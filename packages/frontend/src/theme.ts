@@ -17,10 +17,10 @@ const themeOptions: MyThemeOptions = {
   breakpoints: {
     values: {
       xs: 650,
-      sm: 800,
-      md: 900,
-      lg: 1100,
-      xl: 1340,
+      sm: 700,
+      md: 800,
+      lg: 940,
+      xl: 1100,
     },
   },
 } as MyThemeOptions;
