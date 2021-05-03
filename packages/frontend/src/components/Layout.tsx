@@ -12,6 +12,7 @@ import socialFb from 'assets/social/fb.png';
 import socialTw from 'assets/social/tw.png';
 import socialPin from 'assets/social/pin.png';
 import socialInsta from 'assets/social/insta.png';
+import { ScrollToTop } from 'components/ScrollToTop';
 import { Home } from 'pages/Home';
 import { MyTheme } from '../theme';
 
@@ -186,6 +187,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
           </Typography>
         </Container>
       </div>
+      <ScrollToTop />
     </div>
   );
 };
