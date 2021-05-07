@@ -62,7 +62,6 @@ const ScrollToTopView = ({ classes }: ScrollToTopProps) => {
   }, []);
 
   const updateVisibility = useCallback(() => {
-    console.log(window.scrollY);
     if (window.scrollY > 400) {
       setShowed(true);
     } else {
