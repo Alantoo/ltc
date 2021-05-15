@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.inner-form-no-bg .MuiToolbar-root {
+  background: none;
+}
+
+.inner-form-no-bg .MuiCardContent-root {
+  padding: 0;
+}
+
+.MuiTextField-root.MuiFormControl-fullWidth {
+  width: 100%;
+}
+
+.MuiToolbar-root > h6 {
+  margin-left: 24px;
+}
+
+.MuiToolbar-root > button + h6 {
+  margin-left: 0;
+}
+
+@media screen and (min-width: 600px) {
+  .inner-form-no-bg .MuiToolbar-root {
+    padding: 0;
+  }
+}
