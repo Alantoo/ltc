@@ -1,5 +1,7 @@
 import mongoose, { Model, Document, LeanDocument, FilterQuery } from 'mongoose';
 
+export { Model, Document, LeanDocument, FilterQuery } from 'mongoose';
+
 const simpleKeys = ['$custom'];
 
 type ListQueryFilter = Record<string, any>;

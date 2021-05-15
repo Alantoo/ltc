@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaOptions, SchemaFactory } from '@nestjs/mongoose';
 import { Document, LeanDocument } from 'mongoose';
 
-export type UserDocument = User & Document;
+export type UserTokenDocument = UserToken & Document;
 
-export type RawUserDocument = LeanDocument<UserDocument>;
+export type RawUserTokenDocument = LeanDocument<UserTokenDocument>;
 
 const options: SchemaOptions = {
   toJSON: {
@@ -12,25 +12,21 @@ const options: SchemaOptions = {
       ret.id = ret._id;
       delete ret._id;
       delete ret.__v;
-      delete ret.password;
       return ret;
     },
   },
 };
 
 @Schema(options)
-export class User {
+export class UserToken {
   @Prop({ type: String, required: true, unique: true })
-  email: string;
+  userId: string;
 
   @Prop()
-  password: string;
+  rememberMe: boolean;
 
   @Prop()
-  name: string;
-
-  @Prop()
-  age: number;
+  validityTimestamp: number;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserTokenSchema = SchemaFactory.createForClass(UserToken);

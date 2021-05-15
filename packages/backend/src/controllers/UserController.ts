@@ -1,7 +1,6 @@
-import { Inject, Controller, Get, Req, Logger } from '@nestjs/common';
+import { Inject, Controller, Logger } from '@nestjs/common';
 import { ApiController } from './ApiController';
-import { UserDocument } from '../dals/schemas/User';
-import { UserService } from '../services/UserService';
+import { UserService, UserDocument } from '../services/UserService';
 
 @Controller('api/users')
 export class UserController extends ApiController<UserDocument> {

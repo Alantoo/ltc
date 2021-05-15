@@ -1,6 +1,5 @@
-import { Document, LeanDocument } from 'mongoose';
-import { Logger } from '@nestjs/common';
-import { BaseDal } from '../dals/BaseDal';
+import { Logger, NotFoundException } from '@nestjs/common';
+import { BaseDal, Document, LeanDocument } from '../dals/BaseDal';
 
 export type ListResult<T extends Document> = {
   data: Array<LeanDocument<T>>;
@@ -37,7 +36,7 @@ export class DalService<T extends Document> {
   async getOne(id, user): Promise<SingleResult<T> | undefined> {
     const idV = await this._beforeFilter(id, user);
     if (!idV) {
-      return undefined;
+      throw new NotFoundException();
     }
     const obj = await this.baseDal.getOne(idV);
     return obj;
@@ -53,7 +52,7 @@ export class DalService<T extends Document> {
   async update(id, data, user): Promise<SingleResult<T> | undefined> {
     const idV = await this._beforeFilter(id, user);
     if (!idV) {
-      return undefined;
+      throw new NotFoundException();
     }
     const oldObj = await this.baseDal.getOne(idV);
     await this._beforeUpdate(data, user);
@@ -65,7 +64,7 @@ export class DalService<T extends Document> {
   async delete(id, user) {
     const idV = await this._beforeFilter(id, user);
     if (!idV) {
-      return undefined;
+      throw new NotFoundException();
     }
     const obj = await this.baseDal.delete(idV);
     await this._afterDelete(obj, user);

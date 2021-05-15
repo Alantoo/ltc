@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DalService } from './DalService';
-import { UserDocument } from '../dals/schemas/User';
-import { UserDal } from '../dals/UserDal';
+import { UserDal, UserDocument, RawUserDocument } from '../dals/UserDal';
+
+export { RawUserDocument, UserDocument } from '../dals/UserDal';
 
 @Injectable()
 export class UserService extends DalService<UserDocument> {
@@ -10,5 +11,9 @@ export class UserService extends DalService<UserDocument> {
   constructor(@Inject(UserDal) userDal: UserDal) {
     super({ baseDal: userDal });
     this.userDal = userDal;
+  }
+
+  async findByEmail(email: string): Promise<RawUserDocument | undefined> {
+    return this.userDal.findByEmail(email);
   }
 }

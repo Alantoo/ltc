@@ -42,10 +42,8 @@ export class ApiController<T extends Document> {
       );
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} get list error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} get list error: ${error}`);
+      throw error;
     }
   }
 
@@ -57,10 +55,8 @@ export class ApiController<T extends Document> {
       const data = await this.baseService.getOne(id, {} /*req.user*/);
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} get one error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} get one error: ${error}`);
+      throw error;
     }
   }
 
@@ -72,10 +68,8 @@ export class ApiController<T extends Document> {
       const data = await this.baseService.create(body, {} /*req.user*/);
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} create error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} create error: ${error}`);
+      throw error;
     }
   }
 
@@ -88,10 +82,8 @@ export class ApiController<T extends Document> {
       const data = await this.baseService.update(id, body, {} /*req.user*/);
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} update error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} update error: ${error}`);
+      throw error;
     }
   }
 
@@ -103,10 +95,8 @@ export class ApiController<T extends Document> {
       const data = await this.baseService.delete(id, {} /*req.user*/);
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} delete error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} delete error: ${error}`);
+      throw error;
     }
   }
 
@@ -129,10 +119,8 @@ export class ApiController<T extends Document> {
       const data = removed.filter((i) => i);
       return data;
     } catch (error) {
-      return {
-        error: true,
-        message: `${this.constructor.name} delete error: ${error}`,
-      };
+      this.logger.log(`${this.constructor.name} delete bunch error: ${error}`);
+      throw error;
     }
   }
 }

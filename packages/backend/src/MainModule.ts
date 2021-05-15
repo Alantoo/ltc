@@ -9,17 +9,27 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Request, Response, NextFunction } from 'express';
-import { User, UserSchema } from './dals/schemas/User';
-import { UserDal } from './dals/UserDal';
+import { JwtModule } from '@nestjs/jwt';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import * as cookieParser from 'cookie-parser';
+import { UserDal, User, UserSchema } from './dals/UserDal';
+import { UserTokenDal, UserToken, UserTokenSchema } from './dals/UserTokenDal';
 import { UserService } from './services/UserService';
 import { UserController } from './controllers/UserController';
-import { AppController } from './controllers/AppController';
+import { AuthService } from './services/AuthService';
+import { JwtStrategy } from './services/JwtStrategy';
+import { AuthController } from './controllers/AuthController';
 
 @Injectable()
-export class TestMiddleware implements NestMiddleware {
+export class CookieParserMiddleware implements NestMiddleware {
+  useFn: RequestHandler;
+
+  constructor() {
+    this.useFn = cookieParser(process.env.COOKIE_SECRET);
+  }
+
   use(req: Request, res: Response, next: NextFunction) {
-    next();
+    return this.useFn(req, res, next);
   }
 }
 
@@ -33,16 +43,21 @@ export class TestMiddleware implements NestMiddleware {
       rootPath: join(__dirname, '..', './client'),
       serveRoot: '/',
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.JWT_EXPIRESIN },
+    }),
     MongooseModule.forRoot(process.env.DB_CONNECTION),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: UserToken.name, schema: UserTokenSchema },
+    ]),
   ],
-  controllers: [AppController, UserController],
-  providers: [UserDal, UserService],
+  controllers: [AuthController, UserController],
+  providers: [UserDal, UserTokenDal, UserService, AuthService, JwtStrategy],
 })
 export class MainModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    if (process.env.ADMIN_PASS) {
-      consumer.apply(TestMiddleware).forRoutes('/');
-    }
+    consumer.apply(CookieParserMiddleware).forRoutes('/');
   }
 }
