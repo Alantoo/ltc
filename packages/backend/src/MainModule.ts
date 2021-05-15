@@ -43,6 +43,10 @@ export class CookieParserMiddleware implements NestMiddleware {
       rootPath: join(__dirname, '..', './client'),
       serveRoot: '/',
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', './admin'),
+      serveRoot: '/admin',
+    }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_EXPIRESIN },
