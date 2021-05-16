@@ -21,7 +21,7 @@ import {
   DeleteManyResult,
   fetchUtils,
 } from 'react-admin';
-//import { Data } from './authProvider';
+import { AuthProvider } from 'authProvider';
 
 const { fetchJson } = fetchUtils;
 
@@ -29,21 +29,14 @@ type MyRecord = {
   id: string | number;
 };
 
-type MyRequestRecord = MyRecord & {
-  type: string;
-  currency: string;
-  customer_account: string;
-  give: number;
-};
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 export class MyDataProvider implements DataProvider {
-  //dataProviderData: Data;
+  authProvider: AuthProvider;
 
-  // constructor({ dataProviderData }: { dataProviderData: Data }) {
-  //   this.dataProviderData = dataProviderData;
-  // }
+  constructor({ authProvider }: { authProvider: AuthProvider }) {
+    this.authProvider = authProvider;
+  }
 
   getResourceName(part: string): string {
     if (part === 'transactions') {
@@ -60,8 +53,13 @@ export class MyDataProvider implements DataProvider {
     url: string;
     options?: Record<string, string>;
   }): Promise<any> {
-    const jwtToken = ''; //await this.dataProviderData.getJwtToken();
     const headers = new Headers();
+    let jwtToken = this.authProvider.getToken();
+    if (!jwtToken) {
+      if (await this.authProvider.getRefreshedToken()) {
+        jwtToken = this.authProvider.getToken();
+      }
+    }
     if (jwtToken) {
       headers.set('Authorization', `Bearer ${jwtToken}`);
     }

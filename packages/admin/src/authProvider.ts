@@ -139,7 +139,7 @@ export class AuthProvider {
     return Promise.resolve();
   }
 
-  private getRefreshedToken(): Promise<boolean> {
+  getRefreshedToken(): Promise<boolean> {
     let url = `${API_URL}/auth/refresh`;
     if (
       process.env.REACT_APP_HTTP_CRED !== 'include' &&

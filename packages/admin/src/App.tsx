@@ -16,7 +16,7 @@ import { authProvider } from 'authProvider';
 import { theme } from 'theme';
 import './App.css';
 
-const dataProvider = new MyDataProvider();
+const dataProvider = new MyDataProvider({ authProvider });
 const history = createBrowserHistory({
   basename: process.env.REACT_APP_BASENAME,
 });
