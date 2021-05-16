@@ -5,9 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
 import { hashSync } from 'bcrypt';
 import { UserService, RawUserDocument } from './UserService';
 import { UserTokenDal } from '../dals/UserTokenDal';
+
+@Injectable()
+export class UserAuthGuard extends AuthGuard('jwt') {}
 
 export type JwtPayload = {
   id: string;
@@ -181,7 +185,7 @@ export class AuthService {
   }
 
   private createLoginInfo(user: RawUserDocument, token: string): LoginInfo {
-    const expiresIn = process.env.JWT_EXPIRESIN;
+    const expiresIn = '' + parseInt(process.env.JWT_EXPIRESIN, 10) * 1000;
     return {
       expiresIn,
       token,

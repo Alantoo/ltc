@@ -9,9 +9,13 @@ import {
   Res,
   Query,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { AuthService, LoginInfo, RefreshInfo } from '../services/AuthService';
+import {
+  AuthService,
+  UserAuthGuard,
+  LoginInfo,
+  RefreshInfo,
+} from '../services/AuthService';
 
 type LoginResult = {
   loginInfo: LoginInfo;
@@ -79,7 +83,7 @@ export class AuthController {
   }
 
   @Get('test')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(UserAuthGuard)
   async test(): Promise<{
     data?: any;
     error?: Error;

@@ -8,8 +8,10 @@ import {
   Body,
   Query,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { DalService, ListResult, SingleResult } from '../services/DalService';
+import { UserAuthGuard } from '../services/AuthService';
 
 type ErrorResult = {
   error: true;
@@ -20,6 +22,7 @@ type ApiControllerOptions<T extends Document> = {
   baseService: DalService<T>;
 };
 
+@UseGuards(UserAuthGuard)
 export class ApiController<T extends Document> {
   protected logger = new Logger(ApiController.name);
 

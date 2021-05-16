@@ -175,7 +175,7 @@ export class AuthProvider {
   }
 
   private setToken(loginInfo: LoginInfo, refreshInfo?: RefreshInfo) {
-    const { token, expiresIn = '600' } = loginInfo;
+    const { token, expiresIn = '600000' } = loginInfo;
     const delay = parseInt(expiresIn, 10);
     this.token = token;
     this.payload = JSON.parse(atob(token.split('.')[1]));
@@ -203,7 +203,7 @@ export class AuthProvider {
   private refreshToken(delay: number): void {
     this.refreshTimeOutId = window.setTimeout(() => {
       this.getRefreshedToken();
-    }, delay * 1000 - 5000); // Validity period of the token in seconds, minus 5 seconds
+    }, delay - 5000); // Validity period of the token in seconds, minus 5 seconds
   }
 }
 

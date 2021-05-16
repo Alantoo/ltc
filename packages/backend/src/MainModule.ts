@@ -49,7 +49,9 @@ export class CookieParserMiddleware implements NestMiddleware {
     }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRESIN },
+      signOptions: {
+        expiresIn: parseInt(process.env.JWT_EXPIRESIN, 10) * 1000,
+      },
     }),
     MongooseModule.forRoot(process.env.DB_CONNECTION),
     MongooseModule.forFeature([
