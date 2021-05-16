@@ -7,10 +7,16 @@ import {
   Body,
   Req,
   Res,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService, LoginInfo, RefreshInfo } from '../services/AuthService';
+
+type LoginResult = {
+  loginInfo: LoginInfo;
+  refreshInfo: RefreshInfo;
+};
 
 @Controller('api/auth')
 export class AuthController {
@@ -26,45 +32,46 @@ export class AuthController {
   async register(
     @Body() body: { email: string; password: string },
     @Res({ passthrough: true }) response: Response,
-  ): Promise<LoginInfo> {
-    const { refreshInfo, loginInfo } = await this.authService.registerUser(
+  ): Promise<LoginResult> {
+    const result = await this.authService.registerUser(
       body.email,
       body.password,
     );
-    this.setRefreshTokenCookie(refreshInfo, response);
-    return loginInfo;
+    this.setRefreshToken(result.refreshInfo, response);
+    return result;
   }
 
   @Post('login')
   async login(
     @Body() body: { email: string; password: string; rememberMe: boolean },
     @Res({ passthrough: true }) response: Response,
-  ): Promise<LoginInfo> {
-    const { refreshInfo, loginInfo } = await this.authService.loginUSer(
+  ): Promise<LoginResult> {
+    const result = await this.authService.loginUSer(
       body.email,
       body.password,
       body.rememberMe,
     );
-    this.setRefreshTokenCookie(refreshInfo, response);
-    return loginInfo;
+    this.setRefreshToken(result.refreshInfo, response);
+    return result;
   }
 
   @Get('refresh')
-  async refresh(@Req() request: Request): Promise<LoginInfo> {
-    const refreshToken = this.getRefreshTokenCookie(request);
+  async refresh(@Req() request: Request, @Query() query): Promise<LoginInfo> {
+    const refreshToken = this.getRefreshToken(request) || query.token;
     return this.authService.refreshToken(refreshToken);
   }
 
   @Get('logout')
   async logout(
     @Req() request: Request,
-    @Res() response: Response,
+    @Res({ passthrough: true }) response: Response,
+    @Query() query,
   ): Promise<void> {
-    const refreshToken = this.getRefreshTokenCookie(request);
-    this.setRefreshTokenCookie(
+    const refreshToken = this.getRefreshToken(request) || query.token;
+    this.setRefreshToken(
       {
         tokenId: null,
-        tokenExpires: new Date(new Date().getTime() - 1),
+        tokenExpires: new Date(new Date().getTime() - 1).getTime(),
       },
       response,
     );
@@ -87,17 +94,16 @@ export class AuthController {
     }
   }
 
-  private getRefreshTokenCookie(@Req() request: Request): string {
+  private getRefreshToken(@Req() request: Request): string {
     return request.signedCookies['refreshToken'];
   }
 
-  private setRefreshTokenCookie(
+  private setRefreshToken(
     refreshInfo: RefreshInfo,
     @Res() response: Response,
   ): void {
-    // store refresh token
     response.cookie('refreshToken', refreshInfo.tokenId, {
-      expires: refreshInfo.tokenExpires,
+      expires: new Date(refreshInfo.tokenExpires),
       httpOnly: true,
       secure: false,
       signed: true,

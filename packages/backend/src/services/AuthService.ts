@@ -15,14 +15,14 @@ export type JwtPayload = {
   roles: string[];
 };
 
-export type LoginInfo = JwtPayload & {
+export type LoginInfo = {
   token: string;
   expiresIn: string;
 };
 
 export type RefreshInfo = {
   tokenId: string;
-  tokenExpires: Date;
+  tokenExpires: number;
 };
 
 export const User = createParamDecorator((data, req) => {
@@ -170,7 +170,7 @@ export class AuthService {
     const delay = rememberMe
       ? parseInt(process.env.JWT_REFRESH_REMEMBER_EXPIRESIN, 10) * 1000
       : parseInt(process.env.JWT_REFRESH_EXPIRESIN, 10) * 1000;
-    const tokenExpires = new Date(new Date().getTime() + delay);
+    const tokenExpires = new Date(new Date().getTime() + delay).getTime();
 
     return { tokenId: refreshTokenId, tokenExpires };
   }
@@ -183,9 +183,6 @@ export class AuthService {
   private createLoginInfo(user: RawUserDocument, token: string): LoginInfo {
     const expiresIn = process.env.JWT_EXPIRESIN;
     return {
-      id: user.id.toString(),
-      email: user.email,
-      roles: [],
       expiresIn,
       token,
     };
