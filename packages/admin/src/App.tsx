@@ -5,6 +5,7 @@ import {
   LoginComponent,
   DashboardComponent,
 } from 'react-admin';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
 import { MyLayout } from 'components/CustomLayout';
 import { LoginPage } from 'components/LoginPage';
@@ -23,22 +24,23 @@ const history = createBrowserHistory({
 
 function App() {
   return (
-    <AuthContextProvider auth={authProvider}>
-      <Admin
-        theme={theme}
-        history={history}
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={LoginPage as LoginComponent}
-        dashboard={DashboardPage as DashboardComponent}
-        layout={MyLayout}
-      >
-        {(permissions) => {
-          console.log(permissions);
-          return [<Resource name="users" {...users} />];
-        }}
-      </Admin>
-    </AuthContextProvider>
+    <ThemeProvider theme={theme}>
+      <AuthContextProvider auth={authProvider}>
+        <Admin
+          theme={theme}
+          history={history}
+          dataProvider={dataProvider}
+          authProvider={authProvider}
+          loginPage={LoginPage as LoginComponent}
+          dashboard={DashboardPage as DashboardComponent}
+          layout={MyLayout}
+        >
+          {(permissions) => {
+            return [<Resource name="users" {...users} />];
+          }}
+        </Admin>
+      </AuthContextProvider>
+    </ThemeProvider>
   );
 }
 

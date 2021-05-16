@@ -34,7 +34,7 @@ const styles = (theme: Theme) => {
     },
     field: {
       width: '100%',
-      marginBottom: 5,
+      marginBottom: 12,
     },
     formError: {
       color: myTheme.palette.error.main,
@@ -50,16 +50,21 @@ const styles = (theme: Theme) => {
   });
 };
 
-type LoginFormProps = WithStyles<ClassKey> & {
+type SignUpFormProps = WithStyles<ClassKey> & {
   active: boolean;
   loading: boolean;
   error: string;
-  onFormSubmit: (data: { email: string; password: string }) => void;
-  onRegisterClick: () => void;
+  onFormSubmit: (data: {
+    email: string;
+    name: string;
+    password: string;
+  }) => void;
+  onLoginClick: () => void;
 };
 
-const LoginFormView = (props: LoginFormProps) => {
+const SignUpFormView = (props: SignUpFormProps) => {
   const { classes, error: initError, active, loading } = props;
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(initError);
@@ -71,17 +76,26 @@ const LoginFormView = (props: LoginFormProps) => {
   const onFormSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      props.onFormSubmit({ email, password });
+      props.onFormSubmit({ email, name, password });
     },
-    [email, password, props.onFormSubmit],
+    [email, password, name, props.onFormSubmit],
   );
 
-  const onRegisterClick = useCallback(
+  const onLoginClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      props.onRegisterClick();
+      props.onLoginClick();
     },
-    [props.onRegisterClick],
+    [props.onLoginClick],
+  );
+
+  const onNameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setName(value);
+      setError('');
+    },
+    [setName, setError],
   );
 
   const onEmailChange = useCallback(
@@ -110,31 +124,43 @@ const LoginFormView = (props: LoginFormProps) => {
       autoComplete="off"
     >
       <Typography className={classes.formTitle} variant="subtitle1">
-        Login
+        Register
       </Typography>
       <div>
         <FormControl className={classes.field}>
           <TextField
-            id="login-email"
-            name="login-email"
-            label="E-mail"
-            value={email}
-            onChange={onEmailChange}
-            InputLabelProps={{ shrink: true }}
+            id="sign-up-name"
+            name="sign-up-name"
+            label="Name"
+            value={name}
+            onChange={onNameChange}
             fullWidth
+            autoComplete="off"
           />
         </FormControl>
       </div>
       <div>
         <FormControl className={classes.field}>
           <TextField
-            id="login-password"
-            name="login-password"
+            id="sign-up-email"
+            name="sign-up-email"
+            label="Email"
+            value={email}
+            onChange={onEmailChange}
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-password"
+            name="sign-up-password"
             label="Password"
             type="password"
             value={password}
             onChange={onPasswordChange}
-            InputLabelProps={{ shrink: true }}
             fullWidth
           />
         </FormControl>
@@ -151,18 +177,18 @@ const LoginFormView = (props: LoginFormProps) => {
           disabled={loading}
           className={classes.button}
         >
-          Sign in
+          Sign up
         </Button>
       </div>
       <div className={classes.links}>
-        <a href="#" onClick={onRegisterClick}>
-          Register
+        <a href="#" onClick={onLoginClick}>
+          Login
         </a>
       </div>
     </form>
   );
 };
 
-export const LoginForm = withStyles(styles)(LoginFormView);
+export const SignUpForm = withStyles(styles)(SignUpFormView);
 
-export default LoginForm;
+export default SignUpForm;

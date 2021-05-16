@@ -84,19 +84,36 @@ export class AuthProvider {
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
     });
-    return fetch(request)
-      .then((response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(({ loginInfo, refreshInfo }) => {
-        return this.setToken(loginInfo, refreshInfo);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    const response = await fetch(request);
+    const data = await response.json();
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(data.message || response.statusText);
+    }
+    return this.setToken(data.loginInfo, data.refreshInfo);
+  }
+
+  async register({
+    email,
+    name,
+    password,
+  }: {
+    email: string;
+    name: string;
+    password: string;
+  }): Promise<any> {
+    const loginUrl = `${API_URL}/auth/register`;
+    const request = new Request(loginUrl, {
+      method: 'POST',
+      body: JSON.stringify({ email, name, password }),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
+    });
+    const response = await fetch(request);
+    const data = await response.json();
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(data.message || response.statusText);
+    }
+    return this.setToken(data.loginInfo, data.refreshInfo);
   }
 
   async logout(params: any): Promise<string | false | void> {

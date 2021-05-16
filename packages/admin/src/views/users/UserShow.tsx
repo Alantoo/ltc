@@ -6,9 +6,7 @@ export const UserShow = (props: ShowProps) => {
     <Show {...props}>
       <SimpleShowLayout>
         <TextField source="name" />
-        <TextField source="username" />
         <TextField source="email" />
-        <TextField source="phone" />
       </SimpleShowLayout>
     </Show>
   );
