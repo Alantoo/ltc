@@ -32,4 +32,12 @@ export class UserDal extends BaseDal<UserDocument> {
       return obj;
     }
   }
+
+  async findByName(name: string): Promise<RawUserDocument | undefined> {
+    const doc = await this.Model.findOne({ name });
+    if (doc) {
+      const obj = doc.toJSON();
+      return obj;
+    }
+  }
 }

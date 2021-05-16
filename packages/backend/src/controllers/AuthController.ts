@@ -34,11 +34,12 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() body: { email: string; password: string },
+    @Body() body: { email: string; name: string; password: string },
     @Res({ passthrough: true }) response: Response,
   ): Promise<LoginResult> {
     const result = await this.authService.registerUser(
       body.email,
+      body.name,
       body.password,
     );
     this.setRefreshToken(result.refreshInfo, response);

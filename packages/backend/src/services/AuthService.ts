@@ -51,18 +51,33 @@ export class AuthService {
 
   async registerUser(
     email: string,
+    name: string,
     pass: string,
   ): Promise<{
     loginInfo: LoginInfo;
     refreshInfo: RefreshInfo;
   }> {
-    const existedUser = await this.userService.findByEmail(email);
-    if (existedUser) {
-      throw new BadRequestException('User already exist');
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+    if (!name) {
+      throw new BadRequestException('Name is required');
+    }
+    if (!pass) {
+      throw new BadRequestException('Password is required');
+    }
+    const existedEmail = await this.userService.findByEmail(email);
+    if (existedEmail) {
+      throw new BadRequestException('Email already exist');
+    }
+    const existedName = await this.userService.findByName(name);
+    if (existedName) {
+      throw new BadRequestException('User name already exist');
     }
     const newUser = await this.userService.create(
       {
         email,
+        name,
         password: this.encodePass(pass),
       },
       {},
@@ -83,6 +98,12 @@ export class AuthService {
     loginInfo: LoginInfo;
     refreshInfo: RefreshInfo;
   }> {
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+    if (!pass) {
+      throw new BadRequestException('Password is required');
+    }
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new BadRequestException('User not found');
@@ -180,8 +201,7 @@ export class AuthService {
   }
 
   private encodePass(rawPass: string): string {
-    // return hashSync(rawPass, 10);
-    return rawPass;
+    return hashSync(rawPass, process.env.SALT);
   }
 
   private createLoginInfo(user: RawUserDocument, token: string): LoginInfo {

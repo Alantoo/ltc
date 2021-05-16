@@ -16,4 +16,8 @@ export class UserService extends DalService<UserDocument> {
   async findByEmail(email: string): Promise<RawUserDocument | undefined> {
     return this.userDal.findByEmail(email);
   }
+
+  async findByName(name: string): Promise<RawUserDocument | undefined> {
+    return this.userDal.findByName(name);
+  }
 }
