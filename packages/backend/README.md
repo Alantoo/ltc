@@ -72,6 +72,8 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
   Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
+## Deployment
+
 Node install
 
 ```
@@ -89,16 +91,33 @@ rm ./install_nvm.sh
 # source profile so that your current session knows about the changes
 source ~/.profile
  
-# install node v10
-nvm install 10
+# install node v12
+nvm install 12
 ```
 
+Mongo install
+
+```
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+sudo add-apt-repository 'deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse'
+sudo apt update
+sudo apt install mongodb-org
+
+sudo systemctl start mongod
+sudo systemctl enable mongod
+```
+
+
 PM2 install
+
 ```
 npm install pm2 -g
 
 From ~/src:
-pm2 start ./dist/main.js
+
+export NODE_ENV=production
+
+pm2 start ./dist/main.js --name main
 pm2 start ./dist/main.js --name main:debug -- --inspect=0.0.0.0:30000
 or
 pm2 restart main --update-env
@@ -108,5 +127,5 @@ pm2 logs main --lines 1000
 
 Port forward
 ```
-sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8181
+sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8282
 ```
