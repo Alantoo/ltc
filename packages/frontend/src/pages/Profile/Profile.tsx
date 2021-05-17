@@ -5,7 +5,7 @@ import {
   WithStyles,
   Theme,
 } from '@material-ui/core/styles';
-import { MyTheme } from '../theme';
+import { MyTheme } from 'theme';
 
 type ClassKey = 'root';
 
@@ -16,12 +16,12 @@ const styles = (theme: Theme) => {
   });
 };
 
-type LoginFormProps = WithStyles<ClassKey>;
+type ProfileProps = WithStyles<ClassKey>;
 
-const LoginFormView = ({ classes }: LoginFormProps) => {
-  return <div></div>;
+const ProfileView = ({ classes }: ProfileProps) => {
+  return <div className={classes.root}>Profile</div>;
 };
 
-export const LoginForm = withStyles(styles)(LoginFormView);
+export const Profile = withStyles(styles)(ProfileView);
 
-export default LoginForm;
+export default Profile;

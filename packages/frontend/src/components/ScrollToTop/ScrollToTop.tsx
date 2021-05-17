@@ -3,14 +3,14 @@ import {
   withStyles,
   createStyles,
   WithStyles,
-  DefaultTheme,
-} from '@material-ui/styles';
+  Theme,
+} from '@material-ui/core/styles';
 import top from 'assets/top.png';
-import { MyTheme } from '../theme';
+import { MyTheme } from 'theme';
 
 type ClassKey = 'root';
 
-const styles = (theme: DefaultTheme) => {
+const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {

@@ -3,18 +3,18 @@ import {
   withStyles,
   createStyles,
   WithStyles,
-  DefaultTheme,
-} from '@material-ui/styles';
+  Theme,
+} from '@material-ui/core/styles';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import banner from 'assets/banner.png';
 import blueBg from 'assets/blue-bg.png';
-import { MyTheme } from '../theme';
+import { MyTheme } from 'theme';
 
 type ClassKey = 'root' | 'introSlide' | 'simpleSlide' | 'bgSlide';
 
-const styles = (theme: DefaultTheme) => {
+const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {},

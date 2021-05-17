@@ -1,5 +1,9 @@
 import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core/styles';
-import { Palette, PaletteColor } from '@material-ui/core/styles/createPalette';
+import {
+  Palette,
+  PaletteOptions,
+  PaletteColor,
+} from '@material-ui/core/styles/createPalette';
 
 interface MyPalette extends Palette {
   third: PaletteColor;
@@ -9,11 +13,23 @@ export interface MyTheme extends Theme {
   palette: MyPalette;
 }
 
+interface MyPaletteOptions extends PaletteOptions {
+  third?: PaletteColor;
+}
+
 interface MyThemeOptions extends ThemeOptions {
-  palette?: MyPalette;
+  palette?: MyPaletteOptions;
 }
 
 const themeOptions: MyThemeOptions = {
+  palette: {
+    third: {
+      main: 'back',
+      light: 'black',
+      dark: 'black',
+      contrastText: 'black',
+    },
+  },
   breakpoints: {
     values: {
       xs: 650,
@@ -23,6 +39,6 @@ const themeOptions: MyThemeOptions = {
       xl: 1100,
     },
   },
-} as MyThemeOptions;
+};
 
 export const theme = createMuiTheme(themeOptions);
