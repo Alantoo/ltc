@@ -9,6 +9,7 @@ import {
   Res,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import {
   AuthService,
@@ -22,6 +23,7 @@ type LoginResult = {
   refreshInfo: RefreshInfo;
 };
 
+@ApiTags('auth')
 @Controller('api/auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
