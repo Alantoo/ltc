@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiController, ErrorResult } from './ApiController';
-import { UserAuthGuard } from '../services/AuthService';
+import { UserAuthGuard, User, UserData } from '../services/AuthService';
 import { ListResult, SingleResult } from '../services/DalService';
 import {
-  User,
+  User as UserModel,
   UserService,
   UserDocument,
   RawUserDocument,
@@ -37,11 +37,12 @@ export class UserController extends ApiController<UserDocument> {
   @Get()
   async getList(
     @Query() query,
+    @User() user,
   ): Promise<ListResult<UserDocument> | ErrorResult> {
-    return super.getList(query);
+    return super.getList(query, user);
   }
 
-  @ApiResponse({ type: User })
+  @ApiResponse({ type: UserModel })
   @Get(':id')
   async getOne(
     @Param('id') id: string,

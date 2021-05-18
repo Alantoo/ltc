@@ -1,6 +1,7 @@
 import {
   Injectable,
   createParamDecorator,
+  ExecutionContext,
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,6 +13,23 @@ import { UserTokenDal } from '../dals/UserTokenDal';
 
 @Injectable()
 export class UserAuthGuard extends AuthGuard('jwt') {}
+
+export type UserData = RawUserDocument | undefined;
+
+export const User = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    const user: RawUserDocument = request.user;
+    const isAdmin = user ? user.roles.includes('admin') : false;
+    const proxy = {
+      ...user,
+      isAdmin() {
+        return isAdmin;
+      },
+    };
+    return proxy; // || { id: '000000000000000000000000' };
+  },
+);
 
 export type JwtPayload = {
   id: string;
@@ -28,10 +46,6 @@ export type RefreshInfo = {
   tokenId: string;
   tokenExpires: number;
 };
-
-export const User = createParamDecorator((data, req) => {
-  return req.user;
-});
 
 @Injectable()
 export class AuthService {

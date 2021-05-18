@@ -28,6 +28,9 @@ export class User {
   @Prop()
   password: string;
 
+  @Prop({ type: [String], default: [] })
+  roles: string[];
+
   @ApiProperty()
   @Prop({ type: String, required: true, unique: true })
   name: string;

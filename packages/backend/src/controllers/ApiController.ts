@@ -1,6 +1,7 @@
 import { Document, LeanDocument } from 'mongoose';
 import { Logger } from '@nestjs/common';
 import { DalService, ListResult, SingleResult } from '../services/DalService';
+import { UserData } from '../services/AuthService';
 
 export type ErrorResult = {
   error: true;
@@ -20,7 +21,10 @@ export class ApiController<T extends Document> {
     this.baseService = props.baseService;
   }
 
-  async getList(query: any): Promise<ListResult<T> | ErrorResult> {
+  async getList(
+    query: any,
+    user: UserData,
+  ): Promise<ListResult<T> | ErrorResult> {
     try {
       const sort = query.sort ? JSON.parse(query.sort) : null;
       const range = query.range ? JSON.parse(query.range) : null;
