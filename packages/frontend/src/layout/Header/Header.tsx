@@ -84,7 +84,7 @@ const HeaderView = ({ classes }: HeaderProps) => {
 
   return (
     <div className={classes.header}>
-      <Container className={classes.headerContainer} maxWidth="lg">
+      <Container className={classes.headerContainer} maxWidth="xl">
         <div className={classes.logo}>
           <Link to="/">
             <img src={logo} alt="logo" />

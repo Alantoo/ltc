@@ -83,7 +83,7 @@ const HomeView = ({ classes }: HomeProps) => {
   return (
     <>
       <div className={`${classes.introSlide} gradientBg`}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Typography component="div">
             <h2 className="h2">
               EARN HUNDREDS OF DOLLARS IN CRYPTOCURRENCY DAILY
@@ -106,7 +106,7 @@ const HomeView = ({ classes }: HomeProps) => {
         </Container>
       </div>
       <div className={classes.simpleSlide}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Typography component="div">
             <p>
               Are you tired of joining money making opportunities only to
@@ -191,7 +191,7 @@ const HomeView = ({ classes }: HomeProps) => {
         </Container>
       </div>
       <div className={classes.bgSlide}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Typography component="div">
             <h3>How you’ll earn using the Global Money List system</h3>
             <hr />
@@ -245,7 +245,7 @@ const HomeView = ({ classes }: HomeProps) => {
         </Container>
       </div>
       <div className={classes.simpleSlide}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Typography component="div">
             <h3 className="center">Referral List</h3>
             <p>

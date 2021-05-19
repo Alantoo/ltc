@@ -68,7 +68,7 @@ type FooterProps = WithStyles<ClassKey>;
 const FooterView = ({ classes }: FooterProps) => {
   return (
     <div className={classes.footer}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <ul className={classes.social}>
           <li>
             <a href="#">
