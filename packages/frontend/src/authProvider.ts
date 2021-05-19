@@ -1,9 +1,11 @@
+import { fetchJson } from './helpers';
 const API_URL = process.env.REACT_APP_API_URL;
 
 export type JwtPayload = {
   id: string;
   email: string;
   roles: string[];
+  isVerified: boolean;
 };
 
 export type LoginInfo = {
@@ -97,17 +99,10 @@ export class AuthProvider {
     password: string;
   }): Promise<any> {
     const loginUrl = `${API_URL}/auth/login`;
-    const request = new Request(loginUrl, {
+    const data = await fetchJson<LoginResult>(loginUrl, {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
+      data: { email, password },
     });
-    const response = await fetch(request);
-    const data = await response.json();
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error(data.message || response.statusText);
-    }
     return this.setToken(data.loginInfo, data.refreshInfo);
   }
 
@@ -120,18 +115,11 @@ export class AuthProvider {
     name: string;
     password: string;
   }): Promise<any> {
-    const loginUrl = `${API_URL}/auth/register`;
-    const request = new Request(loginUrl, {
+    const registerUrl = `${API_URL}/auth/register`;
+    const data = await fetchJson<LoginResult>(registerUrl, {
       method: 'POST',
-      body: JSON.stringify({ email, name, password }),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
+      data: { email, name, password },
     });
-    const response = await fetch(request);
-    const data = await response.json();
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error(data.message || response.statusText);
-    }
     return this.setToken(data.loginInfo, data.refreshInfo);
   }
 
@@ -143,20 +131,20 @@ export class AuthProvider {
     ) {
       logoutUrl += `?token=${this.refreshTokenInfo.tokenId}`;
     }
-    const request = new Request(logoutUrl, {
-      method: 'GET',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
-    });
     this.clearToken();
-
-    return fetch(request).then(() => '/');
+    await fetchJson<void>(logoutUrl);
+    return '/';
   }
 
   async getPermissions(params: any): Promise<any> {
     return this.waitForTokenRefresh().then(() => {
       return this.payload ? Promise.resolve(this.payload) : Promise.reject();
     });
+  }
+
+  async sendVerificationCode(): Promise<any> {
+    const sendVerifyUrl = `${API_URL}/auth/sendVerify`;
+    await fetchJson<void>(sendVerifyUrl, { token: this.token });
   }
 
   getToken(): string {
@@ -168,29 +156,21 @@ export class AuthProvider {
   }
 
   getRefreshedToken(): Promise<boolean> {
-    let url = `${API_URL}/auth/refresh`;
+    let refreshUrl = `${API_URL}/auth/refresh`;
     if (
       process.env.REACT_APP_HTTP_CRED !== 'include' &&
       this.refreshTokenInfo
     ) {
-      url += `?token=${this.refreshTokenInfo.tokenId}`;
+      refreshUrl += `?token=${this.refreshTokenInfo.tokenId}`;
     }
-    const request = new Request(url, {
-      method: 'GET',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-      credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
-    });
 
-    this.isRefreshing = fetch(request)
-      .then((response) => {
-        if (response.status !== 200) {
-          this.clearToken();
-          console.log('Token renewal failure');
-          return { token: null };
-        }
-        return response.json();
+    this.isRefreshing = fetchJson<LoginInfo>(refreshUrl)
+      .catch(() => {
+        this.clearToken();
+        console.log('Token renewal failure');
+        return { token: '', expiresIn: '0' } as LoginInfo;
       })
-      .then((loginInfo: LoginInfo) => {
+      .then((loginInfo) => {
         if (loginInfo && loginInfo.token) {
           this.setToken(loginInfo);
           return true;
@@ -253,6 +233,9 @@ export class AuthProvider {
   }
 
   private refreshToken(delay: number): void {
+    if (!delay) {
+      return;
+    }
     this.refreshTimeOutId = window.setTimeout(() => {
       this.getRefreshedToken();
     }, delay - 5000); // Validity period of the token in seconds, minus 5 seconds
