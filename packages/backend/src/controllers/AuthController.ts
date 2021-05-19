@@ -24,7 +24,7 @@ import { EmailService } from '../services/EmailService';
 
 function getHost(req: Request, forUI = false) {
   if (process.env.NODE_ENV === 'production') {
-    return req.headers.origin;
+    return req.headers.origin || process.env.HOST;
   }
   return forUI ? 'http://localhost:3002' : 'http://localhost:8282';
 }

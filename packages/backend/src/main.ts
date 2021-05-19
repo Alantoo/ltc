@@ -1,6 +1,29 @@
+import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
+import {
+  Catch,
+  NotFoundException,
+  ExceptionFilter,
+  HttpException,
+  ArgumentsHost,
+} from '@nestjs/common';
+
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MainModule } from './MainModule';
+
+@Catch(NotFoundException)
+export class NotFoundExceptionFilter implements ExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const request = ctx.getRequest();
+    const response = ctx.getResponse();
+    if (request.url.startsWith('/admin')) {
+      response.sendFile(join(__dirname, '../admin', 'index.html'));
+    } else {
+      response.sendFile(join(__dirname, '../client', 'index.html'));
+    }
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule, { cors: true });
@@ -21,6 +44,9 @@ async function bootstrap() {
     ],
     credentials: true,
   });
+
+  app.useGlobalFilters(new NotFoundExceptionFilter());
+
   await app.listen(process.env.PORT);
 }
 bootstrap();
