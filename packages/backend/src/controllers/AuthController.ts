@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   Query,
+  Param,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
@@ -16,7 +17,17 @@ import {
   UserAuthGuard,
   LoginInfo,
   RefreshInfo,
+  UserData,
+  User,
 } from '../services/AuthService';
+import { EmailService } from '../services/EmailService';
+
+function getHost(req: Request, forUI = false) {
+  if (process.env.NODE_ENV === 'production') {
+    return req.headers.origin;
+  }
+  return forUI ? 'http://localhost:3002' : 'http://localhost:8282';
+}
 
 type LoginResult = {
   loginInfo: LoginInfo;
@@ -29,9 +40,11 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
   authService: AuthService;
+  emailService: EmailService;
 
-  constructor(authService: AuthService) {
+  constructor(authService: AuthService, emailService: EmailService) {
     this.authService = authService;
+    this.emailService = emailService;
   }
 
   @Post('register')
@@ -85,20 +98,30 @@ export class AuthController {
     return this.authService.logout(refreshToken);
   }
 
-  @Get('test')
+  @Get('sendVerify')
   @UseGuards(UserAuthGuard)
-  async test(): Promise<{
-    data?: any;
-    error?: Error;
-  }> {
+  async sendVerify(
+    @Req() request: Request,
+    @User() user: UserData,
+  ): Promise<void> {
+    const host = getHost(request);
+    const code = await this.authService.setVerificationCode(user);
+    const url = `${host}/api/auth/verify/${code}`;
+    await this.emailService.sendVerificationCode(url, user);
+  }
+
+  @Get('verify/:code')
+  async verify(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+    @Param('code') code: string,
+  ): Promise<void> {
+    const host = getHost(request, true);
+    const url = `${host}/profile`;
     try {
-      return {
-        data: 'ok',
-      };
-    } catch (error) {
-      this.logger.error(`Test error: "${error.message}"`);
-      return { error };
-    }
+      await this.authService.checkVerificationCode(code);
+    } catch (e) {}
+    response.redirect(url);
   }
 
   private getRefreshToken(@Req() request: Request): string {

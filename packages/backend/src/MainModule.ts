@@ -18,6 +18,7 @@ import { UserService } from './services/UserService';
 import { UserController } from './controllers/UserController';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
+import { EmailService } from './services/EmailService';
 import { AuthController } from './controllers/AuthController';
 
 @Injectable()
@@ -60,7 +61,14 @@ export class CookieParserMiddleware implements NestMiddleware {
     ]),
   ],
   controllers: [AuthController, UserController],
-  providers: [UserDal, UserTokenDal, UserService, AuthService, JwtStrategy],
+  providers: [
+    UserDal,
+    UserTokenDal,
+    UserService,
+    AuthService,
+    EmailService,
+    JwtStrategy,
+  ],
 })
 export class MainModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -37,7 +37,7 @@ export class UserController extends ApiController<UserDocument> {
   @Get()
   async getList(
     @Query() query,
-    @User() user,
+    @User() user: UserData,
   ): Promise<ListResult<UserDocument> | ErrorResult> {
     return super.getList(query, user);
   }

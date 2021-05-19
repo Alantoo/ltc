@@ -14,6 +14,7 @@ const options: SchemaOptions = {
       delete ret._id;
       delete ret.__v;
       delete ret.password;
+      delete ret.code;
       return ret;
     },
   },
@@ -37,9 +38,12 @@ export class User {
 
   @ApiProperty()
   @Prop()
-  age: number;
+  isVerified: boolean;
+
+  @Prop()
+  code: string;
 }
 
-export class UserUpdateDto extends PickType(User, ['age']) {}
+export class UserUpdateDto extends PickType(User, ['name']) {}
 
 export const UserSchema = SchemaFactory.createForClass(User);

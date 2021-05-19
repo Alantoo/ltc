@@ -20,4 +20,8 @@ export class UserService extends DalService<UserDocument> {
   async findByName(name: string): Promise<RawUserDocument | undefined> {
     return this.userDal.findByName(name);
   }
+
+  async findByCode(code: string): Promise<RawUserDocument | undefined> {
+    return this.userDal.findByCode(code);
+  }
 }

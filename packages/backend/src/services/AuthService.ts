@@ -11,17 +11,31 @@ import { hashSync } from 'bcrypt';
 import { UserService, RawUserDocument } from './UserService';
 import { UserTokenDal } from '../dals/UserTokenDal';
 
+const getCode = (size = 25): string => {
+  const characters =
+    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let token = '';
+  for (let i = 0; i < 25; i++) {
+    token += characters[Math.floor(Math.random() * characters.length)];
+  }
+  return token;
+};
+
 @Injectable()
 export class UserAuthGuard extends AuthGuard('jwt') {}
 
-export type UserData = RawUserDocument | undefined;
+export type UserData =
+  | undefined
+  | (RawUserDocument & {
+      isAdmin: () => boolean;
+    });
 
 export const User = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const user: RawUserDocument = request.user;
     const isAdmin = user ? user.roles.includes('admin') : false;
-    const proxy = {
+    const proxy: UserData = {
       ...user,
       isAdmin() {
         return isAdmin;
@@ -35,6 +49,7 @@ export type JwtPayload = {
   id: string;
   email: string;
   roles: string[];
+  isVerified: boolean;
 };
 
 export type LoginInfo = {
@@ -168,6 +183,30 @@ export class AuthService {
     return user;
   }
 
+  async setVerificationCode(user: UserData): Promise<string> {
+    if (user.isVerified) {
+      return '';
+    }
+    const code = getCode();
+    await this.userService.updateInternal(user.id, {
+      code,
+    });
+    return code;
+  }
+
+  async checkVerificationCode(code?: string): Promise<void> {
+    if (!code) {
+      return;
+    }
+    const user = await this.userService.findByCode(code);
+    if (user) {
+      await this.userService.updateInternal(user.id, {
+        isVerified: true,
+        code: '',
+      });
+    }
+  }
+
   private async updateRefreshToken(
     userId: string,
     rememberMe: boolean,
@@ -226,8 +265,9 @@ export class AuthService {
     };
   }
 
-  private createToken({ id, email }: RawUserDocument): string {
-    const user: JwtPayload = { id, email, roles: [] };
-    return this.jwtService.sign(user);
+  private createToken(user: RawUserDocument): string {
+    const { id, email, roles, isVerified } = user;
+    const payload: JwtPayload = { id, email, roles, isVerified };
+    return this.jwtService.sign(payload);
   }
 }
