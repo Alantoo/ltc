@@ -3,11 +3,6 @@ import { Logger } from '@nestjs/common';
 import { DalService, ListResult, SingleResult } from '../services/DalService';
 import { UserData } from '../services/AuthService';
 
-export type ErrorResult = {
-  error: true;
-  message: string;
-};
-
 type ApiControllerOptions<T extends Document> = {
   baseService: DalService<T>;
 };
@@ -21,10 +16,7 @@ export class ApiController<T extends Document> {
     this.baseService = props.baseService;
   }
 
-  async getList(
-    query: any,
-    user: UserData,
-  ): Promise<ListResult<T> | ErrorResult> {
+  async getList(query: any, user: UserData): Promise<ListResult<T>> {
     try {
       const sort = query.sort ? JSON.parse(query.sort) : null;
       const range = query.range ? JSON.parse(query.range) : null;
@@ -41,7 +33,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async getOne(id: string): Promise<SingleResult<T> | ErrorResult> {
+  async getOne(id: string): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.getOne(id, {} /*req.user*/);
       return data;
@@ -51,7 +43,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async create(body: LeanDocument<T>): Promise<SingleResult<T> | ErrorResult> {
+  async create(body: LeanDocument<T>): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.create(body, {} /*req.user*/);
       return data;
@@ -61,10 +53,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async update(
-    id: string,
-    body: LeanDocument<T>,
-  ): Promise<SingleResult<T> | ErrorResult> {
+  async update(id: string, body: LeanDocument<T>): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.update(id, body, {} /*req.user*/);
       return data;
@@ -74,7 +63,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async delete(id: string): Promise<SingleResult<T> | ErrorResult> {
+  async delete(id: string): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.delete(id, {} /*req.user*/);
       return data;
@@ -84,9 +73,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async deleteBunch(body: {
-    ids: Array<string>;
-  }): Promise<Array<string> | ErrorResult> {
+  async deleteBunch(body: { ids: Array<string> }): Promise<Array<string>> {
     try {
       const { ids = [] } = body;
       const removed = await Promise.all(

@@ -15,13 +15,20 @@ import * as cookieParser from 'cookie-parser';
 import { UserDal, User, UserSchema } from './dals/UserDal';
 import { UserTokenDal, UserToken, UserTokenSchema } from './dals/UserTokenDal';
 import { ListDal, List, ListSchema } from './dals/ListDal';
+import {
+  RotatorItemDal,
+  RotatorItem,
+  RotatorItemSchema,
+} from './dals/RotatorItemDal';
 import { UserService } from './services/UserService';
 import { ListService } from './services/ListService';
+import { RotatorService } from './services/RotatorService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
 import { UserController } from './controllers/UserController';
 import { ListController } from './controllers/ListController';
+import { RotatorController } from './controllers/RotatorController';
 import { AuthController } from './controllers/AuthController';
 
 @Injectable()
@@ -62,15 +69,23 @@ export class CookieParserMiddleware implements NestMiddleware {
       { name: User.name, schema: UserSchema },
       { name: UserToken.name, schema: UserTokenSchema },
       { name: List.name, schema: ListSchema },
+      { name: RotatorItem.name, schema: RotatorItemSchema },
     ]),
   ],
-  controllers: [AuthController, UserController, ListController],
+  controllers: [
+    AuthController,
+    UserController,
+    ListController,
+    RotatorController,
+  ],
   providers: [
     UserDal,
     UserTokenDal,
     ListDal,
+    RotatorItemDal,
     UserService,
     ListService,
+    RotatorService,
     AuthService,
     EmailService,
     JwtStrategy,

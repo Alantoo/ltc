@@ -12,7 +12,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
-import { ApiController, ErrorResult } from './ApiController';
+import { ApiController } from './ApiController';
 import { UserAuthGuard, User, UserData } from '../services/AuthService';
 import { ListResult, SingleResult } from '../services/DalService';
 import {
@@ -39,15 +39,13 @@ export class ListController extends ApiController<ListDocument> {
   async getList(
     @Query() query,
     @User() user: UserData,
-  ): Promise<ListResult<ListDocument> | ErrorResult> {
+  ): Promise<ListResult<ListDocument>> {
     return super.getList(query, user);
   }
 
   @ApiResponse({ type: ListModel })
   @Get(':id')
-  async getOne(
-    @Param('id') id: string,
-  ): Promise<SingleResult<ListDocument> | ErrorResult> {
+  async getOne(@Param('id') id: string): Promise<SingleResult<ListDocument>> {
     return super.getOne(id);
   }
 
@@ -55,7 +53,7 @@ export class ListController extends ApiController<ListDocument> {
   @Post()
   async create(
     @Body() body: RawListDocument,
-  ): Promise<SingleResult<ListDocument> | ErrorResult> {
+  ): Promise<SingleResult<ListDocument>> {
     return super.create(body);
   }
 
@@ -63,21 +61,19 @@ export class ListController extends ApiController<ListDocument> {
   async update(
     @Param('id') id: string,
     @Body() body: RawListDocument,
-  ): Promise<SingleResult<ListDocument> | ErrorResult> {
+  ): Promise<SingleResult<ListDocument>> {
     return super.update(id, body);
   }
 
   @Delete(':id')
-  async delete(
-    @Param('id') id: string,
-  ): Promise<SingleResult<ListDocument> | ErrorResult> {
+  async delete(@Param('id') id: string): Promise<SingleResult<ListDocument>> {
     return super.delete(id);
   }
 
   @Delete()
   async deleteBunch(
     @Body() body: { ids: Array<string> },
-  ): Promise<Array<string> | ErrorResult> {
+  ): Promise<Array<string>> {
     return super.deleteBunch(body);
   }
 }
