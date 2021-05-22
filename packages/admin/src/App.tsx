@@ -5,6 +5,7 @@ import {
   LoginComponent,
   DashboardComponent,
 } from 'react-admin';
+import PeopleIcon from '@material-ui/icons/People';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
 import { MyLayout } from 'components/CustomLayout';
@@ -12,6 +13,7 @@ import { LoginPage } from 'components/LoginPage';
 import { DashboardPage } from 'components/DashboardPage';
 import { AuthContextProvider } from 'contexts/AuthContext';
 import users from 'views/users';
+import lists from 'views/lists';
 import { MyDataProvider } from 'dataProvider';
 import { authProvider } from 'authProvider';
 import { theme } from 'theme';
@@ -36,7 +38,10 @@ function App() {
           layout={MyLayout}
         >
           {(permissions) => {
-            return [<Resource name="users" {...users} />];
+            return [
+              <Resource name="lists" {...lists} />,
+              <Resource name="users" icon={PeopleIcon} {...users} />,
+            ];
           }}
         </Admin>
       </AuthContextProvider>
