@@ -13,6 +13,8 @@ export {
   UserDocument,
   RawUserDocument,
   UserSchema,
+  UserCreateDto,
+  UserUpdateDto,
 } from './schemas/User';
 
 @Injectable()

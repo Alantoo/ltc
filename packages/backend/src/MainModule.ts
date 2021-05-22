@@ -14,11 +14,14 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as cookieParser from 'cookie-parser';
 import { UserDal, User, UserSchema } from './dals/UserDal';
 import { UserTokenDal, UserToken, UserTokenSchema } from './dals/UserTokenDal';
+import { ListDal, List, ListSchema } from './dals/ListDal';
 import { UserService } from './services/UserService';
-import { UserController } from './controllers/UserController';
+import { ListService } from './services/ListService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
+import { UserController } from './controllers/UserController';
+import { ListController } from './controllers/ListController';
 import { AuthController } from './controllers/AuthController';
 
 @Injectable()
@@ -58,13 +61,16 @@ export class CookieParserMiddleware implements NestMiddleware {
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: UserToken.name, schema: UserTokenSchema },
+      { name: List.name, schema: ListSchema },
     ]),
   ],
-  controllers: [AuthController, UserController],
+  controllers: [AuthController, UserController, ListController],
   providers: [
     UserDal,
     UserTokenDal,
+    ListDal,
     UserService,
+    ListService,
     AuthService,
     EmailService,
     JwtStrategy,

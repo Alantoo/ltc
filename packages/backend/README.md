@@ -129,3 +129,19 @@ Port forward
 ```
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8282
 ```
+
+Generate SSL sertificate
+
+```
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot
+
+sudo certbot certonly --manual
+
+HTTP folder access:
+/.well-known/acme-challenege/<xxxx>
+```

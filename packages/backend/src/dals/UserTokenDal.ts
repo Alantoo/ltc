@@ -6,6 +6,7 @@ import {
   UserTokenDocument,
   RawUserTokenDocument,
   UserTokenSchema,
+  UserTokenCreateDto,
 } from './schemas/UserToken';
 
 export {
@@ -13,6 +14,7 @@ export {
   UserTokenDocument,
   RawUserTokenDocument,
   UserTokenSchema,
+  UserTokenCreateDto,
 } from './schemas/UserToken';
 
 @Injectable()
@@ -42,7 +44,7 @@ export class UserTokenDal {
   }
 
   async create(
-    data: RawUserTokenDocument,
+    data: UserTokenCreateDto,
   ): Promise<RawUserTokenDocument | undefined> {
     const doc = new this.Model(data);
     await doc.save();

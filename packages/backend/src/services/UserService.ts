@@ -2,7 +2,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DalService } from './DalService';
 import { UserDal, UserDocument, RawUserDocument } from '../dals/UserDal';
 
-export { RawUserDocument, UserDocument, User } from '../dals/UserDal';
+export {
+  RawUserDocument,
+  UserDocument,
+  User,
+  UserCreateDto,
+  UserUpdateDto,
+} from '../dals/UserDal';
 
 @Injectable()
 export class UserService extends DalService<UserDocument> {

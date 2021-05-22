@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaOptions, SchemaFactory } from '@nestjs/mongoose';
-import { Document, LeanDocument } from 'mongoose';
+import { Document, LeanDocument, Schema as MongooseSchema } from 'mongoose';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { User } from './User';
 
 export type UserTokenDocument = UserToken & Document;
 
@@ -18,15 +20,27 @@ const options: SchemaOptions = {
 };
 
 @Schema(options)
-export class UserToken {
-  @Prop({ type: String, required: true, unique: true })
-  userId: string;
+export class UserToken extends Document {
+  @ApiProperty()
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    required: true,
+    unique: true,
+    ref: User.name,
+  })
+  userId: MongooseSchema.Types.ObjectId;
 
   @Prop()
   rememberMe: boolean;
 
   @Prop()
   validityTimestamp: number;
+}
+
+export class UserTokenCreateDto extends PickType(UserToken, [
+  'validityTimestamp',
+]) {
+  userId: string;
 }
 
 export const UserTokenSchema = SchemaFactory.createForClass(UserToken);

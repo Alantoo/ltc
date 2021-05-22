@@ -1,4 +1,4 @@
-import { Document, LeanDocument } from 'mongoose';
+import { Document, LeanDocument, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaOptions, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
@@ -21,7 +21,7 @@ const options: SchemaOptions = {
 };
 
 @Schema(options)
-export class User {
+export class User extends Document {
   @ApiProperty()
   @Prop({ type: String, required: true, unique: true })
   email: string;
@@ -43,6 +43,12 @@ export class User {
   @Prop()
   code: string;
 }
+
+export class UserCreateDto extends PickType(User, [
+  'email',
+  'password',
+  'name',
+]) {}
 
 export class UserUpdateDto extends PickType(User, ['name']) {}
 
