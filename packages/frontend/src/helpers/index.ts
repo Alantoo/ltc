@@ -1,4 +1,4 @@
-type FetchOptions = RequestInit & {
+export type FetchOptions = RequestInit & {
   data?: any;
   token?: string;
 };

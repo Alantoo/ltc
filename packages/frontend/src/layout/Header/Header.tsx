@@ -17,7 +17,6 @@ type ClassKey = 'header' | 'headerContainer' | 'logo' | 'menu';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
-  console.log(myTheme);
   return createStyles({
     header: {
       display: 'block',
@@ -90,7 +89,7 @@ const HeaderView = ({ classes }: HeaderProps) => {
             <img src={logo} alt="logo" />
           </Link>
         </div>
-        <Typography className={classes.menu}>
+        <Typography className={classes.menu} component="div">
           <ul>
             <li>
               <Link to="/">Home</Link>

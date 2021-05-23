@@ -91,10 +91,10 @@ const FooterView = ({ classes }: FooterProps) => {
             </a>
           </li>
         </ul>
-        <Typography variant="body2">
+        <Typography variant="body2" component="div">
           Copyright 2017 LetterCopy.com. All rights reserved.
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" component="div">
           <ul className={classes.footerMenu}>
             <li>
               <a href="#">Privacy Policy</a>
