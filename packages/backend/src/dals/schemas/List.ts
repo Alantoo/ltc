@@ -23,6 +23,10 @@ export class List extends Document {
   @ApiProperty()
   @Prop({ type: String, required: true, unique: true })
   name: string;
+
+  @ApiProperty()
+  @Prop({ type: Number, required: true })
+  price: number;
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

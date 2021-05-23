@@ -1,5 +1,6 @@
 import { Logger, NotFoundException } from '@nestjs/common';
 import { BaseDal, Document, LeanDocument } from '../dals/BaseDal';
+import { UserData } from './AuthService';
 
 export type ListResult<T extends Document> = {
   data: Array<LeanDocument<T>>;
@@ -8,6 +9,12 @@ export type ListResult<T extends Document> = {
 
 export type SingleResult<T extends Document> = LeanDocument<T>;
 
+export type ListQuery = {
+  filter?: any;
+  range?: any;
+  sort?: any;
+};
+
 export type DalServiceOptions<T extends Document> = {
   baseDal: BaseDal<T>;
 };
@@ -15,14 +22,14 @@ export type DalServiceOptions<T extends Document> = {
 export class DalService<T extends Document> {
   private readonly logger = new Logger(DalService.name);
 
-  baseDal: BaseDal<T>;
+  protected baseDal: BaseDal<T>;
 
   constructor(props: DalServiceOptions<T>) {
     this.baseDal = props.baseDal;
   }
 
-  async getList(query, user): Promise<ListResult<T>> {
-    const { filter, range, sort } = query;
+  async getList(query?: ListQuery, user?: UserData): Promise<ListResult<T>> {
+    const { filter, range, sort } = query || {};
     await this._beforeListFilter(filter, user);
     await this._beforeListRange(range, user);
     await this._beforeListSort(sort, user);
@@ -75,39 +82,39 @@ export class DalService<T extends Document> {
     return this.baseDal.updateInternal(id, data);
   }
 
-  async _beforeListFilter(filter, user) {
+  protected async _beforeListFilter(filter, user) {
     return filter;
   }
 
-  async _beforeListRange(range, user) {
+  protected async _beforeListRange(range, user) {
     return range;
   }
 
-  async _beforeListSort(sort, user) {
+  protected async _beforeListSort(sort, user) {
     return sort;
   }
 
-  async _beforeFilter(id, user) {
+  protected async _beforeFilter(id, user) {
     return id;
   }
 
-  async _beforeCreate(data, user) {
+  protected async _beforeCreate(data, user) {
     // _beforeCreate
   }
 
-  async _afterCreate(obj, user) {
+  protected async _afterCreate(obj, user) {
     // _afterCreate
   }
 
-  async _beforeUpdate(data, user) {
+  protected async _beforeUpdate(data, user) {
     // _beforeUpdate
   }
 
-  async _afterUpdate(fromObj, toObj, user) {
+  protected async _afterUpdate(fromObj, toObj, user) {
     // _afterUpdate
   }
 
-  async _afterDelete(obj, user) {
+  protected async _afterDelete(obj, user) {
     // _afterDelete
   }
 }

@@ -1,6 +1,10 @@
-import mongoose, { Model, Document, LeanDocument, FilterQuery } from 'mongoose';
+import { Model, Document, LeanDocument, FilterQuery, Types } from 'mongoose';
 
 export { Model, Document, LeanDocument, FilterQuery } from 'mongoose';
+
+const toObjectId = (id: any) => {
+  return new Types.ObjectId(id);
+};
 
 const simpleKeys = ['$custom'];
 
@@ -39,17 +43,24 @@ export class BaseDal<T extends Document> {
     await this._beforeFilter(filterRule);
     if (filter) {
       Object.keys(filter).forEach((key: string) => {
-        const value: any = filter[key];
+        let value: any = filter[key];
         if (key === 'id') {
           if (Array.isArray(value)) {
             filterRule._id = {
               $in: value
                 .filter((i) => i)
-                .map((str) => (str || '').trim())
-                .map(mongoose.Types.ObjectId),
+                .map((i) => {
+                  if (typeof i === 'string') {
+                    i = (i || '').trim();
+                  }
+                  return toObjectId(i);
+                }),
             };
           } else {
-            filterRule._id = mongoose.Types.ObjectId(value.trim());
+            if (typeof value === 'string') {
+              value = (value || '').trim();
+            }
+            filterRule._id = toObjectId(value);
           }
         } else if (this._isIgnoredFilterKey(key)) {
           // do nothing
@@ -60,11 +71,18 @@ export class BaseDal<T extends Document> {
             filterRule[key] = {
               $in: value
                 .filter((i) => i)
-                .map((str) => (str || '').trim())
-                .map(mongoose.Types.ObjectId),
+                .map((i) => {
+                  if (typeof i === 'string') {
+                    i = (i || '').trim();
+                  }
+                  return toObjectId(i);
+                }),
             };
           } else {
-            filterRule[key] = mongoose.Types.ObjectId(value.trim());
+            if (typeof value === 'string') {
+              value = (value || '').trim();
+            }
+            filterRule[key] = toObjectId(value);
           }
         }
       });
@@ -80,17 +98,24 @@ export class BaseDal<T extends Document> {
     await this._beforeFilter(filterRule);
     if (filter) {
       Object.keys(filter).forEach((key) => {
-        const value: any = filter[key];
+        let value: any = filter[key];
         if (key === 'id') {
           if (Array.isArray(value)) {
             filterRule._id = {
               $in: value
                 .filter((i) => i)
-                .map((str) => (str || '').trim())
-                .map(mongoose.Types.ObjectId),
+                .map((i) => {
+                  if (typeof i === 'string') {
+                    i = (i || '').trim();
+                  }
+                  return toObjectId(i);
+                }),
             };
           } else {
-            filterRule._id = mongoose.Types.ObjectId(value.trim());
+            if (typeof value === 'string') {
+              value = (value || '').trim();
+            }
+            filterRule._id = toObjectId(value);
           }
         } else if (this._isIgnoredFilterKey(key)) {
           // do nothing
@@ -101,11 +126,18 @@ export class BaseDal<T extends Document> {
             filterRule[key] = {
               $in: value
                 .filter((i) => i)
-                .map((str) => (str || '').trim())
-                .map(mongoose.Types.ObjectId),
+                .map((i) => {
+                  if (typeof i === 'string') {
+                    i = (i || '').trim();
+                  }
+                  return toObjectId(i);
+                }),
             };
           } else {
-            filterRule[key] = mongoose.Types.ObjectId(value.trim());
+            if (typeof value === 'string') {
+              value = (value || '').trim();
+            }
+            filterRule[key] = toObjectId(value);
           }
         }
       });

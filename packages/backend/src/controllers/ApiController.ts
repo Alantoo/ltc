@@ -18,13 +18,13 @@ export class ApiController<T extends Document> {
 
   async getList(query: any, user: UserData): Promise<ListResult<T>> {
     try {
-      const sort = query.sort ? JSON.parse(query.sort) : null;
-      const range = query.range ? JSON.parse(query.range) : null;
-      const filter = query.filter ? JSON.parse(query.filter) : null;
+      const sort = query.sort ? JSON.parse(query.sort) : undefined;
+      const range = query.range ? JSON.parse(query.range) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : undefined;
 
       const data = await this.baseService.getList(
         { filter, range, sort },
-        {}, //req.user,
+        user,
       );
       return data;
     } catch (error) {

@@ -6,7 +6,7 @@ export { RawListDocument, ListDocument, List } from '../dals/ListDal';
 
 @Injectable()
 export class ListService extends DalService<ListDocument> {
-  listDal: ListDal;
+  private listDal: ListDal;
 
   constructor(@Inject(ListDal) listDal: ListDal) {
     super({ baseDal: listDal });

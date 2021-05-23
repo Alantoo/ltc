@@ -1,6 +1,6 @@
 import { Document, LeanDocument, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaOptions, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { User } from './User';
 import { List } from './List';
 
@@ -24,11 +24,25 @@ const options: SchemaOptions = {
 export class RotatorItem extends Document {
   @ApiProperty()
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: List.name })
-  listId: string;
+  listId: MongooseSchema.Types.ObjectId;
 
   @ApiProperty()
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: User.name })
   userId: MongooseSchema.Types.ObjectId;
+
+  @ApiProperty()
+  @Prop([
+    { type: MongooseSchema.Types.ObjectId, required: true, ref: User.name },
+  ])
+  selected: Array<MongooseSchema.Types.ObjectId>;
+
+  @Prop()
+  status: string;
+}
+
+export class RotatorItemCreateDto extends PickType(RotatorItem, []) {
+  listId: string;
+  userId: string;
 }
 
 export const RotatorItemSchema = SchemaFactory.createForClass(RotatorItem);
