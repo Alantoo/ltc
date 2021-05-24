@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { readFileSync } from 'fs';
 import { NestFactory } from '@nestjs/core';
 import {
   Catch,
@@ -26,7 +27,18 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(MainModule, { cors: true });
+  let httpsOptions = undefined;
+  if (process.env.NODE_ENV === 'production') {
+    httpsOptions = {
+      key: readFileSync('./cert/privkey1.pem'),
+      cert: readFileSync('./cert/cert1.pem'),
+      ca: readFileSync('./cert/chain1.pem'),
+    };
+  }
+  const app = await NestFactory.create(MainModule, {
+    cors: true,
+    httpsOptions,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('LTC REST API')
