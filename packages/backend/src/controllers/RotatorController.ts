@@ -78,8 +78,8 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   ): Promise<{ item: RawRotatorItemDocument; list: Array<RawUserDocument> }> {
     const { listId } = body || {};
     const data: RotatorItemCreateDto = {
-      listId,
-      userId: user.id,
+      list: listId,
+      user: user.id,
     };
 
     const item = await this.rotatorService.create(data, user);
@@ -90,22 +90,12 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   async getUsers(
     @Param('id') id: string,
     @User() user: UserData,
-  ): Promise<{ item: RawRotatorItemDocument; list: Array<RawUserDocument> }> {
+  ): Promise<{
+    item: RawRotatorItemDocument;
+    list: Array<RawRotatorItemDocument>;
+  }> {
     const { item, list } = await this.rotatorService.getStatus(id, user);
-    const usersIds = list.map((i) => i.userId);
-    const users = await this.userService.getList({ filter: { id: usersIds } });
-    return {
-      item,
-      list: list.map((rotatorItem) => {
-        const userObj = users.data.find(
-          (elem) => elem.id.toString() === rotatorItem.userId.toString(),
-        );
-        return {
-          ...userObj,
-          itemId: rotatorItem.id,
-        };
-      }),
-    };
+    return { item, list };
   }
 
   @Post(':id/select')
@@ -113,27 +103,17 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
     @Param('id') id: string,
     @Body() body: { userId: string },
     @User() user: UserData,
-  ): Promise<{ item: RawRotatorItemDocument; list: Array<RawUserDocument> }> {
+  ): Promise<{
+    item: RawRotatorItemDocument;
+    list: Array<RawRotatorItemDocument>;
+  }> {
     const { userId } = body || {};
     const { item, list } = await this.rotatorService.selectUser(
       id,
       userId,
       user,
     );
-    const usersIds = list.map((i) => i.userId);
-    const users = await this.userService.getList({ filter: { id: usersIds } });
-    return {
-      item,
-      list: list.map((rotatorItem) => {
-        const userObj = users.data.find(
-          (elem) => elem.id.toString() === rotatorItem.userId.toString(),
-        );
-        return {
-          ...userObj,
-          itemId: rotatorItem.id,
-        };
-      }),
-    };
+    return { item, list };
   }
 
   @ApiResponse({ type: RotatorItemModel })

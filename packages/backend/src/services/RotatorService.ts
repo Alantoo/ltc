@@ -47,9 +47,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
   }
 
   async getHistory(user: UserData): Promise<Array<RawRotatorItemDocument>> {
-    const list = await this.rotatorItemDal.getList({
-      filter: { userId: user.id },
-    });
+    const list = await this.rotatorItemDal.getHistory(user.id);
     return list;
   }
 
@@ -60,10 +58,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
 
   async getStatus(id: string, user): Promise<ItemStatus> {
     let item = await this.rotatorItemDal.getOne(id);
-    const list = await this.rotatorItemDal.getRandomFor(
-      item.listId,
-      item.userId,
-    );
+    const list = await this.rotatorItemDal.getRandomFor(item.list, item.user);
     if (item.selected.length === list.length) {
       // done
       item = await this.rotatorItemDal.updateInternal(id, {
@@ -82,10 +77,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     let item = await this.rotatorItemDal.updateInternal(id, {
       selected: [...curItem.selected, selectUserId],
     });
-    const list = await this.rotatorItemDal.getRandomFor(
-      item.listId,
-      item.userId,
-    );
+    const list = await this.rotatorItemDal.getRandomFor(item.list, item.user);
     if (item.selected.length === list.length) {
       // done
       item = await this.rotatorItemDal.updateInternal(id, {

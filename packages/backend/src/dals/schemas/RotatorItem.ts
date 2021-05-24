@@ -24,11 +24,11 @@ const options: SchemaOptions = {
 export class RotatorItem extends Document {
   @ApiProperty()
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: List.name })
-  listId: MongooseSchema.Types.ObjectId;
+  list: MongooseSchema.Types.ObjectId;
 
   @ApiProperty()
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: User.name })
-  userId: MongooseSchema.Types.ObjectId;
+  user: MongooseSchema.Types.ObjectId;
 
   @ApiProperty()
   @Prop([
@@ -41,8 +41,8 @@ export class RotatorItem extends Document {
 }
 
 export class RotatorItemCreateDto extends PickType(RotatorItem, []) {
-  listId: string;
-  userId: string;
+  list: string;
+  user: string;
 }
 
 export const RotatorItemSchema = SchemaFactory.createForClass(RotatorItem);
