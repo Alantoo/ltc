@@ -9,7 +9,7 @@ export class EmailService {
 
   transporter: Transporter;
 
-  fromName = 'Yurii';
+  fromName = 'LTC';
   fromEmail = 'failwin6720+ltc@gmail.com';
 
   constructor() {

@@ -40,7 +40,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     return super.create(
       {
         ...data,
-        status: rotateStatus.PAY,
+        status: rotateStatus.SELECT,
       },
       user,
     );
