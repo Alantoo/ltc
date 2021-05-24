@@ -292,7 +292,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
               <Typography className={classes.gridItemTop} component="div">
                 60-day entry into the {name}
                 <br />
-                Global Money List revolver For {price}
+                Global Money List revolver For ${price}
               </Typography>
               <div className={classes.gridItemBottom}>
                 <a href="#" onClick={onPayClick}>

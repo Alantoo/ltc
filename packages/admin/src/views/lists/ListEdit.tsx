@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Edit, EditProps, SimpleForm, TextInput } from 'react-admin';
+import {
+  Edit,
+  EditProps,
+  NumberInput,
+  SimpleForm,
+  TextInput,
+} from 'react-admin';
 
 const redirect = (base: string, id: string) => {
   return `${base}/${id}/show`;
@@ -10,6 +16,7 @@ export const ListEdit = (props: EditProps) => {
     <Edit {...props}>
       <SimpleForm redirect={redirect}>
         <TextInput source="name" />
+        <NumberInput source="price" />
       </SimpleForm>
     </Edit>
   );

@@ -6,6 +6,7 @@ export const ListShow = (props: ShowProps) => {
     <Show {...props}>
       <SimpleShowLayout>
         <TextField source="name" />
+        <TextField source="price" />
       </SimpleShowLayout>
     </Show>
   );

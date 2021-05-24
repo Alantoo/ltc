@@ -14,6 +14,7 @@ export const ListList = (props: ListProps) => {
       <Datagrid rowClick="show">
         <TextField source="id" />
         <TextField source="name" />
+        <TextField source="price" />
       </Datagrid>
     </List>
   );
