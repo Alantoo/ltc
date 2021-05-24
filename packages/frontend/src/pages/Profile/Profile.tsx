@@ -9,6 +9,12 @@ import Container from '@material-ui/core/Container';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
 import { AuthContext } from 'contexts/AuthContext';
@@ -23,14 +29,15 @@ type ClassKey =
   | 'grid'
   | 'gridItem'
   | 'gridItemTop'
-  | 'gridItemBottom';
+  | 'gridItemBottom'
+  | 'activeItem';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {},
     grid: {
-      margin: '0 -10px 0 -10px',
+      margin: '0 -10px 30px -10px',
       padding: 0,
       listStyle: 'none',
       textAlign: 'center',
@@ -63,6 +70,9 @@ const styles = (theme: Theme) => {
         height: 'auto',
       },
     },
+    activeItem: {
+      marginBottom: 30,
+    },
     verify: {
       padding: '30px 0',
       textAlign: 'center',
@@ -80,7 +90,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [historyList, setHistoryList] = useState<Array<RotatorItem>>([]);
   const [historyCache, setHistoryCache] = useState(0);
   const [activeItem, setActiveItem] = useState<RotatorItem>();
-  const [usersList, setUsersList] = useState<Array<User>>([]);
+  const [itemsList, setItemsList] = useState<Array<RotatorItem>>([]);
 
   // const gridItems = [
   //   { name: '$100.00', price: '$604.95' },
@@ -96,12 +106,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
       if (newActiveItem && newActiveItem.status === rotateStatus.ADDED) {
         setHistoryCache(historyCache + 1);
         setActiveItem(undefined);
-        setUsersList([]);
+        setItemsList([]);
       } else if (JSON.stringify(activeItem) !== JSON.stringify(newActiveItem)) {
         setActiveItem(newActiveItem);
       }
     },
-    [activeItem, setActiveItem, historyCache, setHistoryList, setUsersList],
+    [activeItem, setActiveItem, historyCache, setHistoryList, setItemsList],
   );
 
   useEffect(() => {
@@ -136,7 +146,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       .getItemStatus(activeItem.id)
       .then((data) => {
         const { item, list } = data || {};
-        setUsersList(list);
+        setItemsList(list);
         updateActiveItem(item);
       })
       .catch((err) => {
@@ -166,13 +176,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
         .then((data) => {
           const { item, list } = data || {};
           updateActiveItem(item);
-          setUsersList(list);
+          setItemsList(list);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [dataProvider, updateActiveItem, setUsersList],
+    [dataProvider, updateActiveItem, setItemsList],
   );
 
   const onUserSelect = useCallback(
@@ -185,7 +195,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
         .then((data) => {
           const { item, list } = data || {};
           updateActiveItem(item);
-          setUsersList(list);
+          setItemsList(list);
         })
         .catch((err) => {
           console.error(err);
@@ -195,7 +205,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       dataProvider,
       activeItem,
       updateActiveItem,
-      setUsersList,
+      setItemsList,
       historyCache,
       setHistoryCache,
     ],
@@ -225,36 +235,51 @@ const ProfileView = ({ classes }: ProfileProps) => {
     );
   }
 
+  let activeOrList = null;
+
   if (activeItem) {
     const { selected = [] } = activeItem;
-    return (
-      <Container maxWidth="xl">
-        <div>Active item</div>
-        <ul>
-          {usersList.map((item: User) => {
-            const isSelected = selected.includes(`${item.itemId}`);
-            const onSelectedChange = (e: React.ChangeEvent) => {
-              e.preventDefault();
-              onUserSelect(item.itemId);
-            };
-            return (
-              <li key={item.itemId}>
-                <Checkbox
-                  onChange={onSelectedChange}
-                  disabled={isSelected}
-                  checked={isSelected}
-                />
-                {item.email}
-              </li>
-            );
-          })}
-        </ul>
-      </Container>
+    activeOrList = (
+      <div className={classes.activeItem}>
+        <Typography variant="h5">Active item</Typography>
+        <Typography>Please select users</Typography>
+        <TableContainer component="div">
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>User name</TableCell>
+                <TableCell>User email</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {itemsList.map((item) => {
+                const isSelected = selected.includes(`${item.id}`);
+                const onSelectedChange = (e: React.ChangeEvent) => {
+                  e.preventDefault();
+                  onUserSelect(item.id);
+                };
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        onChange={onSelectedChange}
+                        disabled={isSelected}
+                        checked={isSelected}
+                      />
+                    </TableCell>
+                    <TableCell>{item.user.name}</TableCell>
+                    <TableCell>{item.user.email}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     );
-  }
-
-  return (
-    <Container maxWidth="xl">
+  } else {
+    activeOrList = (
       <ul className={classes.grid}>
         {list.map(({ id, name, price }) => {
           const onPayClick = (e: React.MouseEvent) => {
@@ -281,12 +306,38 @@ const ProfileView = ({ classes }: ProfileProps) => {
           );
         })}
       </ul>
+    );
+  }
 
-      <div>
-        {historyList.map((historyItem) => {
-          return <div key={historyItem.id}>{historyItem.id}</div>;
-        })}
-      </div>
+  return (
+    <Container maxWidth="xl">
+      {activeOrList}
+
+      {historyList.length ? (
+        <div>
+          <Typography variant="h5">History</Typography>
+          <TableContainer component="div">
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>List name</TableCell>
+                  <TableCell>User email</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {historyList.map((historyItem) => (
+                  <TableRow key={historyItem.id}>
+                    <TableCell>{historyItem.list.name}</TableCell>
+                    <TableCell>{historyItem.user.email}</TableCell>
+                    <TableCell>{historyItem.status.toUpperCase()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      ) : null}
     </Container>
   );
 };

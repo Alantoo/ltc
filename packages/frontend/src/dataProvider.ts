@@ -33,17 +33,17 @@ export type List = MyRecord & {
   price: number;
 };
 
-export type RotatorItem = MyRecord & {
-  listId: string;
-  userId: string;
-  status: string;
-  selected: Array<string>;
-};
-
 export type User = MyRecord & {
   email: string;
   name: string;
   itemId: string;
+};
+
+export type RotatorItem = MyRecord & {
+  list: List;
+  user: User;
+  status: string;
+  selected: Array<string>;
 };
 
 export type UserStatus = {
@@ -53,7 +53,7 @@ export type UserStatus = {
 
 export type ItemStatus = {
   item: RotatorItem;
-  list: Array<User>;
+  list: Array<RotatorItem>;
 };
 
 export const rotateStatus = {

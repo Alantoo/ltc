@@ -25,10 +25,13 @@ export async function fetchJson<T>(
   }
   options.headers = headers;
   const response = await fetch(url, options);
-  const data = await response.json();
+  let data = undefined;
+  try {
+    data = await response.json();
+  } catch (err) {}
   if (response.status >= 200 && response.status < 300) {
     return data;
   } else {
-    throw new Error(data.message || response.statusText);
+    throw new Error((data && data.message) || response.statusText);
   }
 }
