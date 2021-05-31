@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, Model } from './BaseDal';
 import { List, ListDocument, RawListDocument } from './ListDal';
+import { User } from './UserDal';
 
 import {
   RotatorItem,
@@ -28,6 +29,31 @@ export const rotateStatus = {
   REMOVED: 'removed',
 };
 
+const random = (max) => {
+  return Math.floor(Math.random() * (max + 1));
+};
+const shuffle = (a) => {
+  const length = a.length,
+    shuffled = Array(length);
+  for (let index = 0, rand; index < length; ++index) {
+    rand = random(index);
+    if (rand !== index) shuffled[index] = shuffled[rand];
+    shuffled[rand] = a[index];
+  }
+  return shuffled;
+};
+
+const range = (length) => {
+  return Array(length)
+    .fill(null)
+    .map(function (cv, i) {
+      return i;
+    });
+};
+const sample = (a, n) => {
+  return shuffle(a).slice(0, Math.max(0, n));
+};
+
 @Injectable()
 export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   Model: Model<RotatorItemDocument>;
@@ -40,6 +66,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   }
 
   async getHistory(userId): Promise<Array<RawRotatorItemDocument>> {
+    // TODO: paging & sorting & filters
     const list = await this.Model.find({
       user: userId,
     })
@@ -66,14 +93,29 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     listId: ObjectId,
     userId: ObjectId,
   ): Promise<Array<RawRotatorItemDocument>> {
-    const list = await this.Model.find({
+    const query = {
       list: listId,
       user: { $ne: userId },
-    })
-      .populate('list')
-      .populate('user')
-      .skip(0)
-      .limit(6);
-    return list.map((i) => i.toJSON());
+    };
+
+    let limit = 6;
+    const count = await this.Model.find(query).count();
+
+    if (limit > count) {
+      limit = count;
+    }
+
+    const skips = sample(range(count), limit);
+
+    const list = await Promise.all(
+      skips.map(async (skip) => {
+        const item = this.Model.findOne(query, {}, { skip })
+          .populate('list')
+          .populate('user');
+        return item;
+      }),
+    );
+
+    return list;
   }
 }
