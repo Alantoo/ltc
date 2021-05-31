@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react';
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import {
   withStyles,
   createStyles,
@@ -91,6 +97,8 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [historyCache, setHistoryCache] = useState(0);
   const [activeItem, setActiveItem] = useState<RotatorItem>();
   const [itemsList, setItemsList] = useState<Array<RotatorItem>>([]);
+  const [itemsListCache, setItemsListCache] = useState(0);
+  const itemsListCacheTimer = useRef<NodeJS.Timeout>();
 
   // const gridItems = [
   //   { name: '$100.00', price: '$604.95' },
@@ -106,12 +114,25 @@ const ProfileView = ({ classes }: ProfileProps) => {
       if (newActiveItem && newActiveItem.status === rotateStatus.ADDED) {
         setHistoryCache(historyCache + 1);
         setActiveItem(undefined);
-        setItemsList([]);
+        updateItemsList([]);
       } else if (JSON.stringify(activeItem) !== JSON.stringify(newActiveItem)) {
         setActiveItem(newActiveItem);
       }
     },
     [activeItem, setActiveItem, historyCache, setHistoryList, setItemsList],
+  );
+
+  const updateItemsList = useCallback(
+    (newItemsList) => {
+      setItemsList(newItemsList);
+      if (itemsListCacheTimer.current) {
+        clearTimeout(itemsListCacheTimer.current);
+      }
+      itemsListCacheTimer.current = setTimeout(() => {
+        setItemsListCache(itemsListCache + 1);
+      }, 10000);
+    },
+    [setItemsList, itemsListCacheTimer, itemsListCache, setItemsListCache],
   );
 
   useEffect(() => {
@@ -146,13 +167,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
       .getItemStatus(activeItem.id)
       .then((data) => {
         const { item, list } = data || {};
-        setItemsList(list);
+        updateItemsList(list);
         updateActiveItem(item);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [!!activeItem]);
+  }, [!!activeItem, itemsListCache]);
 
   const onSendClick = useCallback(
     (e: React.MouseEvent) => {
@@ -176,13 +197,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
         .then((data) => {
           const { item, list } = data || {};
           updateActiveItem(item);
-          setItemsList(list);
+          updateItemsList(list);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [dataProvider, updateActiveItem, setItemsList],
+    [dataProvider, updateActiveItem, updateItemsList],
   );
 
   const onUserSelect = useCallback(
@@ -195,7 +216,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
         .then((data) => {
           const { item, list } = data || {};
           updateActiveItem(item);
-          setItemsList(list);
+          updateItemsList(list);
         })
         .catch((err) => {
           console.error(err);
@@ -205,7 +226,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       dataProvider,
       activeItem,
       updateActiveItem,
-      setItemsList,
+      updateItemsList,
       historyCache,
       setHistoryCache,
     ],
@@ -248,6 +269,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
             <TableHead>
               <TableRow>
                 <TableCell></TableCell>
+                <TableCell>Id</TableCell>
                 <TableCell>User name</TableCell>
                 <TableCell>User email</TableCell>
               </TableRow>
@@ -268,6 +290,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
                         checked={isSelected}
                       />
                     </TableCell>
+                    <TableCell>{item.id}</TableCell>
                     <TableCell>{item.user.name}</TableCell>
                     <TableCell>{item.user.email}</TableCell>
                   </TableRow>
