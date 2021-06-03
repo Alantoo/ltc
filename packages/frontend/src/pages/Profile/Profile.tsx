@@ -36,7 +36,10 @@ type ClassKey =
   | 'gridItem'
   | 'gridItemTop'
   | 'gridItemBottom'
-  | 'activeItem';
+  | 'activeItem'
+  | 'activeItemTitle'
+  | 'activeItemText'
+  | 'activeItemTable';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
@@ -79,6 +82,29 @@ const styles = (theme: Theme) => {
     activeItem: {
       marginBottom: 30,
     },
+    activeItemTitle: {
+      textAlign: 'center',
+      marginBottom: 10,
+    },
+    activeItemText: {
+      marginBottom: 30,
+    },
+    activeItemTable: {
+      '& table': {
+        width: '100%',
+        textAlign: 'center',
+        borderCollapse: 'collapse',
+      },
+      '& table button': {
+        paddingTop: 4,
+        paddingBottom: 4,
+      },
+      '& td, & th': {
+        padding: 10,
+        border: 'solid 1px black',
+        background: myTheme.palette.primary.main,
+      },
+    },
     verify: {
       padding: '30px 0',
       textAlign: 'center',
@@ -96,6 +122,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [historyList, setHistoryList] = useState<Array<RotatorItem>>([]);
   const [historyCache, setHistoryCache] = useState(0);
   const [activeItem, setActiveItem] = useState<RotatorItem>();
+  const [activeItemList, setActiveItemList] = useState<List>();
   const [itemsList, setItemsList] = useState<Array<RotatorItem>>([]);
   const [itemsListCache, setItemsListCache] = useState(0);
   const itemsListCacheTimer = useRef<NodeJS.Timeout>();
@@ -125,12 +152,17 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const updateItemsList = useCallback(
     (newItemsList) => {
       setItemsList(newItemsList);
-      if (itemsListCacheTimer.current) {
-        clearTimeout(itemsListCacheTimer.current);
+      if (newItemsList && newItemsList[0]) {
+        setActiveItemList(newItemsList[0].list);
+      } else {
+        setActiveItemList(undefined);
       }
-      itemsListCacheTimer.current = setTimeout(() => {
-        setItemsListCache(itemsListCache + 1);
-      }, 10000);
+      // if (itemsListCacheTimer.current) {
+      //   clearTimeout(itemsListCacheTimer.current);
+      // }
+      // itemsListCacheTimer.current = setTimeout(() => {
+      //   setItemsListCache(itemsListCache + 1);
+      // }, 10000);
     },
     [setItemsList, itemsListCacheTimer, itemsListCache, setItemsListCache],
   );
@@ -259,46 +291,50 @@ const ProfileView = ({ classes }: ProfileProps) => {
   let activeOrList = null;
 
   if (activeItem) {
+    const { name } = activeItemList || {};
     const { selected = [] } = activeItem;
     activeOrList = (
       <div className={classes.activeItem}>
-        <Typography variant="h5">Active item</Typography>
-        <Typography>Please select users</Typography>
-        <TableContainer component="div">
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Id</TableCell>
-                <TableCell>User name</TableCell>
-                <TableCell>User email</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {itemsList.map((item) => {
+        <Typography className={classes.activeItemTitle} variant="h5">
+          {name} Global Money List Rotator
+        </Typography>
+        <Typography className={classes.activeItemText}>
+          You are about to enter the {name} Global Money List Rotator, but first
+          you must click on six of our members usernames listed below to
+          complete your entry. If #1 in the list has already been selected
+          please proceed to click on the remaining position #2 through #6. The
+          six members selected will earn {name} each and you'll be entering the
+          money list for a total of 60 days.
+        </Typography>
+        <Typography className={classes.activeItemTable} component="div">
+          <table>
+            <thead>
+              <tr>
+                <th>Position</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              {itemsList.map((item, index) => {
                 const isSelected = selected.includes(`${item.id}`);
-                const onSelectedChange = (e: React.ChangeEvent) => {
+                const onSelectedChange = (e: React.MouseEvent) => {
                   e.preventDefault();
                   onUserSelect(item.id);
                 };
                 return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <Checkbox
-                        onChange={onSelectedChange}
-                        disabled={isSelected}
-                        checked={isSelected}
-                      />
-                    </TableCell>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>{item.user.name}</TableCell>
-                    <TableCell>{item.user.email}</TableCell>
-                  </TableRow>
+                  <tr key={item.id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <button onClick={onSelectedChange} disabled={isSelected}>
+                        {item.user.name}
+                      </button>
+                    </td>
+                  </tr>
                 );
               })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            </tbody>
+          </table>
+        </Typography>
       </div>
     );
   } else {

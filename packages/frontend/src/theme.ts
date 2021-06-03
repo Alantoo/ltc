@@ -23,6 +23,9 @@ interface MyThemeOptions extends ThemeOptions {
 
 const themeOptions: MyThemeOptions = {
   palette: {
+    primary: {
+      main: '#e7a214',
+    },
     third: {
       main: 'back',
       light: 'black',

@@ -42,11 +42,11 @@ const styles = (theme: Theme) => {
         margin: '10px 0',
         display: 'inline-block',
         padding: '15px 30px',
-        background: '#e7a214',
+        background: myTheme.palette.primary.main,
         color: 'black',
         textDecoration: 'none',
         '&:hover': {
-          background: lighten('#e7a214', 0.2),
+          background: lighten(myTheme.palette.primary.main, 0.2),
         },
       },
     },

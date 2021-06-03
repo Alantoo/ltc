@@ -2,8 +2,6 @@ import { ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, Model } from './BaseDal';
-import { List, ListDocument, RawListDocument } from './ListDal';
-import { User } from './UserDal';
 
 import {
   RotatorItem,
