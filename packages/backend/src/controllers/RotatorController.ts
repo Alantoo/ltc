@@ -10,6 +10,7 @@ import {
   Query,
   Body,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiController } from './ApiController';
@@ -88,9 +89,15 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   ): Promise<{ url: string }> {
     const { listId } = body || {};
 
+    const list = await this.listService.getOne(listId, user);
+
+    if (!list) {
+      throw new NotFoundException(`List with "${listId}" id not found`);
+    }
+
     const charge = await this.paymentService.chargesCreate({
-      name: 'Test name',
-      description: 'Test description',
+      name: `List name - ${list.name}`,
+      description: `List price - "$${list.price}"`,
       price: '1.11',
     });
 
