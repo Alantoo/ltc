@@ -12,7 +12,6 @@ import {
   Theme,
 } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -25,8 +24,8 @@ import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
-import { WalletContext } from 'contexts/WalletContext';
 import { List, RotatorItem, User, rotateStatus } from 'dataProvider';
+import { getDateStr } from 'helpers';
 
 import { MyTheme } from 'theme';
 
@@ -137,69 +136,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [itemsListCache, setItemsListCache] = useState(0);
   const itemsListCacheTimer = useRef<NodeJS.Timeout>();
 
-  const {
-    walletProvider,
-    loading,
-    isLoggedIn,
-    ethBalance,
-    daiBalance,
-  } = useContext(WalletContext);
-  const [ethCount, setEthCount] = useState('0');
-  const [ethAddress, setEthAddress] = useState('');
-  const [ethLoading, setEthLoading] = useState(false);
-
-  const [daiCount, setDaiCount] = useState('0');
-  const [daiAddress, setDaiAddress] = useState('');
-  const [daiLoading, setDaiLoading] = useState(false);
-
-  const onLoginClick = () => {
-    walletProvider.login();
-  };
-
-  const onLogoutClick = () => {
-    walletProvider.logout();
-  };
-
-  const onEthSendClick = () => {
-    setEthLoading(true);
-    walletProvider
-      .sendEth(ethCount, ethAddress)
-      .then(() => {
-        setEthCount('0');
-      })
-      .finally(() => {
-        setEthLoading(false);
-      });
-  };
-
-  const onDaiSendClick = () => {
-    setDaiLoading(true);
-    walletProvider
-      .sendDai(daiCount, daiAddress)
-      .then(() => {
-        setDaiCount('0');
-      })
-      .finally(() => {
-        setDaiLoading(false);
-      });
-  };
-
-  const onEthCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEthCount(e.target.value);
-  };
-
-  const onEthAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEthAddress(e.target.value);
-  };
-
-  const onDaiCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDaiCount(e.target.value);
-  };
-
-  const onDaiAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDaiAddress(e.target.value);
-  };
-
   // const gridItems = [
   //   { name: '$100.00', price: '$604.95' },
   //   { name: '$50.00', price: '$304.95' },
@@ -300,15 +236,17 @@ const ProfileView = ({ classes }: ProfileProps) => {
       dataProvider
         .listStart(listId)
         .then((data) => {
-          const { item, list } = data || {};
-          updateActiveItem(item);
-          updateItemsList(list);
+          if (data && data.url) {
+            window.open(data.url, '_blank');
+          }
+
+          setHistoryCache(historyCache + 1);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [dataProvider, updateActiveItem, updateItemsList],
+    [dataProvider, historyCache, setHistoryCache],
   );
 
   const onUserSelect = useCallback(
@@ -444,68 +382,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
-      <div>{loading ? <span>Loading...</span> : null}</div>
-      {loading ? null : (
-        <>
-          {isLoggedIn ? (
-            <button onClick={onLogoutClick}>Logout</button>
-          ) : (
-            <button onClick={onLoginClick}>Login</button>
-          )}
-        </>
-      )}
-
-      <table className={classes.table}>
-        <tbody>
-          {ethBalance !== '' ? (
-            <tr>
-              <td>ETH: {ethBalance}</td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: 60 }}
-                  value={ethCount}
-                  onChange={onEthCountChange}
-                />
-                <input
-                  type="text"
-                  style={{ width: 350 }}
-                  value={ethAddress}
-                  onChange={onEthAddressChange}
-                  placeholder="Adddress"
-                />
-                <br />
-                <button onClick={onEthSendClick}>Send</button>
-                {ethLoading ? <span>&nbsp;Processing...</span> : null}
-              </td>
-            </tr>
-          ) : null}
-          {daiBalance !== '' ? (
-            <tr>
-              <td>DAI: {daiBalance}</td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: 60 }}
-                  value={daiCount}
-                  onChange={onDaiCountChange}
-                />
-                <input
-                  type="text"
-                  style={{ width: 350 }}
-                  value={daiAddress}
-                  onChange={onDaiAddressChange}
-                  placeholder="Adddress"
-                />
-                <br />
-                <button onClick={onDaiSendClick}>Send</button>
-                {daiLoading ? <span>&nbsp;Processing...</span> : null}
-              </td>
-            </tr>
-          ) : null}
-        </tbody>
-      </table>
-
       {activeOrList}
 
       {historyList.length ? (
@@ -518,6 +394,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
                   <TableCell>List name</TableCell>
                   <TableCell>User email</TableCell>
                   <TableCell>Status</TableCell>
+                  <TableCell>Created at</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -526,6 +403,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
                     <TableCell>{historyItem.list.name}</TableCell>
                     <TableCell>{historyItem.user.email}</TableCell>
                     <TableCell>{historyItem.status.toUpperCase()}</TableCell>
+                    <TableCell>{getDateStr(historyItem.createdAt)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

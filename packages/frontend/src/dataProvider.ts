@@ -42,6 +42,7 @@ export type User = MyRecord & {
 export type RotatorItem = MyRecord & {
   list: List;
   user: User;
+  createdAt: string;
   status: string;
   selected: Array<string>;
 };
@@ -59,6 +60,7 @@ export type ItemStatus = {
 export const rotateStatus = {
   NONE: 'none',
   PAY: 'pay',
+  PENDING: 'pending',
   SELECT: 'select',
   ADDED: 'added',
   REMOVED: 'removed',
@@ -113,9 +115,9 @@ export class DataProvider {
     return data;
   }
 
-  async listStart(listId: string | number): Promise<ItemStatus> {
+  async listStart(listId: string | number): Promise<{ url: string }> {
     const url = `${API_URL}/rotator/start`;
-    const data = await this.makeRequest<ItemStatus>(url, {
+    const data = await this.makeRequest<{ url: string }>(url, {
       method: 'POST',
       data: { listId },
     });

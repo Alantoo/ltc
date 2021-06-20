@@ -35,3 +35,11 @@ export async function fetchJson<T>(
     throw new Error((data && data.message) || response.statusText);
   }
 }
+
+export const getDateStr = (str: string): string => {
+  if (!str) {
+    return '';
+  }
+  const d = new Date(str);
+  return d.toLocaleString();
+};
