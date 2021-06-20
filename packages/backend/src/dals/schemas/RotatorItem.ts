@@ -9,6 +9,7 @@ export type RotatorItemDocument = RotatorItem & Document;
 export type RawRotatorItemDocument = LeanDocument<RotatorItemDocument>;
 
 const options: SchemaOptions = {
+  timestamps: true,
   toJSON: {
     virtuals: true,
     transform: function (doc, ret) {
@@ -35,6 +36,9 @@ export class RotatorItem extends Document {
     { type: MongooseSchema.Types.ObjectId, required: true, ref: User.name },
   ])
   selected: Array<MongooseSchema.Types.ObjectId>;
+
+  @Prop()
+  code: string;
 
   @Prop()
   status: string;

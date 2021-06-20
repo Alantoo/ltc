@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongoose';
+import { Document, FilterQuery, ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, Model } from './BaseDal';
@@ -22,6 +22,7 @@ export {
 export const rotateStatus = {
   NONE: 'none',
   PAY: 'pay',
+  PENDING: 'pending',
   SELECT: 'select',
   ADDED: 'added',
   REMOVED: 'removed',
@@ -63,13 +64,23 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     this.Model = model;
   }
 
+  async getOneByCode(code: string): Promise<RawRotatorItemDocument> {
+    const query: FilterQuery<Document> = { code };
+    await this._beforeFilter(query);
+    const doc = await this.Model.findOne(query);
+    if (doc) {
+      return doc.toJSON();
+    }
+  }
+
   async getHistory(userId): Promise<Array<RawRotatorItemDocument>> {
     // TODO: paging & sorting & filters
     const list = await this.Model.find({
       user: userId,
     })
       .populate('list')
-      .populate('user');
+      .populate('user')
+      .sort({ createdAt: 'DESC' });
     return list;
   }
 
@@ -78,7 +89,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
       $and: [
         { user: userId },
         {
-          $or: [{ status: rotateStatus.PAY }, { status: rotateStatus.SELECT }],
+          $or: [{ status: rotateStatus.SELECT }],
         },
       ],
     })

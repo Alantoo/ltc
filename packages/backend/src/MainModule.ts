@@ -26,6 +26,7 @@ import { RotatorService } from './services/RotatorService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
+import { PaymentService } from './services/PaymentService';
 import { UserController } from './controllers/UserController';
 import { ListController } from './controllers/ListController';
 import { RotatorController } from './controllers/RotatorController';
@@ -41,6 +42,31 @@ export class CookieParserMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     return this.useFn(req, res, next);
+  }
+}
+
+@Injectable()
+export class CoinbaseWebhookMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    req.setEncoding('utf8');
+
+    let data = '';
+
+    req.on('data', function (chunk) {
+      data += chunk;
+    });
+
+    req.on('error', function (chunk) {
+      console.error(chunk);
+    });
+
+    req.on('end', function () {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      req.rawBody = data;
+
+      next();
+    });
   }
 }
 
@@ -88,11 +114,13 @@ export class CookieParserMiddleware implements NestMiddleware {
     RotatorService,
     AuthService,
     EmailService,
+    PaymentService,
     JwtStrategy,
   ],
 })
 export class MainModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CookieParserMiddleware).forRoutes('/');
+    //consumer.apply(CoinbaseWebhookMiddleware).forRoutes('/api/rotator/webhook');
   }
 }

@@ -40,10 +40,44 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     return super.create(
       {
         ...data,
-        status: rotateStatus.SELECT,
+        status: rotateStatus.PAY,
       },
       user,
     );
+  }
+
+  async updateStatus(code: string, payStatus: string): Promise<void> {
+    const item = await this.rotatorItemDal.getOneByCode(code);
+
+    if (!item) {
+      return;
+    }
+
+    if (payStatus === 'charge:failed') {
+      await this.rotatorItemDal.updateInternal(item.id, {
+        status: rotateStatus.REMOVED,
+      });
+    }
+
+    if (payStatus === 'charge:pending') {
+      await this.rotatorItemDal.updateInternal(item.id, {
+        status: rotateStatus.PENDING,
+      });
+    }
+
+    if (
+      payStatus === 'charge:confirmed' ||
+      payStatus === 'charge:delayed' ||
+      payStatus === 'charge:resolved'
+    ) {
+      await this.rotatorItemDal.updateInternal(item.id, {
+        status: rotateStatus.SELECT,
+      });
+    }
+  }
+
+  async getOneByCode(code: string): Promise<RawRotatorItemDocument> {
+    return this.rotatorItemDal.getOneByCode(code);
   }
 
   async getHistory(user: UserData): Promise<Array<RawRotatorItemDocument>> {
