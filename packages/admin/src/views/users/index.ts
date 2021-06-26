@@ -5,7 +5,7 @@ import { UserShow } from './UserShow';
 
 export default {
   list: UserList,
-  // create: UserCreate,
+  create: UserCreate,
   edit: UserEdit,
   show: UserShow,
 };
