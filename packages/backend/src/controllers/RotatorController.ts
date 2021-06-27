@@ -59,7 +59,20 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
     @Query() query,
     @User() user: UserData,
   ): Promise<ListResult<RotatorItemDocument>> {
-    return super.getList(query, user);
+    try {
+      const sort = query.sort ? JSON.parse(query.sort) : undefined;
+      const range = query.range ? JSON.parse(query.range) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : undefined;
+
+      const data = await this.rotatorService.getComplexList(
+        { filter, range, sort },
+        user,
+      );
+      return data;
+    } catch (error) {
+      this.logger.log(`${this.constructor.name} get list error: ${error}`);
+      throw error;
+    }
   }
 
   @Get('history')

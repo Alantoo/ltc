@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DalService } from './DalService';
+import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
 import {
   RotatorItemDal,
@@ -31,6 +31,21 @@ export class RotatorService extends DalService<RotatorItemDocument> {
   constructor(@Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
+  }
+
+  async getComplexList(
+    query?: ListQuery,
+    user?: UserData,
+  ): Promise<ListResult<RotatorItemDocument>> {
+    const { filter, range, sort } = query || {};
+    await this._beforeListFilter(filter, user);
+    await this._beforeListRange(range, user);
+    await this._beforeListSort(sort, user);
+    const [data, total] = await Promise.all([
+      this.rotatorItemDal.getComplexList({ filter, range, sort }),
+      this.rotatorItemDal.getComplexCount({ filter, range, sort }),
+    ]);
+    return { data, total };
   }
 
   async create(

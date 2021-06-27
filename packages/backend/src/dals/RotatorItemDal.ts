@@ -1,7 +1,7 @@
 import { Document, FilterQuery, ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { BaseDal, Model } from './BaseDal';
+import { BaseDal, ListQuery, Model } from './BaseDal';
 
 import {
   RotatorItem,
@@ -10,6 +10,8 @@ import {
   RotatorItemSchema,
   RotatorItemCreateDto,
 } from './schemas/RotatorItem';
+
+import { User } from './schemas/User';
 
 export {
   RotatorItem,
@@ -62,6 +64,99 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   ) {
     super({ Model: model });
     this.Model = model;
+  }
+
+  async getComplexCount(query: ListQuery): Promise<number> {
+    const aggs = this.getComplexListAggregation(query, true);
+    const list = await this.Model.aggregate(aggs);
+    return list[0] ? list[0].count : 0;
+  }
+
+  async getComplexList(
+    query: ListQuery,
+  ): Promise<Array<RawRotatorItemDocument>> {
+    const aggs = this.getComplexListAggregation(query);
+    const list = await this.Model.aggregate(aggs);
+    return list;
+  }
+
+  private getComplexListAggregation(
+    query: ListQuery,
+    isCount = false,
+  ): Array<any> {
+    const { filter, range, sort } = query;
+    let skip = 0;
+    let limit = undefined;
+    if (range) {
+      skip = range[0];
+      limit = range[1] - range[0] + 1;
+    }
+    let sortRule = undefined;
+    if (sort) {
+      sortRule = { [sort[0]]: sort[1].toLowerCase() === 'asc' ? 1 : -1 };
+    }
+    const { query: queryStr = '', ...restFilters } = filter;
+    const filterRule = {
+      ...restFilters,
+      $and: [
+        {
+          $or: [
+            {
+              'user.name': { $regex: queryStr },
+            },
+            {
+              'user.email': { $regex: queryStr },
+            },
+          ],
+        },
+      ],
+    };
+    const aggs: Array<any> = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $lookup: {
+          from: 'lists',
+          localField: 'list',
+          foreignField: '_id',
+          as: 'list',
+        },
+      },
+      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: '$list', preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          id: '$_id',
+          status: 1,
+          createdAt: 1,
+          user: {
+            id: '$_id',
+            name: 1,
+            email: 1,
+          },
+          list: {
+            id: '$_id',
+            name: 1,
+            price: 1,
+          },
+        },
+      },
+      { $match: filterRule },
+    ];
+    if (isCount) {
+      aggs.push({ $count: 'count' });
+    } else {
+      aggs.push({ $skip: skip });
+      aggs.push({ $limit: limit });
+      aggs.push({ $sort: sortRule });
+    }
+    return aggs;
   }
 
   async getOneByCode(code: string): Promise<RawRotatorItemDocument> {
