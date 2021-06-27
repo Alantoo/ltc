@@ -121,30 +121,27 @@ https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
 https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Exu2fa3q5/.well-known/jwks.json
 https://cognito-idp.us-east-1.amazonaws.com/us-east-1_bxBRrto7R/.well-known/jwks.json
 
-
 Test
 Hosted UI Endpoint: https://cnz-test.auth.us-east-1.amazoncognito.com/
 Test Your Hosted UI Endpoint: https://cnz-test.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=43b5cmh31jboc89nnmaaktn8sj&redirect_uri=http://localhost:3000/
-
-
 
 Node install
 
 ```
 # get the software packages from Ubuntu repositories
 sudo apt-get install build-essential libssl-dev
- 
- 
+
+
 # download nvm install script and run it
 curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh -o install_nvm.sh
 chmod +x install_nvm.sh
 bash ./install_nvm.sh
 rm ./install_nvm.sh
- 
- 
+
+
 # source profile so that your current session knows about the changes
 source ~/.profile
- 
+
 # install node v10
 nvm install 10
 
@@ -154,8 +151,8 @@ YARN
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update
- 
- 
+
+
 # install yarn (by using "--no-install-recommends" you will avoid node.js installation)
 sudo apt-get install --no-install-recommends yarn
 
@@ -184,6 +181,7 @@ pm2 start ./index.js
 ```
 
 In this step, we will install certbot on your server. Before doing this, please make sure you have Python installed, updated on your server. These following commands will properly install the certbot to your system.
+
 ```
 $ sudo apt-get update
 $ sudo apt-get install software-properties-common
@@ -193,13 +191,14 @@ $ sudo apt-get update
 $ sudo apt-get install certbot
 ```
 
-
 Step 3: Generate the SLL certificate for your domains 🔒
 
 Now, as you have certbot, you can generate the certificate for your domain(s).
+
 ```
 $ sudo certbot certonly --manual
 ```
+
 After you run this command, you will be prompt to input your email, accept the term of service, enter your domain name (without www.), following by the verification which you have to serve a file at “/.well-known/acme-challenege/<xxxx>” containing the challenge string on your server. In this verification step, please left your shell window open and come back after your done hosting the acme-file on the server. You can do this by allowing your express app to serve the static file through HTTP as following server.js example.
 
 Then, go back to your shell and press enter. You will get confirmation that the certification for your domain.
