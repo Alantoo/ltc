@@ -5,10 +5,8 @@ import {
   Datagrid,
   TextField,
   EmailField,
-  TextFieldProps,
   EditButton,
   ShowButton,
-  CreateButton,
   DeleteButton,
 } from 'react-admin';
 

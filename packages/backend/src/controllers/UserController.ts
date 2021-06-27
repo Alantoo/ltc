@@ -4,6 +4,7 @@ import {
   UseGuards,
   Logger,
   Get,
+  Post,
   Put,
   Delete,
   Param,
@@ -20,6 +21,7 @@ import {
   UserDocument,
   RawUserDocument,
 } from '../services/UserService';
+import { AuthService } from '../services/AuthService';
 
 @ApiTags('users')
 @UseGuards(UserAuthGuard)
@@ -27,11 +29,17 @@ import {
 export class UserController extends ApiController<UserDocument> {
   protected logger = new Logger(UserController.name);
 
-  userService: UserService;
+  private userService: UserService;
 
-  constructor(@Inject(UserService) userService: UserService) {
+  private authService: AuthService;
+
+  constructor(
+    @Inject(UserService) userService: UserService,
+    @Inject(AuthService) authService: AuthService,
+  ) {
     super({ baseService: userService });
     this.userService = userService;
+    this.authService = authService;
   }
 
   @Get()
@@ -46,6 +54,14 @@ export class UserController extends ApiController<UserDocument> {
   @Get(':id')
   async getOne(@Param('id') id: string): Promise<SingleResult<UserDocument>> {
     return super.getOne(id);
+  }
+
+  @Post()
+  async create(
+    @Body() body: RawUserDocument,
+  ): Promise<SingleResult<UserDocument>> {
+    body.password = this.authService.encodePass(body.password || '123456789');
+    return super.create(body);
   }
 
   @Put(':id')

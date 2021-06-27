@@ -207,6 +207,10 @@ export class AuthService {
     }
   }
 
+  encodePass(rawPass: string): string {
+    return hashSync(rawPass, process.env.SALT);
+  }
+
   private async updateRefreshToken(
     userId: string,
     rememberMe: boolean,
@@ -251,10 +255,6 @@ export class AuthService {
     const tokenExpires = new Date(new Date().getTime() + delay).getTime();
 
     return { tokenId: refreshTokenId, tokenExpires };
-  }
-
-  private encodePass(rawPass: string): string {
-    return hashSync(rawPass, process.env.SALT);
   }
 
   private createLoginInfo(user: RawUserDocument, token: string): LoginInfo {

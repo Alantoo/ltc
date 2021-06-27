@@ -5,7 +5,6 @@ export const UserCreate = (props: CreateProps) => {
   return (
     <Create {...props}>
       <SimpleForm redirect="/users">
-        <TextInput source="id" label="id" />
         <TextInput source="name" label="User Name" />
         <TextInput source="email" label="Email" />
         <TextInput source="phone" label="Phone" />
