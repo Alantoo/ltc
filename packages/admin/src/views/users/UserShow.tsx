@@ -8,7 +8,6 @@ export const UserShow = (props: ShowProps) => {
         <TextField source="name" />
         <TextField source="email" />
         <TextField source="phone" />
-        <TextField source="action" />
       </SimpleShowLayout>
     </Show>
   );

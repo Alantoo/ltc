@@ -1,5 +1,11 @@
 import React from 'react';
-import { Create, CreateProps, SimpleForm, TextInput } from 'react-admin';
+import {
+  Create,
+  CreateProps,
+  SimpleForm,
+  TextInput,
+  PasswordInput,
+} from 'react-admin';
 
 export const UserCreate = (props: CreateProps) => {
   return (
@@ -8,7 +14,7 @@ export const UserCreate = (props: CreateProps) => {
         <TextInput source="name" label="User Name" />
         <TextInput source="email" label="Email" />
         <TextInput source="phone" label="Phone" />
-        <TextInput source="action" label="Action" />
+        <PasswordInput source="password" label="Password" />
       </SimpleForm>
     </Create>
   );
