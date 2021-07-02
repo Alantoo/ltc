@@ -16,7 +16,7 @@ export class ApiController<T extends Document> {
     this.baseService = props.baseService;
   }
 
-  async getList(query: any, user: UserData): Promise<ListResult<T>> {
+  async getList(query: any, user?: UserData): Promise<ListResult<T>> {
     try {
       const sort = query.sort ? JSON.parse(query.sort) : undefined;
       const range = query.range ? JSON.parse(query.range) : undefined;
@@ -33,7 +33,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async getOne(id: string): Promise<SingleResult<T>> {
+  async getOne(id: string, user?: UserData): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.getOne(id, {} /*req.user*/);
       return data;
@@ -53,7 +53,11 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async update(id: string, body: LeanDocument<T>): Promise<SingleResult<T>> {
+  async update(
+    id: string,
+    body: LeanDocument<T>,
+    user?: UserData,
+  ): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.update(id, body, {} /*req.user*/);
       return data;
@@ -63,7 +67,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async delete(id: string): Promise<SingleResult<T>> {
+  async delete(id: string, user?: UserData): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.delete(id, {} /*req.user*/);
       return data;

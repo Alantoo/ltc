@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   BadRequestException,
   UnauthorizedException,
+  mixin,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,8 +22,38 @@ const getCode = (size = 25): string => {
   return token;
 };
 
+export const roles = {
+  ADMIN: 'admins',
+};
+
 @Injectable()
 export class UserAuthGuard extends AuthGuard('jwt') {}
+
+export function AuthRoles(roles: string[]) {
+  return mixin(
+    class RolesAuth extends AuthGuard('jwt') {
+      protected readonly roles = roles;
+      handleRequest(err, user, info, context) {
+        if (err || !user) {
+          throw err || new UnauthorizedException();
+        }
+
+        if (this.roles.length === 0) {
+          return user;
+        }
+
+        if (!this.roles.some((s) => (user.roles || []).includes(s))) {
+          throw new UnauthorizedException(
+            `User does not meet one of the required roles (${this.roles.join(
+              ',',
+            )})`,
+          );
+        }
+        return user;
+      }
+    },
+  );
+}
 
 export type UserData =
   | undefined
@@ -34,7 +65,7 @@ export const User = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const user: RawUserDocument = request.user;
-    const isAdmin = user ? user.roles.includes('admin') : false;
+    const isAdmin = user ? user.roles.includes(roles.ADMIN) : false;
     const proxy: UserData = {
       ...user,
       isAdmin() {

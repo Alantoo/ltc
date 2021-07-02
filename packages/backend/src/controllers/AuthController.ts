@@ -14,7 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import {
   AuthService,
-  UserAuthGuard,
+  AuthRoles,
   LoginInfo,
   RefreshInfo,
   UserData,
@@ -99,7 +99,7 @@ export class AuthController {
   }
 
   @Get('sendVerify')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async sendVerify(
     @Req() request: Request,
     @User() user: UserData,

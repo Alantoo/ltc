@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiController } from './ApiController';
-import { UserAuthGuard, User, UserData } from '../services/AuthService';
+import { roles, AuthRoles, User, UserData } from '../services/AuthService';
 import { ListResult, SingleResult } from '../services/DalService';
 import {
   List as ListModel,
@@ -23,7 +23,6 @@ import {
 } from '../services/ListService';
 
 @ApiTags('lists')
-@UseGuards(UserAuthGuard)
 @Controller('api/lists')
 export class ListController extends ApiController<ListDocument> {
   protected logger = new Logger(ListController.name);
@@ -36,6 +35,7 @@ export class ListController extends ApiController<ListDocument> {
   }
 
   @Get()
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async getList(
     @Query() query,
     @User() user: UserData,
@@ -45,12 +45,14 @@ export class ListController extends ApiController<ListDocument> {
 
   @ApiResponse({ type: ListModel })
   @Get(':id')
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async getOne(@Param('id') id: string): Promise<SingleResult<ListDocument>> {
     return super.getOne(id);
   }
 
   @ApiResponse({ type: ListModel })
   @Post()
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async create(
     @Body() body: RawListDocument,
   ): Promise<SingleResult<ListDocument>> {
@@ -58,6 +60,7 @@ export class ListController extends ApiController<ListDocument> {
   }
 
   @Put(':id')
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async update(
     @Param('id') id: string,
     @Body() body: RawListDocument,
@@ -66,11 +69,13 @@ export class ListController extends ApiController<ListDocument> {
   }
 
   @Delete(':id')
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async delete(@Param('id') id: string): Promise<SingleResult<ListDocument>> {
     return super.delete(id);
   }
 
   @Delete()
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async deleteBunch(
     @Body() body: { ids: Array<string> },
   ): Promise<Array<string>> {

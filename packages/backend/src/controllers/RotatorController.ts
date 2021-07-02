@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiController } from './ApiController';
-import { UserAuthGuard, User, UserData } from '../services/AuthService';
+import { roles, AuthRoles, User, UserData } from '../services/AuthService';
 import { ListResult, SingleResult } from '../services/DalService';
 import {
   RotatorItem as RotatorItemModel,
@@ -54,7 +54,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Get()
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async getList(
     @Query() query,
     @User() user: UserData,
@@ -76,7 +76,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Get('history')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async getHistory(
     @User() user: UserData,
   ): Promise<Array<RawRotatorItemDocument>> {
@@ -85,7 +85,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Get('status')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async getStatus(
     @User() user: UserData,
   ): Promise<{ item: RawRotatorItemDocument; list: Array<RawListDocument> }> {
@@ -95,7 +95,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Post('start')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async start(
     @Body() body: { listId: string },
     @User() user: UserData,
@@ -125,7 +125,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Get(':id/status')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async getUsers(
     @Param('id') id: string,
     @User() user: UserData,
@@ -138,7 +138,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Post(':id/select')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([]))
   async select(
     @Param('id') id: string,
     @Body() body: { userId: string },
@@ -181,7 +181,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @ApiResponse({ type: RotatorItemModel })
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([roles.ADMIN]))
   @Get(':id')
   async getOne(
     @Param('id') id: string,
@@ -190,7 +190,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   }
 
   @Put(':id')
-  @UseGuards(UserAuthGuard)
+  @UseGuards(AuthRoles([roles.ADMIN]))
   async update(
     @Param('id') id: string,
     @Body() body: RawRotatorItemDocument,
