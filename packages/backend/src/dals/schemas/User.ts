@@ -44,6 +44,9 @@ export class User extends Document {
   isVerified: boolean;
 
   @Prop()
+  isBlocked: boolean;
+
+  @Prop()
   code: string;
 }
 

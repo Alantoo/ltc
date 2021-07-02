@@ -21,6 +21,7 @@ export const UserEdit = (props: EditProps) => {
         <TextInput source="phone" label="Phone" />
         <PasswordInput source="password" label="Password" />
         <BooleanInput source="isAdmin" />
+        <BooleanInput source="isBlocked" />
       </SimpleForm>
     </Edit>
   );

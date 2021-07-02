@@ -90,6 +90,7 @@ export class UserController extends ApiController<UserDocument> {
     }
     if (!user.isAdmin) {
       delete body.isAdmin;
+      delete body.isBlocked;
     }
     body.password = this.authService.encodePass(body.password || '123456789');
     return super.update(id, body, user);

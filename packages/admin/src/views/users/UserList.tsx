@@ -17,8 +17,9 @@ export const UserList = (props: ListProps) => {
       <Datagrid rowClick="show">
         <TextField source="name" />
         <EmailField source="email" />
-        <BooleanField source="isAdmin" />
         <TextField source="phone" />
+        <BooleanField source="isAdmin" />
+        <BooleanField source="isBlocked" />
         <ShowButton basePath="/users" label="View" />
         <EditButton basePath="/users" label="Edit" />
         <DeleteButton basePath="/users" label="Delete" />

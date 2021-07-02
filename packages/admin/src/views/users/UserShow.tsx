@@ -15,6 +15,7 @@ export const UserShow = (props: ShowProps) => {
         <TextField source="email" />
         <TextField source="phone" />
         <BooleanField source="isAdmin" />
+        <BooleanField source="isBlocked" />
       </SimpleShowLayout>
     </Show>
   );

@@ -167,6 +167,9 @@ export class AuthService {
     if (user && user.password !== this.encodePass(pass)) {
       throw new BadRequestException('Wrong password');
     }
+    if (user && user.isBlocked) {
+      throw new BadRequestException('User is blocked');
+    }
 
     const refreshInfo = await this.updateRefreshToken(user.id, rememberMe);
 
@@ -198,6 +201,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (user && user.isBlocked) {
+      throw new UnauthorizedException('User is blocked');
+    }
+
     const token = this.createToken(user);
     return this.createLoginInfo(user, token);
   }
@@ -206,6 +213,9 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid token');
+    }
+    if (user && user.isBlocked) {
+      throw new UnauthorizedException('User is blocked');
     }
     return user;
   }

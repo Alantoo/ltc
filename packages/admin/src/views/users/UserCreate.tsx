@@ -17,6 +17,7 @@ export const UserCreate = (props: CreateProps) => {
         <TextInput source="phone" label="Phone" />
         <PasswordInput source="password" label="Password" />
         <BooleanInput source="isAdmin" />
+        <BooleanInput source="isBlocked" />
       </SimpleForm>
     </Create>
   );
