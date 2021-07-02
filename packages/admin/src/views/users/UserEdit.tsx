@@ -5,6 +5,7 @@ import {
   SimpleForm,
   TextInput,
   PasswordInput,
+  BooleanInput,
 } from 'react-admin';
 
 const redirect = (base: string, id: string) => {
@@ -19,6 +20,7 @@ export const UserEdit = (props: EditProps) => {
         <TextInput source="email" label="Email" />
         <TextInput source="phone" label="Phone" />
         <PasswordInput source="password" label="Password" />
+        <BooleanInput source="isAdmin" />
       </SimpleForm>
     </Edit>
   );

@@ -5,6 +5,7 @@ import {
   Datagrid,
   TextField,
   EmailField,
+  BooleanField,
   EditButton,
   ShowButton,
   DeleteButton,
@@ -14,9 +15,9 @@ export const UserList = (props: ListProps) => {
   return (
     <List {...props}>
       <Datagrid rowClick="show">
-        <TextField source="id" />
         <TextField source="name" />
         <EmailField source="email" />
+        <BooleanField source="isAdmin" />
         <TextField source="phone" />
         <ShowButton basePath="/users" label="View" />
         <EditButton basePath="/users" label="Edit" />

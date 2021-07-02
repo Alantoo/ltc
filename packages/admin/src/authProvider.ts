@@ -5,7 +5,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 export type JwtPayload = {
   id: string;
   email: string;
-  roles: string[];
+  isAdmin: boolean;
+  isVerified: boolean;
 };
 
 export type LoginInfo = JwtPayload & {
@@ -194,8 +195,12 @@ export class AuthProvider {
   private setToken(loginInfo: LoginInfo, refreshInfo?: RefreshInfo) {
     const { token, expiresIn = '600000' } = loginInfo;
     const delay = parseInt(expiresIn, 10);
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (!payload.isAdmin) {
+      throw new Error('Not admin');
+    }
     this.token = token;
-    this.payload = JSON.parse(atob(token.split('.')[1]));
+    this.payload = payload;
     this.refreshToken(delay);
     if (refreshInfo) {
       this.refreshTokenInfo = refreshInfo;

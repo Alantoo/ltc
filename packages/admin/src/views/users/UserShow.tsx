@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Show, ShowProps, SimpleShowLayout, TextField } from 'react-admin';
+import {
+  Show,
+  ShowProps,
+  SimpleShowLayout,
+  TextField,
+  BooleanField,
+} from 'react-admin';
 
 export const UserShow = (props: ShowProps) => {
   return (
@@ -8,6 +14,7 @@ export const UserShow = (props: ShowProps) => {
         <TextField source="name" />
         <TextField source="email" />
         <TextField source="phone" />
+        <BooleanField source="isAdmin" />
       </SimpleShowLayout>
     </Show>
   );

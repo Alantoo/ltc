@@ -32,6 +32,9 @@ export class User extends Document {
   @Prop({ type: [String], default: [] })
   roles: string[];
 
+  @Prop({ type: Boolean, default: false })
+  isAdmin: boolean;
+
   @ApiProperty()
   @Prop({ type: String, required: true, unique: true })
   name: string;

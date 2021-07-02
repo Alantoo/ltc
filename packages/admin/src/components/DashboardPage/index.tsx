@@ -12,7 +12,10 @@ type ClassKey = 'main';
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
-    main: {},
+    main: {
+      padding: 20,
+      userSelect: 'none',
+    },
   });
 };
 

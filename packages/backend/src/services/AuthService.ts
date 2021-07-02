@@ -58,19 +58,15 @@ export function AuthRoles(roles: string[]) {
 export type UserData =
   | undefined
   | (RawUserDocument & {
-      isAdmin: () => boolean;
+      isAdmin: boolean;
     });
 
 export const User = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const user: RawUserDocument = request.user;
-    const isAdmin = user ? user.roles.includes(roles.ADMIN) : false;
     const proxy: UserData = {
       ...user,
-      isAdmin() {
-        return isAdmin;
-      },
     };
     return proxy; // || { id: '000000000000000000000000' };
   },
@@ -79,7 +75,7 @@ export const User = createParamDecorator(
 export type JwtPayload = {
   id: string;
   email: string;
-  roles: string[];
+  isAdmin: boolean;
   isVerified: boolean;
 };
 
@@ -297,8 +293,8 @@ export class AuthService {
   }
 
   private createToken(user: RawUserDocument): string {
-    const { id, email, roles, isVerified } = user;
-    const payload: JwtPayload = { id, email, roles, isVerified };
+    const { id, email, isAdmin, isVerified } = user;
+    const payload: JwtPayload = { id, email, isAdmin, isVerified };
     return this.jwtService.sign(payload);
   }
 }

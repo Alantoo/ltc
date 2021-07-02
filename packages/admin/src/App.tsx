@@ -40,7 +40,7 @@ function App() {
           dashboard={DashboardPage as DashboardComponent}
           layout={MyLayout}
         >
-          {(permissions) => {
+          {() => {
             return [
               <Resource name="rotator" icon={ListAltIcon} {...rotator} />,
               <Resource name="lists" icon={TuneIcon} {...lists} />,

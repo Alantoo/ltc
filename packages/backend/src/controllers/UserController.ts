@@ -11,6 +11,7 @@ import {
   Query,
   Body,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ApiController } from './ApiController';
@@ -60,7 +61,7 @@ export class UserController extends ApiController<UserDocument> {
   ): Promise<SingleResult<UserDocument>> {
     // check admin or owner
     const obj: RawUserDocument = await super.getOne(id, user);
-    if (!user.isAdmin() && user.id.toString() !== obj.id.toString()) {
+    if (!user.isAdmin && user.id.toString() !== obj.id.toString()) {
       throw new UnauthorizedException();
     }
     return obj;
@@ -84,9 +85,13 @@ export class UserController extends ApiController<UserDocument> {
   ): Promise<SingleResult<UserDocument>> {
     // check admin or owner
     const obj: RawUserDocument = await super.getOne(id, user);
-    if (!user.isAdmin() && user.id.toString() !== obj.id.toString()) {
+    if (!user.isAdmin && user.id.toString() !== obj.id.toString()) {
       throw new UnauthorizedException();
     }
+    if (!user.isAdmin) {
+      delete body.isAdmin;
+    }
+    body.password = this.authService.encodePass(body.password || '123456789');
     return super.update(id, body, user);
   }
 
@@ -98,7 +103,10 @@ export class UserController extends ApiController<UserDocument> {
   ): Promise<SingleResult<UserDocument>> {
     // check admin or owner
     const obj: RawUserDocument = await super.getOne(id, user);
-    if (!user.isAdmin() && user.id.toString() !== obj.id.toString()) {
+    if (user.id.toString() === obj.id.toString()) {
+      throw new UnprocessableEntityException('User can not delete himself');
+    }
+    if (!user.isAdmin) {
       throw new UnauthorizedException();
     }
     return super.delete(id, user);
