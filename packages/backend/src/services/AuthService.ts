@@ -29,20 +29,25 @@ export const roles = {
 @Injectable()
 export class UserAuthGuard extends AuthGuard('jwt') {}
 
-export function AuthRoles(roles: string[]) {
+export function AuthRoles(ruleRoles: string[]) {
   return mixin(
     class RolesAuth extends AuthGuard('jwt') {
-      protected readonly roles = roles;
+      protected readonly roles = ruleRoles;
       handleRequest(err, user, info, context) {
         if (err || !user) {
           throw err || new UnauthorizedException();
+        }
+
+        const userRoles = [];
+        if (user.isAdmin) {
+          userRoles.push(roles.ADMIN);
         }
 
         if (this.roles.length === 0) {
           return user;
         }
 
-        if (!this.roles.some((s) => (user.roles || []).includes(s))) {
+        if (!this.roles.some((s) => userRoles.includes(s))) {
           throw new UnauthorizedException(
             `User does not meet one of the required roles (${this.roles.join(
               ',',

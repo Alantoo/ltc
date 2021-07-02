@@ -29,9 +29,6 @@ export class User extends Document {
   @Prop()
   password: string;
 
-  @Prop({ type: [String], default: [] })
-  roles: string[];
-
   @Prop({ type: Boolean, default: false })
   isAdmin: boolean;
 
