@@ -9,14 +9,12 @@ import {
   rotateStatus,
 } from '../dals/RotatorItemDal';
 
-import { RawUserDocument } from '../dals/schemas/User';
-import { filter } from 'rxjs/operators';
-
 export {
   RawRotatorItemDocument,
   RotatorItemDocument,
   RotatorItem,
   RotatorItemCreateDto,
+  rotateStatus,
 } from '../dals/RotatorItemDal';
 
 export type ItemStatus = {
@@ -50,15 +48,9 @@ export class RotatorService extends DalService<RotatorItemDocument> {
 
   async create(
     data: RotatorItemCreateDto,
-    user,
+    user: UserData,
   ): Promise<RawRotatorItemDocument | undefined> {
-    return super.create(
-      {
-        ...data,
-        status: rotateStatus.PAY,
-      },
-      user,
-    );
+    return super.create(data, user);
   }
 
   async updateStatus(code: string, payStatus: string): Promise<void> {

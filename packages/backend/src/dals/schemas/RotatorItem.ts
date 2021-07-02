@@ -47,6 +47,7 @@ export class RotatorItem extends Document {
 export class RotatorItemCreateDto extends PickType(RotatorItem, []) {
   list: string;
   user: string;
+  status: string;
 }
 
 export const RotatorItemSchema = SchemaFactory.createForClass(RotatorItem);

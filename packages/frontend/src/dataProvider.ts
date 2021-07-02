@@ -115,11 +115,14 @@ export class DataProvider {
     return data;
   }
 
-  async listStart(listId: string | number): Promise<{ url: string }> {
+  async listStart(
+    listId: string | number,
+    direct?: boolean,
+  ): Promise<{ url: string }> {
     const url = `${API_URL}/rotator/start`;
     const data = await this.makeRequest<{ url: string }>(url, {
       method: 'POST',
-      data: { listId },
+      data: { listId, direct },
     });
     return data;
   }

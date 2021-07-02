@@ -22,13 +22,12 @@ import {
   RotatorItemDocument,
   RawRotatorItemDocument,
   RotatorItemCreateDto,
-  ItemStatus,
+  rotateStatus,
 } from '../services/RotatorService';
 import { ListService, RawListDocument } from '../services/ListService';
 import { UserService, RawUserDocument } from '../services/UserService';
 import { PaymentService } from '../services/PaymentService';
 import { Request } from 'express';
-import { rotateStatus } from '../dals/RotatorItemDal';
 
 @ApiTags('rotator')
 @Controller('api/rotator')
@@ -97,10 +96,10 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   @Post('start')
   @UseGuards(AuthRoles([]))
   async start(
-    @Body() body: { listId: string },
+    @Body() body: { listId: string; direct: boolean },
     @User() user: UserData,
   ): Promise<{ url: string }> {
-    const { listId } = body || {};
+    const { listId, direct } = body || {};
 
     const list = await this.listService.getOne(listId, user);
 
@@ -108,20 +107,33 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
       throw new NotFoundException(`List with "${listId}" id not found`);
     }
 
-    const charge = await this.paymentService.chargesCreate({
-      name: `List name - ${list.name}`,
-      description: `List price - "$${list.price}"`,
-      price: '1.11',
-    });
+    // TODO: remove for Production
+    if (direct) {
+      const data: RotatorItemCreateDto = {
+        list: listId,
+        user: user.id,
+        status: rotateStatus.SELECT,
+      };
 
-    const data: RotatorItemCreateDto = {
-      list: listId,
-      user: user.id,
-      code: charge.code,
-    };
+      await this.rotatorService.create(data, user);
+      return { url: '' };
+    } else {
+      const charge = await this.paymentService.chargesCreate({
+        name: `List name - ${list.name}`,
+        description: `List price - "$${list.price}"`,
+        price: '1.11',
+      });
 
-    await this.rotatorService.create(data, user);
-    return { url: charge.hosted_url };
+      const data: RotatorItemCreateDto = {
+        list: listId,
+        user: user.id,
+        code: charge.code,
+        status: rotateStatus.PAY,
+      };
+
+      await this.rotatorService.create(data, user);
+      return { url: charge.hosted_url };
+    }
   }
 
   @Get(':id/status')

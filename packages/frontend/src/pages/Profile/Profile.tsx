@@ -232,12 +232,14 @@ const ProfileView = ({ classes }: ProfileProps) => {
   );
 
   const onPaySubmit = useCallback(
-    (listId: string | number) => {
+    (listId: string | number, direct?: boolean) => {
       dataProvider
-        .listStart(listId)
-        .then((data) => {
-          if (data && data.url) {
+        .listStart(listId, direct)
+        .then((data = { url: '' }) => {
+          if (data.url) {
             window.open(data.url, '_blank');
+          } else {
+            window.location.reload();
           }
 
           setHistoryCache(historyCache + 1);
@@ -358,6 +360,11 @@ const ProfileView = ({ classes }: ProfileProps) => {
             onPaySubmit(id);
           };
 
+          const onPayDirectClick = (e: React.MouseEvent) => {
+            e.preventDefault();
+            onPaySubmit(id, true);
+          };
+
           return (
             <li key={id} className={classes.gridItem}>
               <Typography className={classes.gridItemTop} component="div">
@@ -369,7 +376,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
                 <a href="#" onClick={onPayClick}>
                   <img src={gpay} alt="gpay" />
                 </a>
-                <a href="#" onClick={onPayClick}>
+                <a href="#" onClick={onPayDirectClick}>
                   <img src={bitpay} alt="bitpay" />
                 </a>
               </div>
