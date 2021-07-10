@@ -24,7 +24,7 @@ import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
-import { List, RotatorItem, User, rotateStatus } from 'dataProvider';
+import { List, RotatorItem, rotateStatus } from 'dataProvider';
 import { getDateStr } from 'helpers';
 
 import { MyTheme } from 'theme';
@@ -136,15 +136,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [itemsListCache, setItemsListCache] = useState(0);
   const itemsListCacheTimer = useRef<NodeJS.Timeout>();
 
-  // const gridItems = [
-  //   { name: '$100.00', price: '$604.95' },
-  //   { name: '$50.00', price: '$304.95' },
-  //   { name: '$20.00', price: '$124.95' },
-  //   { name: '$10.00', price: '$64.95' },
-  //   { name: '$5.00', price: '$34.95' },
-  //   { name: '$1.00', price: '$10.95' },
-  // ];
-
   const updateActiveItem = useCallback(
     (newActiveItem) => {
       if (newActiveItem && newActiveItem.status === rotateStatus.ADDED) {
@@ -166,12 +157,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
       } else {
         setActiveItemList(undefined);
       }
-      // if (itemsListCacheTimer.current) {
-      //   clearTimeout(itemsListCacheTimer.current);
-      // }
-      // itemsListCacheTimer.current = setTimeout(() => {
-      //   setItemsListCache(itemsListCache + 1);
-      // }, 10000);
+      if (itemsListCacheTimer.current) {
+        clearTimeout(itemsListCacheTimer.current);
+      }
+      itemsListCacheTimer.current = setTimeout(() => {
+        setItemsListCache(itemsListCache + 1);
+      }, 10000);
     },
     [setItemsList, itemsListCacheTimer, itemsListCache, setItemsListCache],
   );
@@ -252,12 +243,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
   );
 
   const onUserSelect = useCallback(
-    (userId: string | number) => {
+    (selectedItemId: string | number, index: number) => {
       if (!activeItem) {
         return;
       }
       dataProvider
-        .addItemUser(activeItem.id, userId)
+        .addItemUser(activeItem.id, selectedItemId, index)
         .then((data) => {
           const { item, list } = data || {};
           updateActiveItem(item);
@@ -305,7 +296,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   if (activeItem) {
     const { name } = activeItemList || {};
-    const { selected = [] } = activeItem;
     activeOrList = (
       <div className={classes.activeItem}>
         <Typography className={classes.activeItemTitle} variant="h5">
@@ -330,16 +320,18 @@ const ProfileView = ({ classes }: ProfileProps) => {
             </thead>
             <tbody>
               {itemsList.map((item, index) => {
-                const isSelected = selected.includes(`${item.id}`);
                 const onSelectedChange = (e: React.MouseEvent) => {
                   e.preventDefault();
-                  onUserSelect(item.id);
+                  onUserSelect(item.id, index);
                 };
                 return (
                   <tr key={item.id}>
                     <td>{index + 1}</td>
                     <td>
-                      <button onClick={onSelectedChange} disabled={isSelected}>
+                      <button
+                        onClick={onSelectedChange}
+                        disabled={item.isSelected}
+                      >
                         {item.user.name}
                       </button>
                     </td>

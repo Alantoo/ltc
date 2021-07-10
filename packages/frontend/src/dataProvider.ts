@@ -44,7 +44,7 @@ export type RotatorItem = MyRecord & {
   user: User;
   createdAt: string;
   status: string;
-  selected: Array<string>;
+  isSelected: boolean;
 };
 
 export type UserStatus = {
@@ -135,12 +135,13 @@ export class DataProvider {
 
   async addItemUser(
     itemId: string | number,
-    userId: string | number,
+    selectedItemId: string | number,
+    index: number,
   ): Promise<ItemStatus> {
     const url = `${API_URL}/rotator/${itemId}/select`;
     const data = await this.makeRequest<ItemStatus>(url, {
       method: 'POST',
-      data: { userId },
+      data: { selectedItemId, index },
     });
     return data;
   }
