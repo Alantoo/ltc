@@ -22,10 +22,11 @@ import {
   RotatorItemDocument,
   RawRotatorItemDocument,
   RotatorItemCreateDto,
+  ItemStatus,
   rotateStatus,
 } from '../services/RotatorService';
 import { ListService, RawListDocument } from '../services/ListService';
-import { UserService, RawUserDocument } from '../services/UserService';
+import { UserService } from '../services/UserService';
 import { PaymentService } from '../services/PaymentService';
 import { Request } from 'express';
 
@@ -141,10 +142,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   async getUsers(
     @Param('id') id: string,
     @User() user: UserData,
-  ): Promise<{
-    item: RawRotatorItemDocument;
-    list: Array<RawRotatorItemDocument>;
-  }> {
+  ): Promise<ItemStatus> {
     const { item, list } = await this.rotatorService.getStatus(id, user);
     return { item, list };
   }
@@ -153,16 +151,14 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
   @UseGuards(AuthRoles([]))
   async select(
     @Param('id') id: string,
-    @Body() body: { userId: string },
+    @Body() body: { selectedItemId: string; index: number },
     @User() user: UserData,
-  ): Promise<{
-    item: RawRotatorItemDocument;
-    list: Array<RawRotatorItemDocument>;
-  }> {
-    const { userId } = body || {};
+  ): Promise<ItemStatus> {
+    const { selectedItemId, index } = body || {};
     const { item, list } = await this.rotatorService.selectUser(
       id,
-      userId,
+      selectedItemId,
+      index,
       user,
     );
     return { item, list };

@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, Model } from './BaseDal';
-import {
-  List,
-  ListDocument,
-  RawListDocument,
-  ListSchema,
-} from './schemas/List';
+import { List, ListDocument } from './schemas/List';
 
 export {
   List,

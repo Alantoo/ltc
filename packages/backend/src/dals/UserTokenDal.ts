@@ -5,7 +5,6 @@ import {
   UserToken,
   UserTokenDocument,
   RawUserTokenDocument,
-  UserTokenSchema,
   UserTokenCreateDto,
 } from './schemas/UserToken';
 

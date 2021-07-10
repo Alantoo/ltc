@@ -20,9 +20,15 @@ import {
   RotatorItem,
   RotatorItemSchema,
 } from './dals/RotatorItemDal';
+import {
+  ItemSelectDal,
+  ItemSelect,
+  ItemSelectSchema,
+} from './dals/ItemSelectDal';
 import { UserService } from './services/UserService';
 import { ListService } from './services/ListService';
 import { RotatorService } from './services/RotatorService';
+import { ItemSelectService } from './services/ItemSelectService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
@@ -96,6 +102,7 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
       { name: UserToken.name, schema: UserTokenSchema },
       { name: List.name, schema: ListSchema },
       { name: RotatorItem.name, schema: RotatorItemSchema },
+      { name: ItemSelect.name, schema: ItemSelectSchema },
     ]),
   ],
   controllers: [
@@ -109,9 +116,11 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
     UserTokenDal,
     ListDal,
     RotatorItemDal,
+    ItemSelectDal,
     UserService,
     ListService,
     RotatorService,
+    ItemSelectService,
     AuthService,
     EmailService,
     PaymentService,

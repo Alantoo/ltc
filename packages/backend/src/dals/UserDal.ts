@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, Model } from './BaseDal';
-import {
-  User,
-  UserDocument,
-  RawUserDocument,
-  UserSchema,
-} from './schemas/User';
+import { User, UserDocument, RawUserDocument } from './schemas/User';
 
 export {
   User,

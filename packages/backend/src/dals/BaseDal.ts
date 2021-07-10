@@ -1,6 +1,6 @@
 import { Model, Document, LeanDocument, FilterQuery, Types } from 'mongoose';
 
-export { Model, Document, LeanDocument, FilterQuery } from 'mongoose';
+export { Model, Document, LeanDocument, FilterQuery, Types } from 'mongoose';
 
 const toObjectId = (id: any) => {
   return new Types.ObjectId(id);

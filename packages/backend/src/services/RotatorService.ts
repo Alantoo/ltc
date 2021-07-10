@@ -1,16 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
+import { ItemSelectService } from './ItemSelectService';
 import {
   RotatorItemDal,
   RotatorItemDocument,
   RawRotatorItemDocument,
+  RawRotatorItemDocumentForUi,
   RotatorItemCreateDto,
   rotateStatus,
 } from '../dals/RotatorItemDal';
 
 export {
   RawRotatorItemDocument,
+  RawRotatorItemDocumentForUi,
   RotatorItemDocument,
   RotatorItem,
   RotatorItemCreateDto,
@@ -19,16 +22,23 @@ export {
 
 export type ItemStatus = {
   item: RawRotatorItemDocument;
-  list: Array<RawRotatorItemDocument>;
+  list: Array<RawRotatorItemDocumentForUi>;
 };
+
+const SELECT_COUNT = 6;
 
 @Injectable()
 export class RotatorService extends DalService<RotatorItemDocument> {
   rotatorItemDal: RotatorItemDal;
+  selectService: ItemSelectService;
 
-  constructor(@Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal) {
+  constructor(
+    @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
+    @Inject(ItemSelectService) selectService: ItemSelectService,
+  ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
+    this.selectService = selectService;
   }
 
   async getComplexList(
@@ -53,8 +63,8 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     return super.create(data, user);
   }
 
-  async updateStatus(code: string, payStatus: string): Promise<void> {
-    const item = await this.rotatorItemDal.getOneByCode(code);
+  async updateStatus(paymentCode: string, payStatus: string): Promise<void> {
+    const item = await this.rotatorItemDal.getOneByCode(paymentCode);
 
     if (!item) {
       return;
@@ -83,10 +93,6 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     }
   }
 
-  async getOneByCode(code: string): Promise<RawRotatorItemDocument> {
-    return this.rotatorItemDal.getOneByCode(code);
-  }
-
   async getHistory(user: UserData): Promise<Array<RawRotatorItemDocument>> {
     const list = await this.rotatorItemDal.getHistory(user.id);
     return list;
@@ -97,10 +103,19 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     return item;
   }
 
-  async getStatus(id: string, user): Promise<ItemStatus> {
-    let item = await this.rotatorItemDal.getOne(id);
-    const list = await this.rotatorItemDal.getRandomFor(item.list, item.user);
-    if (item.selected.length === list.length) {
+  async getStatus(id: string, user: UserData): Promise<ItemStatus> {
+    let item = await this.getOne(id, user);
+    if (!item) {
+      throw new NotFoundException();
+    }
+    const selected = await this.selectService.getSelectedFor(item.id);
+    const list = await this.rotatorItemDal.getRandomFor(
+      item.list,
+      item.user,
+      selected,
+      SELECT_COUNT,
+    );
+    if (selected.length === list.length) {
       // done
       item = await this.rotatorItemDal.updateInternal(id, {
         status: rotateStatus.ADDED,
@@ -111,20 +126,36 @@ export class RotatorService extends DalService<RotatorItemDocument> {
 
   async selectUser(
     id: string,
-    selectUserId: string,
-    user,
+    selectedItemId: string,
+    index: number,
+    user: UserData,
   ): Promise<ItemStatus> {
-    const curItem = await this.rotatorItemDal.getOne(id);
-    let item = await this.rotatorItemDal.updateInternal(id, {
-      selected: [...curItem.selected, selectUserId],
-    });
-    const list = await this.rotatorItemDal.getRandomFor(item.list, item.user);
-    if (item.selected.length === list.length) {
+    let item = await this.getOne(id, user);
+    if (!item) {
+      throw new NotFoundException();
+    }
+    const selected = await this.selectService.addSelectedFor(
+      id,
+      selectedItemId,
+      index,
+    );
+    const list = await this.rotatorItemDal.getRandomFor(
+      item.list,
+      item.user,
+      selected,
+      SELECT_COUNT,
+    );
+    if (selected.length === list.length) {
       // done
       item = await this.rotatorItemDal.updateInternal(id, {
         status: rotateStatus.ADDED,
       });
     }
     return { item, list };
+  }
+
+  async _afterDelete(obj, user) {
+    await this.selectService.deleteFor(obj.id);
+    return super._afterDelete(obj, user);
   }
 }

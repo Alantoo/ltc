@@ -4,14 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, ListQuery, Model } from './BaseDal';
 
 import {
+  RawRotatorItemDocument,
   RotatorItem,
   RotatorItemDocument,
-  RawRotatorItemDocument,
-  RotatorItemSchema,
-  RotatorItemCreateDto,
 } from './schemas/RotatorItem';
 
-import { User } from './schemas/User';
+export type RawRotatorItemDocumentForUi = RawRotatorItemDocument & {
+  isSelected: boolean;
+};
 
 export {
   RotatorItem,
@@ -159,8 +159,8 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     return aggs;
   }
 
-  async getOneByCode(code: string): Promise<RawRotatorItemDocument> {
-    const query: FilterQuery<Document> = { code };
+  async getOneByCode(paymentCode: string): Promise<RawRotatorItemDocument> {
+    const query: FilterQuery<Document> = { code: paymentCode };
     await this._beforeFilter(query);
     const doc = await this.Model.findOne(query);
     if (doc) {
@@ -196,21 +196,31 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   async getRandomFor(
     listId: ObjectId,
     userId: ObjectId,
-  ): Promise<Array<RawRotatorItemDocument>> {
+    selected: Array<{ id: string; index: number }>,
+    defaultListSize: number,
+  ): Promise<Array<RawRotatorItemDocumentForUi>> {
+    const selectedIds = selected.map((item) => item.id);
+    // random scope filter
     const query = {
+      _id: { $nin: selectedIds },
       list: listId,
       user: { $ne: userId },
     };
 
-    let limit = 6;
+    let listSize = defaultListSize;
+    let limit = listSize - selectedIds.length;
     const count = await this.Model.find(query).count();
 
     if (limit > count) {
       limit = count;
     }
+    if (listSize > count + selectedIds.length) {
+      listSize = count + selectedIds.length;
+    }
 
     const skips = sample(range(count), limit);
 
+    let listIndex = 0;
     const list = await Promise.all(
       skips.map(async (skip) => {
         const item = this.Model.findOne(query, {}, { skip })
@@ -220,6 +230,40 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
       }),
     );
 
-    return list;
+    const selectedList = await Promise.all(
+      selectedIds.map(async (selectId) => {
+        const item = this.Model.findOne({ _id: selectId })
+          .populate('list')
+          .populate('user');
+        return item;
+      }),
+    );
+
+    const resultList: Array<RawRotatorItemDocumentForUi> = [];
+
+    // fill resultList with selected items
+    selected.forEach(({ id, index }) => {
+      const selectedItem = selectedList.find(
+        (item) => item.id.toString() === id,
+      );
+      resultList[index] = {
+        ...selectedItem.toJSON(),
+        isSelected: true,
+      };
+    });
+
+    // fill empty resultList items with new items
+    Array.from(Array(listSize)).forEach((i, index) => {
+      if (!resultList[index] && list[listIndex]) {
+        const nextItem = list[listIndex];
+        listIndex++;
+        resultList[index] = {
+          ...nextItem.toJSON(),
+          isSelected: false,
+        };
+      }
+    });
+
+    return resultList;
   }
 }
