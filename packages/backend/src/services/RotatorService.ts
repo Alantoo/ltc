@@ -1,3 +1,4 @@
+import * as nodeCron from 'node-cron';
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
@@ -24,6 +25,16 @@ export {
 export type ItemStatus = {
   item: RawRotatorItemDocument;
   list: Array<RawRotatorItemDocumentForUi>;
+};
+
+const dateToCron = (date: Date): string => {
+  const minutes = date.getMinutes();
+  const hours = date.getHours();
+  const days = date.getDate();
+  const months = date.getMonth() + 1;
+  const dayOfWeek = date.getDay();
+
+  return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
 };
 
 @Injectable()
@@ -172,9 +183,9 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       if (diff <= 0) {
         this.removeFromRotation(itemId);
       } else {
-        setTimeout(() => {
+        nodeCron.schedule(dateToCron(item.removeAt), () => {
           this.removeFromRotation(itemId);
-        }, diff);
+        });
       }
     });
   }
@@ -190,9 +201,9 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     });
     this.logger.log(`Item "${item.id}" added to rotation`);
     const itemId = item.id;
-    setTimeout(() => {
+    nodeCron.schedule(dateToCron(removeAt), () => {
       this.removeFromRotation(itemId);
-    }, rotateTimeMs);
+    });
     return item;
   }
 

@@ -6,6 +6,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Param,
   Query,
   Body,
@@ -204,5 +205,21 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
     @Body() body: RawRotatorItemDocument,
   ): Promise<SingleResult<RotatorItemDocument>> {
     return super.update(id, body);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthRoles([roles.ADMIN]))
+  async delete(
+    @Param('id') id: string,
+  ): Promise<SingleResult<RotatorItemDocument>> {
+    return super.delete(id);
+  }
+
+  @Delete()
+  @UseGuards(AuthRoles([roles.ADMIN]))
+  async deleteBunch(
+    @Body() body: { ids: Array<string> },
+  ): Promise<Array<string>> {
+    return super.deleteBunch(body);
   }
 }
