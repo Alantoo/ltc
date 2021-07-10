@@ -168,6 +168,21 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     }
   }
 
+  async getActiveAsync(
+    cb: (item: RawRotatorItemDocument) => void,
+  ): Promise<void> {
+    for await (const item of this.Model.find({
+      status: rotateStatus.ADDED,
+    }).cursor()) {
+      const doc = item.toJSON();
+      try {
+        cb(doc);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+
   async getHistory(userId): Promise<Array<RawRotatorItemDocument>> {
     // TODO: paging & sorting & filters
     const list = await this.Model.find({

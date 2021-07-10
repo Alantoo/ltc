@@ -20,7 +20,7 @@ export type DalServiceOptions<T extends Document> = {
 };
 
 export class DalService<T extends Document> {
-  private readonly logger = new Logger(DalService.name);
+  protected readonly logger = new Logger(DalService.name);
 
   protected baseDal: BaseDal<T>;
 

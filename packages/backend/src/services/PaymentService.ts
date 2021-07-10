@@ -44,7 +44,7 @@ export class PaymentService {
       const res = await this.client(url, opts);
       return res.data;
     } catch (err) {
-      console.error(err);
+      this.logger.error(err);
       throw err;
     }
   }

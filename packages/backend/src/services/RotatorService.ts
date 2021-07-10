@@ -1,6 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
+import { ListService } from './ListService';
 import { ItemSelectService } from './ItemSelectService';
 import {
   RotatorItemDal,
@@ -25,20 +26,29 @@ export type ItemStatus = {
   list: Array<RawRotatorItemDocumentForUi>;
 };
 
-const SELECT_COUNT = 6;
-
 @Injectable()
 export class RotatorService extends DalService<RotatorItemDocument> {
+  protected readonly logger = new Logger(RotatorService.name);
+
   rotatorItemDal: RotatorItemDal;
+  listService: ListService;
   selectService: ItemSelectService;
 
   constructor(
     @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
+    @Inject(ListService) listService: ListService,
     @Inject(ItemSelectService) selectService: ItemSelectService,
   ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
+    this.listService = listService;
     this.selectService = selectService;
+
+    setTimeout(() => {
+      this.checkRotatorExpire().catch((err) => {
+        this.logger.error(err);
+      });
+    }, 1000 * 30);
   }
 
   async getComplexList(
@@ -108,18 +118,17 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     if (!item) {
       throw new NotFoundException();
     }
+    const rotatorList = await this.listService.getListConfig(item.list);
     const selected = await this.selectService.getSelectedFor(item.id);
     const list = await this.rotatorItemDal.getRandomFor(
       item.list,
       item.user,
       selected,
-      SELECT_COUNT,
+      rotatorList.selectCount,
     );
     if (selected.length === list.length) {
       // done
-      item = await this.rotatorItemDal.updateInternal(id, {
-        status: rotateStatus.ADDED,
-      });
+      item = await this.addToRotation(id, rotatorList.rotateTimeMs);
     }
     return { item, list };
   }
@@ -134,6 +143,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     if (!item) {
       throw new NotFoundException();
     }
+    const rotatorList = await this.listService.getListConfig(item.list);
     const selected = await this.selectService.addSelectedFor(
       id,
       selectedItemId,
@@ -143,15 +153,57 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       item.list,
       item.user,
       selected,
-      SELECT_COUNT,
+      rotatorList.selectCount,
     );
     if (selected.length === list.length) {
       // done
-      item = await this.rotatorItemDal.updateInternal(id, {
-        status: rotateStatus.ADDED,
-      });
+      item = await this.addToRotation(id, rotatorList.rotateTimeMs);
     }
     return { item, list };
+  }
+
+  private async checkRotatorExpire() {
+    return this.rotatorItemDal.getActiveAsync((item) => {
+      if (!item.removeAt) {
+        return;
+      }
+      const diff = item.removeAt.getTime() - Date.now();
+      const itemId = item.id;
+      if (diff <= 0) {
+        this.removeFromRotation(itemId);
+      } else {
+        setTimeout(() => {
+          this.removeFromRotation(itemId);
+        }, diff);
+      }
+    });
+  }
+
+  private async addToRotation(
+    id: string,
+    rotateTimeMs: number,
+  ): Promise<RawRotatorItemDocument> {
+    const removeAt = new Date(Date.now() + rotateTimeMs);
+    const item = await this.rotatorItemDal.updateInternal(id, {
+      status: rotateStatus.ADDED,
+      removeAt,
+    });
+    this.logger.log(`Item "${item.id}" added to rotation`);
+    const itemId = item.id;
+    setTimeout(() => {
+      this.removeFromRotation(itemId);
+    }, rotateTimeMs);
+    return item;
+  }
+
+  private async removeFromRotation(
+    id: string,
+  ): Promise<RawRotatorItemDocument> {
+    const item = await this.rotatorItemDal.updateInternal(id, {
+      status: rotateStatus.REMOVED,
+    });
+    this.logger.log(`Item "${item.id}" removed from rotation`);
+    return item;
   }
 
   async _afterDelete(obj, user) {

@@ -31,17 +31,15 @@ export class RotatorItem extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: User.name })
   user: MongooseSchema.Types.ObjectId;
 
-  @ApiProperty()
-  @Prop([
-    { type: MongooseSchema.Types.ObjectId, required: true, ref: User.name },
-  ])
-  selected: Array<MongooseSchema.Types.ObjectId>;
-
   @Prop()
   code: string;
 
   @Prop()
   status: string;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  removeAt: Date;
 }
 
 export class RotatorItemCreateDto extends PickType(RotatorItem, []) {

@@ -27,6 +27,14 @@ export class List extends Document {
   @ApiProperty()
   @Prop({ type: Number, required: true })
   price: number;
+
+  @ApiProperty()
+  @Prop({ type: Number, default: 6 })
+  selectCount: number;
+
+  @ApiProperty()
+  @Prop({ type: String, default: '60d' })
+  rotateTime: string;
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

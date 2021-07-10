@@ -173,8 +173,8 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
       signature as string,
     );
 
-    console.log(`webhook event: "${event.type}" \n`);
-    console.log(
+    this.logger.log(`webhook event: "${event.type}" \n`);
+    this.logger.log(
       JSON.stringify(
         {
           code: event.data.code,
