@@ -17,6 +17,8 @@ export const ListEdit = (props: EditProps) => {
       <SimpleForm redirect={redirect}>
         <TextInput source="name" />
         <NumberInput source="price" />
+        <NumberInput source="selectCount" />
+        <TextInput source="rotateTime" />
       </SimpleForm>
     </Edit>
   );

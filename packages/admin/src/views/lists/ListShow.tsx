@@ -7,6 +7,8 @@ export const ListShow = (props: ShowProps) => {
       <SimpleShowLayout>
         <TextField source="name" />
         <TextField source="price" />
+        <TextField source="selectCount" />
+        <TextField source="rotateTime" />
       </SimpleShowLayout>
     </Show>
   );
