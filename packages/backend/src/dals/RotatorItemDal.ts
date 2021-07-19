@@ -137,12 +137,14 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
           status: 1,
           createdAt: 1,
           user: {
-            id: '$_id',
+            _id: undefined,
+            id: '$user._id',
             name: 1,
             email: 1,
           },
           list: {
-            id: '$_id',
+            _id: undefined,
+            id: '$list._id',
             name: 1,
             price: 1,
           },

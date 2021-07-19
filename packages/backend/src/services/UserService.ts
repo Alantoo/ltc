@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DalService } from './DalService';
+import { DalService, ListQuery, ListResult } from './DalService';
 import { UserDal, UserDocument, RawUserDocument } from '../dals/UserDal';
+import { UserData } from './AuthService';
 
 export {
   RawUserDocument,
@@ -20,6 +21,21 @@ export class UserService extends DalService<UserDocument> {
   constructor(@Inject(UserDal) userDal: UserDal) {
     super({ baseDal: userDal });
     this.userDal = userDal;
+  }
+
+  async getComplexList(
+    query?: ListQuery,
+    user?: UserData,
+  ): Promise<ListResult<UserDocument>> {
+    const { filter, range, sort } = query || {};
+    await this._beforeListFilter(filter, user);
+    await this._beforeListRange(range, user);
+    await this._beforeListSort(sort, user);
+    const [data, total] = await Promise.all([
+      this.userDal.getComplexList({ filter, range, sort }),
+      this.userDal.getComplexCount({ filter, range, sort }),
+    ]);
+    return { data, total };
   }
 
   async findByEmail(email: string): Promise<RawUserDocument | undefined> {

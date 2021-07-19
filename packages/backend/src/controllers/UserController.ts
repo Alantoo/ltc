@@ -49,7 +49,20 @@ export class UserController extends ApiController<UserDocument> {
     @Query() query,
     @User() user: UserData,
   ): Promise<ListResult<UserDocument>> {
-    return super.getList(query, user);
+    try {
+      const sort = query.sort ? JSON.parse(query.sort) : undefined;
+      const range = query.range ? JSON.parse(query.range) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : undefined;
+
+      const data = await this.userService.getComplexList(
+        { filter, range, sort },
+        user,
+      );
+      return data;
+    } catch (error) {
+      this.logger.log(`${this.constructor.name} get list error: ${error}`);
+      throw error;
+    }
   }
 
   @ApiResponse({ type: UserModel })
@@ -92,7 +105,9 @@ export class UserController extends ApiController<UserDocument> {
       delete body.isAdmin;
       delete body.isBlocked;
     }
-    body.password = this.authService.encodePass(body.password || '123456789');
+    if (body.password) {
+      body.password = this.authService.encodePass(body.password);
+    }
     return super.update(id, body, user);
   }
 
