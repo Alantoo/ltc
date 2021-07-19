@@ -9,7 +9,6 @@ import {
   FilterLiveSearch,
 } from 'react-admin';
 import { Card as MuiCard, CardContent, withStyles } from '@material-ui/core';
-import MailIcon from '@material-ui/icons/MailOutline';
 
 const Card = withStyles((theme) => ({
   root: {
@@ -27,7 +26,7 @@ const FilterSidebar = () => (
   <Card>
     <CardContent>
       <FilterLiveSearch source="query" />
-      <FilterList label="List" icon={<MailIcon />}>
+      <FilterList label="List" icon={<span></span>}>
         <FilterListItem label="$1.00" value={{ 'list.name': '$1.00' }} />
         <FilterListItem label="$5.00" value={{ 'list.name': '$5.00' }} />
         <FilterListItem label="$10.00" value={{ 'list.name': '$10.00' }} />
