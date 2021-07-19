@@ -11,11 +11,21 @@ import { theme } from 'theme';
 const dataProvider = new DataProvider({ authProvider });
 
 function App() {
+  let basename = '';
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    basename = (document.cookie || '')
+      .split('; ')
+      .find((row) => row.startsWith('basename='))
+      .split('=')[1];
+  } catch (err) {}
+
   return (
     <ThemeProvider theme={theme}>
       <AuthContextProvider auth={authProvider}>
         <DataContextProvider dataProvider={dataProvider}>
-          <Router basename={process.env.PUBLIC_URL}>
+          <Router basename={basename}>
             <Layout />
           </Router>
         </DataContextProvider>

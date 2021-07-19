@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export type JwtPayload = {
   id: string;
   email: string;
+  name: string;
   roles: string[];
   isVerified: boolean;
 };
@@ -103,7 +104,11 @@ export class AuthProvider {
       method: 'POST',
       data: { email, password },
     });
-    return this.setToken(data.loginInfo, data.refreshInfo);
+    this.setToken(data.loginInfo, data.refreshInfo);
+    const username = this.payload ? this.payload.name : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.location = `/${username}/profile`;
   }
 
   async register({
@@ -120,7 +125,11 @@ export class AuthProvider {
       method: 'POST',
       data: { email, name, password },
     });
-    return this.setToken(data.loginInfo, data.refreshInfo);
+    this.setToken(data.loginInfo, data.refreshInfo);
+    const username = this.payload ? this.payload.name : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.location = `/${username}/profile`;
   }
 
   async logout(params: any): Promise<string | false | void> {
@@ -133,6 +142,9 @@ export class AuthProvider {
     }
     this.clearToken();
     await fetchJson<void>(logoutUrl);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.location = '/';
     return '/';
   }
 
@@ -199,6 +211,7 @@ export class AuthProvider {
     const delay = parseInt(expiresIn, 10);
     this.token = token;
     this.payload = JSON.parse(atob(token.split('.')[1]));
+    console.log(this.payload);
     this.refreshToken(delay);
     if (refreshInfo) {
       this.refreshTokenInfo = refreshInfo;
