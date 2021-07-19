@@ -190,6 +190,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     // TODO: paging & sorting & filters
     const list = await this.Model.find({
       user: userId,
+      status: { $nin: [rotateStatus.REFER] },
     })
       .populate('list')
       .populate('user')
@@ -227,7 +228,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
 
     // random scope filter
     const query = {
-      _id: { $nin: [...selectedIds, referral ? referral.id : ''] },
+      _id: { $nin: [...selectedIds, referral ? referral.id : undefined] },
       list: listId,
       user: { $ne: userId },
       status: { $in: [rotateStatus.ADDED] },
@@ -235,7 +236,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
 
     let listSize = defaultListSize;
     let limit = listSize - selectedIds.length;
-    if (referral && !isReferralSelected) {
+    if (referral) {
       limit -= 1;
     }
     const count = await this.Model.find(query).count();
@@ -243,8 +244,10 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     if (limit > count) {
       limit = count;
     }
-    if (listSize > count + selectedIds.length) {
-      listSize = count + selectedIds.length;
+
+    const referralFix = referral ? 1 : 0;
+    if (listSize > count + selectedIds.length + referralFix) {
+      listSize = count + selectedIds.length + referralFix;
     }
 
     const skips = sample(range(count), limit);
