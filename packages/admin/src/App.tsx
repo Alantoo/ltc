@@ -6,6 +6,7 @@ import {
   DashboardComponent,
 } from 'react-admin';
 import PeopleIcon from '@material-ui/icons/People';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import TuneIcon from '@material-ui/icons/Tune';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -14,7 +15,7 @@ import { MyLayout } from 'components/CustomLayout';
 import { LoginPage } from 'components/LoginPage';
 import { DashboardPage } from 'components/DashboardPage';
 import { AuthContextProvider } from 'contexts/AuthContext';
-import users from 'views/users';
+import users, { UserListMembers } from 'views/users';
 import lists from 'views/lists';
 import rotator from 'views/rotator';
 import { MyDataProvider } from 'dataProvider';
@@ -44,6 +45,13 @@ function App() {
             return [
               <Resource name="rotator" icon={ListAltIcon} {...rotator} />,
               <Resource name="lists" icon={TuneIcon} {...lists} />,
+              <Resource
+                name="members"
+                icon={PeopleOutlineIcon}
+                options={{ label: 'Members list' }}
+                {...users}
+                list={UserListMembers}
+              />,
               <Resource name="users" icon={PeopleIcon} {...users} />,
             ];
           }}

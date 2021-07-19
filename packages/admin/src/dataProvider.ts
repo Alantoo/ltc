@@ -42,6 +42,9 @@ export class MyDataProvider implements DataProvider {
     if (part === 'transactions') {
       return 'requests';
     }
+    if (part === 'members') {
+      return 'users';
+    }
     return part;
   }
 
