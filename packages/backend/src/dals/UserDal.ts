@@ -101,9 +101,9 @@ export class UserDal extends BaseDal<UserDocument> {
     if (isCount) {
       aggs.push({ $count: 'count' });
     } else {
+      aggs.push({ $sort: sortRule });
       aggs.push({ $skip: skip });
       aggs.push({ $limit: limit });
-      aggs.push({ $sort: sortRule });
     }
     return aggs;
   }

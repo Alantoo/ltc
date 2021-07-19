@@ -155,9 +155,9 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     if (isCount) {
       aggs.push({ $count: 'count' });
     } else {
+      aggs.push({ $sort: sortRule });
       aggs.push({ $skip: skip });
       aggs.push({ $limit: limit });
-      aggs.push({ $sort: sortRule });
     }
     return aggs;
   }
