@@ -2,7 +2,8 @@ import * as nodeCron from 'node-cron';
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
-import { ListService } from './ListService';
+import { UserService } from './UserService';
+import { ListService, ListConfig } from './ListService';
 import { ItemSelectService } from './ItemSelectService';
 import {
   RotatorItemDal,
@@ -43,15 +44,18 @@ export class RotatorService extends DalService<RotatorItemDocument> {
 
   rotatorItemDal: RotatorItemDal;
   listService: ListService;
+  userService: UserService;
   selectService: ItemSelectService;
 
   constructor(
     @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
+    @Inject(UserService) userService: UserService,
     @Inject(ListService) listService: ListService,
     @Inject(ItemSelectService) selectService: ItemSelectService,
   ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
+    this.userService = userService;
     this.listService = listService;
     this.selectService = selectService;
 
@@ -131,12 +135,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     }
     const rotatorList = await this.listService.getListConfig(item.list);
     const selected = await this.selectService.getSelectedFor(item.id);
-    const list = await this.rotatorItemDal.getRandomFor(
-      item.list,
-      item.user,
-      selected,
-      rotatorList.selectCount,
-    );
+    const list = await this.getRandomFor(item, selected, rotatorList);
     if (selected.length === list.length) {
       // done
       item = await this.addToRotation(id, rotatorList.rotateTimeMs);
@@ -160,12 +159,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       selectedItemId,
       index,
     );
-    const list = await this.rotatorItemDal.getRandomFor(
-      item.list,
-      item.user,
-      selected,
-      rotatorList.selectCount,
-    );
+    const list = await this.getRandomFor(item, selected, rotatorList);
     if (selected.length === list.length) {
       // done
       item = await this.addToRotation(id, rotatorList.rotateTimeMs);
@@ -215,6 +209,26 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     });
     this.logger.log(`Item "${item.id}" removed from rotation`);
     return item;
+  }
+
+  private async getRandomFor(
+    item: RawRotatorItemDocument,
+    selected: Array<{ id: string; index: number }>,
+    rotatorList: ListConfig,
+  ): Promise<Array<RawRotatorItemDocumentForUi>> {
+    const userInfo = await this.userService.getOne(item.user, {});
+    let referUser;
+    try {
+      referUser = await this.userService.getOne(userInfo.refer, {});
+    } catch (err) {}
+    const list = await this.rotatorItemDal.getRandomFor(
+      item.list,
+      item.user,
+      selected,
+      rotatorList.selectCount,
+      referUser ? referUser.id : undefined,
+    );
+    return list;
   }
 
   async _afterDelete(obj, user) {

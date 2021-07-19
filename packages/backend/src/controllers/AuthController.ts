@@ -50,12 +50,16 @@ export class AuthController {
   @Post('register')
   async register(
     @Body() body: { email: string; name: string; password: string },
+    @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<LoginResult> {
+    const basename = this.getReferName(request);
+    console.log('register basename', basename);
     const result = await this.authService.registerUser(
       body.email,
       body.name,
       body.password,
+      basename,
     );
     this.setRefreshToken(result.refreshInfo, response);
     return result;
@@ -117,11 +121,16 @@ export class AuthController {
     @Param('code') code: string,
   ): Promise<void> {
     const host = getHost(request, true);
-    const url = `${host}/profile`;
+    let url = `${host}/profile`;
     try {
-      await this.authService.checkVerificationCode(code);
+      const user = await this.authService.checkVerificationCode(code);
+      url = `${host}/${user.name}/profile`;
     } catch (e) {}
     response.redirect(url);
+  }
+
+  private getReferName(@Req() request: Request): string {
+    return request.cookies['basename'];
   }
 
   private getRefreshToken(@Req() request: Request): string {

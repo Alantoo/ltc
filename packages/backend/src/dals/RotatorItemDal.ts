@@ -28,6 +28,7 @@ export const rotateStatus = {
   SELECT: 'select',
   ADDED: 'added',
   REMOVED: 'removed',
+  REFER: 'refer',
 };
 
 const random = (max) => {
@@ -213,17 +214,28 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     userId: ObjectId,
     selected: Array<{ id: string; index: number }>,
     defaultListSize: number,
+    refer?: ObjectId,
   ): Promise<Array<RawRotatorItemDocumentForUi>> {
     const selectedIds = selected.map((item) => item.id);
+
+    const referral = await this.getReferralItem(refer, listId);
+    const isReferralSelected = referral
+      ? selectedIds.some((id) => id.toString() === referral.id.toString())
+      : false;
+
     // random scope filter
     const query = {
-      _id: { $nin: selectedIds },
+      _id: { $nin: [...selectedIds, referral ? referral.id : ''] },
       list: listId,
       user: { $ne: userId },
+      status: { $in: [rotateStatus.ADDED] },
     };
 
     let listSize = defaultListSize;
     let limit = listSize - selectedIds.length;
+    if (referral && !isReferralSelected) {
+      limit -= 1;
+    }
     const count = await this.Model.find(query).count();
 
     if (limit > count) {
@@ -269,6 +281,12 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
 
     // fill empty resultList items with new items
     Array.from(Array(listSize)).forEach((i, index) => {
+      if (index === 0 && referral && !isReferralSelected) {
+        resultList[index] = {
+          ...referral.toJSON(),
+          isSelected: false,
+        };
+      }
       if (!resultList[index] && list[listIndex]) {
         const nextItem = list[listIndex];
         listIndex++;
@@ -280,5 +298,46 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     });
 
     return resultList;
+  }
+
+  private async getReferralItem(
+    userId?: ObjectId,
+    listId?: ObjectId,
+  ): Promise<RotatorItemDocument> {
+    if (!userId || !listId) {
+      return undefined;
+    }
+    let query = {
+      list: listId,
+      user: { $eq: userId },
+      status: { $in: [rotateStatus.ADDED] },
+    };
+    let item = await this.Model.findOne(query)
+      .populate('list')
+      .populate('user');
+    if (!item) {
+      // find in refer
+      query = {
+        list: listId,
+        user: { $eq: userId },
+        status: { $in: [rotateStatus.REFER] },
+      };
+      item = await this.Model.findOne(query).populate('list').populate('user');
+    }
+    if (!item) {
+      // create refer
+      const data = {
+        list: listId,
+        user: userId,
+        code: '',
+        removeAt: new Date(),
+        status: rotateStatus.REFER,
+      };
+      const ref = await this.create(data);
+      item = await this.Model.findOne({ _id: ref.id })
+        .populate('list')
+        .populate('user');
+    }
+    return item;
   }
 }

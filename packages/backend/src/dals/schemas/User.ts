@@ -45,6 +45,12 @@ export class User extends Document {
 
   @Prop()
   code: string;
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: User.name,
+  })
+  refer: MongooseSchema.Types.ObjectId;
 }
 
 export class UserCreateDto extends PickType(User, [

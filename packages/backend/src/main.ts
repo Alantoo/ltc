@@ -11,17 +11,35 @@ import {
 
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MainModule } from './MainModule';
+import { UserService } from './services/UserService';
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  userService: UserService;
+
+  constructor(userService: UserService) {
+    this.userService = userService;
+  }
+
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest();
     const response = ctx.getResponse();
     if (request.url.startsWith('/admin')) {
       response.sendFile(join(__dirname, '../admin', 'index.html'));
     } else {
-      response.sendFile(join(__dirname, '../client', 'index.html'));
+      const name = request.url.split('/')[1];
+      let referUser;
+      if (this.userService.isUsernameValid(name)) {
+        referUser = await this.userService.findByName(name);
+      }
+      response.cookie('basename', '');
+      if (name && referUser) {
+        response.cookie('basename', name);
+        response.sendFile(join(__dirname, '../client', 'index.html'));
+      } else {
+        response.redirect('/');
+      }
     }
   }
 }
@@ -57,7 +75,11 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalFilters(new NotFoundExceptionFilter());
+  const appContext = await NestFactory.createApplicationContext(MainModule);
+
+  app.useGlobalFilters(
+    new NotFoundExceptionFilter(appContext.get(UserService)),
+  );
 
   await app.listen(process.env.PORT);
 }

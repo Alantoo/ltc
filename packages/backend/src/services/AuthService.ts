@@ -80,6 +80,7 @@ export const User = createParamDecorator(
 export type JwtPayload = {
   id: string;
   email: string;
+  name: string;
   isAdmin: boolean;
   isVerified: boolean;
 };
@@ -114,15 +115,21 @@ export class AuthService {
     email: string,
     name: string,
     pass: string,
+    referUsername?: string,
   ): Promise<{
     loginInfo: LoginInfo;
     refreshInfo: RefreshInfo;
   }> {
+    email = (email || '').toLowerCase();
+    name = (name || '').toLowerCase();
     if (!email) {
       throw new BadRequestException('Email is required');
     }
     if (!name) {
       throw new BadRequestException('Name is required');
+    }
+    if (!this.userService.isUsernameValid(name)) {
+      throw new BadRequestException('Name is invalid, use only "a-z0-9_-"');
     }
     if (!pass) {
       throw new BadRequestException('Password is required');
@@ -135,11 +142,13 @@ export class AuthService {
     if (existedName) {
       throw new BadRequestException('User name already exist');
     }
+    const referUser = await this.userService.findByName(referUsername);
     const newUser = await this.userService.create(
       {
         email,
         name,
         password: this.encodePass(pass),
+        refer: referUser ? referUser.id : undefined,
       },
       {},
     );
@@ -236,17 +245,18 @@ export class AuthService {
     return code;
   }
 
-  async checkVerificationCode(code?: string): Promise<void> {
+  async checkVerificationCode(code?: string): Promise<RawUserDocument> {
     if (!code) {
       return;
     }
-    const user = await this.userService.findByCode(code);
+    let user = await this.userService.findByCode(code);
     if (user) {
-      await this.userService.updateInternal(user.id, {
+      user = await this.userService.updateInternal(user.id, {
         isVerified: true,
         code: '',
       });
     }
+    return user;
   }
 
   encodePass(rawPass: string): string {
@@ -308,8 +318,8 @@ export class AuthService {
   }
 
   private createToken(user: RawUserDocument): string {
-    const { id, email, isAdmin, isVerified } = user;
-    const payload: JwtPayload = { id, email, isAdmin, isVerified };
+    const { id, email, name, isAdmin, isVerified } = user;
+    const payload: JwtPayload = { id, email, name, isAdmin, isVerified };
     return this.jwtService.sign(payload);
   }
 }

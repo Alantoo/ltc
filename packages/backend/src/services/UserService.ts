@@ -10,6 +10,9 @@ export {
   UserUpdateDto,
 } from '../dals/UserDal';
 
+const reservedUsernames = ['admin', 'favicon.ico'];
+const usernameRegExp = /^[a-zA-Z0-9-_]+$/;
+
 @Injectable()
 export class UserService extends DalService<UserDocument> {
   userDal: UserDal;
@@ -29,5 +32,15 @@ export class UserService extends DalService<UserDocument> {
 
   async findByCode(code: string): Promise<RawUserDocument | undefined> {
     return this.userDal.findByCode(code);
+  }
+
+  isUsernameValid(name): boolean {
+    if (reservedUsernames.indexOf(name) !== -1) {
+      return false;
+    }
+    if (name.startsWith('admin')) {
+      return false;
+    }
+    return usernameRegExp.test(name);
   }
 }
