@@ -4,7 +4,8 @@ import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
 import { UserService } from './UserService';
 import { ListService, ListConfig } from './ListService';
-import { ItemSelectService } from './ItemSelectService';
+import { ItemSelectService, ItemSelectSimple } from './ItemSelectService';
+import { PaySelectService } from './PaySelectService';
 import {
   RotatorItemDal,
   RotatorItemDocument,
@@ -46,18 +47,21 @@ export class RotatorService extends DalService<RotatorItemDocument> {
   listService: ListService;
   userService: UserService;
   selectService: ItemSelectService;
+  paySelectService: PaySelectService;
 
   constructor(
     @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
     @Inject(UserService) userService: UserService,
     @Inject(ListService) listService: ListService,
     @Inject(ItemSelectService) selectService: ItemSelectService,
+    @Inject(PaySelectService) paySelectService: PaySelectService,
   ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
     this.userService = userService;
     this.listService = listService;
     this.selectService = selectService;
+    this.paySelectService = paySelectService;
 
     setTimeout(() => {
       this.checkRotatorExpire().catch((err) => {
@@ -153,11 +157,16 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     if (!item) {
       throw new NotFoundException();
     }
+    const selectedItem = await this.getOne(selectedItemId, {});
+    if (!selectedItem) {
+      throw new NotFoundException();
+    }
     const rotatorList = await this.listService.getListConfig(item.list);
-    const selected = await this.selectService.addSelectedFor(
-      id,
-      selectedItemId,
+    const selected = await this.addSelectedItem(
+      item,
+      selectedItem,
       index,
+      rotatorList,
     );
     const list = await this.getRandomFor(item, selected, rotatorList);
     if (selected.length === list.length) {
@@ -165,6 +174,32 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       item = await this.addToRotation(id, rotatorList.rotateTimeMs);
     }
     return { item, list };
+  }
+
+  private async addSelectedItem(
+    item: RawRotatorItemDocument,
+    selectedItem: RawRotatorItemDocument,
+    selectIndex: number,
+    rotatorList: ListConfig,
+  ): Promise<Array<ItemSelectSimple>> {
+    const selected = await this.selectService.addSelectedFor(
+      item.id,
+      selectedItem.id,
+      selectIndex,
+    );
+    // add selected
+    await this.paySelectService.addSelectPay({
+      userId: selectedItem.user,
+      fromUserId: item.user,
+      listId: rotatorList.id,
+      amount: rotatorList.price,
+    });
+    const count = await this.paySelectService.getCountForUser(
+      selectedItem.user.toString(),
+    );
+
+    console.log('count', count);
+    return selected;
   }
 
   private async checkRotatorExpire() {

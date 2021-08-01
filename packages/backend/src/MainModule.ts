@@ -25,10 +25,12 @@ import {
   ItemSelect,
   ItemSelectSchema,
 } from './dals/ItemSelectDal';
+import { PaySelectDal, PaySelect, PaySelectSchema } from './dals/PaySelectDal';
 import { UserService } from './services/UserService';
 import { ListService } from './services/ListService';
 import { RotatorService } from './services/RotatorService';
 import { ItemSelectService } from './services/ItemSelectService';
+import { PaySelectService } from './services/PaySelectService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
@@ -103,6 +105,7 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
       { name: List.name, schema: ListSchema },
       { name: RotatorItem.name, schema: RotatorItemSchema },
       { name: ItemSelect.name, schema: ItemSelectSchema },
+      { name: PaySelect.name, schema: PaySelectSchema },
     ]),
   ],
   controllers: [
@@ -117,10 +120,12 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
     ListDal,
     RotatorItemDal,
     ItemSelectDal,
+    PaySelectDal,
     UserService,
     ListService,
     RotatorService,
     ItemSelectService,
+    PaySelectService,
     AuthService,
     EmailService,
     PaymentService,

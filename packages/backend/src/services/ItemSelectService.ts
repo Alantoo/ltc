@@ -12,6 +12,11 @@ export {
   RawItemSelectDocument,
 } from '../dals/ItemSelectDal';
 
+export type ItemSelectSimple = {
+  id: string;
+  index: number;
+};
+
 @Injectable()
 export class ItemSelectService extends DalService<ItemSelectDocument> {
   private itemSelectDal: ItemSelectDal;
@@ -21,9 +26,7 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
     this.itemSelectDal = itemSelectDal;
   }
 
-  async getSelectedFor(
-    parentId: string,
-  ): Promise<Array<{ id: string; index: number }>> {
+  async getSelectedFor(parentId: string): Promise<Array<ItemSelectSimple>> {
     const list = await this.itemSelectDal.getSelectedFor(parentId);
     return list.map((item: RawItemSelectDocument) => ({
       id: item.childId.toString(),
@@ -35,7 +38,7 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
     parentId: string,
     childId: string,
     index: number,
-  ): Promise<Array<{ id: string; index: number }>> {
+  ): Promise<Array<ItemSelectSimple>> {
     const list = await this.itemSelectDal.addSelectedFor(
       parentId,
       childId,
