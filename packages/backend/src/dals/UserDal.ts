@@ -85,6 +85,7 @@ export class UserDal extends BaseDal<UserDocument> {
           id: '$_id',
           email: 1,
           name: 1,
+          balance: 1,
           isAdmin: 1,
           isBlocked: 1,
           isVerified: 1,
@@ -131,5 +132,9 @@ export class UserDal extends BaseDal<UserDocument> {
       const obj = doc.toJSON();
       return obj;
     }
+  }
+
+  async updateBalance(id: string, newBalance: number) {
+    await this.Model.updateOne({ _id: id }, { $set: { balance: newBalance } });
   }
 }

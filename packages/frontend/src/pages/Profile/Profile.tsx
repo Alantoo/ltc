@@ -381,6 +381,8 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
+      <Typography variant="h6">Balance: ${user.balance || 0}</Typography>
+
       {activeOrList}
 
       {historyList.length ? (

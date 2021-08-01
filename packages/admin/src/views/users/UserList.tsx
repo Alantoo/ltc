@@ -50,6 +50,7 @@ export const UserList = (props: ListProps) => {
         <TextField source="name" />
         <EmailField source="email" />
         <TextField source="phone" />
+        <TextField source="balance" />
         <BooleanField source="isAdmin" />
         <BooleanField source="isBlocked" />
         <TextField source="refer.name" label="Referral" />

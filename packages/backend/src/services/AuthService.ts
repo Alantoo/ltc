@@ -83,6 +83,7 @@ export type JwtPayload = {
   name: string;
   isAdmin: boolean;
   isVerified: boolean;
+  balance: number;
 };
 
 export type LoginInfo = {
@@ -318,8 +319,15 @@ export class AuthService {
   }
 
   private createToken(user: RawUserDocument): string {
-    const { id, email, name, isAdmin, isVerified } = user;
-    const payload: JwtPayload = { id, email, name, isAdmin, isVerified };
+    const { id, email, name, balance, isAdmin, isVerified } = user;
+    const payload: JwtPayload = {
+      id,
+      email,
+      name,
+      balance,
+      isAdmin,
+      isVerified,
+    };
     return this.jwtService.sign(payload);
   }
 }

@@ -31,6 +31,7 @@ export const UserListMembers = (props: ListProps) => {
         <TextField source="name" />
         <EmailField source="email" />
         <TextField source="phone" />
+        <TextField source="balance" />
         <BooleanField source="isBlocked" />
         <TextField source="refer.name" label="Referral" />
         <ShowButton basePath="/users" label="View" />

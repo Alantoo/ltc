@@ -36,6 +36,9 @@ export class User extends Document {
   @Prop({ type: String, required: true, unique: true })
   name: string;
 
+  @Prop({ type: Number, default: 0 })
+  balance: number;
+
   @ApiProperty()
   @Prop()
   isVerified: boolean;
