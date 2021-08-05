@@ -22,6 +22,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
+import { PayOutButton, PayOutHistory } from 'components/PayOut';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
 import { List, RotatorItem, rotateStatus } from 'dataProvider';
@@ -40,7 +41,8 @@ type ClassKey =
   | 'activeItemTitle'
   | 'activeItemText'
   | 'activeItemTable'
-  | 'table';
+  | 'table'
+  | 'balanceRow';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
@@ -118,6 +120,11 @@ const styles = (theme: Theme) => {
         border: 'solid 1px black',
       },
     },
+    balanceRow: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+    },
   });
 };
 
@@ -125,7 +132,9 @@ type ProfileProps = WithStyles<ClassKey>;
 
 const ProfileView = ({ classes }: ProfileProps) => {
   const { auth, user } = useContext(AuthContext);
-  const { dataProvider } = useContext(DataContext);
+  const { dataProvider, userBalance, refreshUserBalance } = useContext(
+    DataContext,
+  );
   const [isSent, setIsSent] = useState(false);
   const [list, setList] = useState<Array<List>>([]);
   const [historyList, setHistoryList] = useState<Array<RotatorItem>>([]);
@@ -179,6 +188,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   }, [historyCache]);
 
   useEffect(() => {
+    refreshUserBalance();
     dataProvider
       .getUserStatus()
       .then((data) => {
@@ -381,7 +391,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
-      <Typography variant="h6">Balance: ${user.balance || 0}</Typography>
+      <div className={classes.balanceRow}>
+        <Typography variant="h6">Balance: ${userBalance || 0}</Typography>
+        <PayOutButton />
+      </div>
 
       {activeOrList}
 
@@ -412,6 +425,8 @@ const ProfileView = ({ classes }: ProfileProps) => {
           </TableContainer>
         </div>
       ) : null}
+
+      <PayOutHistory />
     </Container>
   );
 };

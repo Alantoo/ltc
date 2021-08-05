@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core/styles';
 import { ScrollToTop } from 'components/ScrollToTop';
 import { AuthPopup } from 'components/LoginPage';
+import { PayOutPopup } from 'components/PayOut';
 import { Header } from 'layout/Header';
 import { Footer } from 'layout/Footer';
 import { Home } from 'pages/Home';
@@ -107,6 +108,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
       </Switch>
       <ScrollToTop />
       <AuthPopup />
+      <PayOutPopup />
     </>
   );
 };

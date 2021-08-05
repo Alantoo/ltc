@@ -24,6 +24,17 @@
 import { fetchJson, FetchOptions } from 'helpers';
 import { AuthProvider } from 'authProvider';
 
+export type ListResult<T> = {
+  data: Array<T>;
+  total: number;
+};
+
+export type SingleResult<T> = T;
+
+type ReqResp = {
+  error?: Record<string, string>;
+};
+
 type MyRecord = {
   id: string | number;
 };
@@ -45,6 +56,11 @@ export type RotatorItem = MyRecord & {
   createdAt: string;
   status: string;
   isSelected: boolean;
+};
+
+export type PayOut = MyRecord & {
+  status: string;
+  createdAt: string;
 };
 
 export type UserStatus = {
@@ -142,6 +158,38 @@ export class DataProvider {
     const data = await this.makeRequest<ItemStatus>(url, {
       method: 'POST',
       data: { selectedItemId, index },
+    });
+    return data;
+  }
+
+  async getUserBalance(): Promise<{ balance: number }> {
+    const user = await this.authProvider?.getUser();
+    if (!user) {
+      throw new Error('No user');
+    }
+    const url = `${API_URL}/users/${user.id}/balance`;
+    const data = await this.makeRequest<{ balance: number }>(url, {
+      method: 'GET',
+    });
+    return data;
+  }
+
+  async createPayOutRequest(reg: {
+    amount: string;
+    address: string;
+  }): Promise<SingleResult<ReqResp>> {
+    const url = `${API_URL}/payouts`;
+    const data = await this.makeRequest<ReqResp>(url, {
+      method: 'POST',
+      data: reg,
+    });
+    return data;
+  }
+
+  async getPayOutHistory(): Promise<ListResult<PayOut>> {
+    const url = `${API_URL}/payouts?sort=%5B%22createdAt%22%2C%22DESC%22%5D`;
+    const data = await this.makeRequest<ListResult<PayOut>>(url, {
+      method: 'GET',
     });
     return data;
   }
