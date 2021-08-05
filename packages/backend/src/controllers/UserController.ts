@@ -43,6 +43,21 @@ export class UserController extends ApiController<UserDocument> {
     this.authService = authService;
   }
 
+  @ApiResponse({ type: UserModel })
+  @Get(':id/balance')
+  @UseGuards(AuthRoles([]))
+  async getBalance(
+    @Param('id') id: string,
+    @User() user: UserData,
+  ): Promise<{ balance: number }> {
+    // check admin or owner
+    const obj: RawUserDocument = await super.getOne(id, user);
+    if (!user.isAdmin && user.id.toString() !== obj.id.toString()) {
+      throw new UnauthorizedException();
+    }
+    return { balance: obj.balance };
+  }
+
   @Get()
   @UseGuards(AuthRoles([roles.ADMIN]))
   async getList(

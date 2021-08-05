@@ -194,11 +194,10 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       listId: rotatorList.id,
       amount: rotatorList.price,
     });
-    const count = await this.paySelectService.getCountForUser(
+    await this.userService.incrementBalance(
       selectedItem.user.toString(),
+      rotatorList.price,
     );
-    await this.userService.updateBalance(selectedItem.user.toString(), count);
-    console.log('count', count);
     return selected;
   }
 

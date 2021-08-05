@@ -26,11 +26,13 @@ import {
   ItemSelectSchema,
 } from './dals/ItemSelectDal';
 import { PaySelectDal, PaySelect, PaySelectSchema } from './dals/PaySelectDal';
+import { PayOutDal, PayOut, PayOutSchema } from './dals/PayOutDal';
 import { UserService } from './services/UserService';
 import { ListService } from './services/ListService';
 import { RotatorService } from './services/RotatorService';
 import { ItemSelectService } from './services/ItemSelectService';
 import { PaySelectService } from './services/PaySelectService';
+import { PayOutService } from './services/PayOutService';
 import { AuthService } from './services/AuthService';
 import { JwtStrategy } from './services/JwtStrategy';
 import { EmailService } from './services/EmailService';
@@ -38,6 +40,7 @@ import { PaymentService } from './services/PaymentService';
 import { UserController } from './controllers/UserController';
 import { ListController } from './controllers/ListController';
 import { RotatorController } from './controllers/RotatorController';
+import { PayOutController } from './controllers/PayOutController';
 import { AuthController } from './controllers/AuthController';
 
 @Injectable()
@@ -106,6 +109,7 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
       { name: RotatorItem.name, schema: RotatorItemSchema },
       { name: ItemSelect.name, schema: ItemSelectSchema },
       { name: PaySelect.name, schema: PaySelectSchema },
+      { name: PayOut.name, schema: PayOutSchema },
     ]),
   ],
   controllers: [
@@ -113,6 +117,7 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
     UserController,
     ListController,
     RotatorController,
+    PayOutController,
   ],
   providers: [
     UserDal,
@@ -121,11 +126,13 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
     RotatorItemDal,
     ItemSelectDal,
     PaySelectDal,
+    PayOutDal,
     UserService,
     ListService,
     RotatorService,
     ItemSelectService,
     PaySelectService,
+    PayOutService,
     AuthService,
     EmailService,
     PaymentService,

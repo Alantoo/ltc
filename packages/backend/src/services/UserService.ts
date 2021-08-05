@@ -50,8 +50,12 @@ export class UserService extends DalService<UserDocument> {
     return this.userDal.findByCode(code);
   }
 
-  async updateBalance(id: string, newBalance: number): Promise<void> {
-    return this.userDal.updateBalance(id, newBalance);
+  async incrementBalance(id: string, amount: number): Promise<void> {
+    return this.userDal.updateBalance(id, amount, 1);
+  }
+
+  async decrementBalance(id: string, amount: number): Promise<void> {
+    return this.userDal.updateBalance(id, amount, -1);
   }
 
   isUsernameValid(name): boolean {

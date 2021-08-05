@@ -43,7 +43,7 @@ export class ApiController<T extends Document> {
     }
   }
 
-  async create(body: LeanDocument<T>): Promise<SingleResult<T>> {
+  async create(body: any, user?: UserData): Promise<SingleResult<T>> {
     try {
       const data = await this.baseService.create(body, {} /*req.user*/);
       return data;

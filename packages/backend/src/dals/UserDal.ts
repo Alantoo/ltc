@@ -134,7 +134,10 @@ export class UserDal extends BaseDal<UserDocument> {
     }
   }
 
-  async updateBalance(id: string, newBalance: number) {
-    await this.Model.updateOne({ _id: id }, { $set: { balance: newBalance } });
+  async updateBalance(id: string, amount: number, sign = 1) {
+    await this.Model.updateOne(
+      { _id: id },
+      { $inc: { balance: sign * amount } },
+    );
   }
 }
