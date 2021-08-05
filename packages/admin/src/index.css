@@ -37,3 +37,9 @@ code {
     padding: 0;
   }
 }
+
+
+.list-btns {
+  width: 1%;
+  text-align: right;
+}

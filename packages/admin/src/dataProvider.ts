@@ -22,11 +22,19 @@ import {
   fetchUtils,
 } from 'react-admin';
 import { AuthProvider } from 'authProvider';
+import walletProvider from 'walletProvider';
 
 const { fetchJson } = fetchUtils;
 
 type MyRecord = {
   id: string | number;
+};
+
+export type PayOut = MyRecord & {
+  amount: number;
+  address: string;
+  status: string;
+  userId: string | number;
 };
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -197,6 +205,38 @@ export class MyDataProvider implements DataProvider {
     const request = {
       url: `${API_URL}/${resourceName}`,
       options: { method: 'DELETE', body: JSON.stringify({ ids: params.ids }) },
+    };
+    const data = await this.makeRequest(request);
+    return { data };
+  }
+
+  async getRates(): Promise<{ data: { eth: number } }> {
+    const request = {
+      url: `${API_URL}/payouts/rates`,
+      options: { method: 'GET' },
+    };
+    const data = await this.makeRequest(request);
+    return { data };
+  }
+
+  async approvePayOut(record: PayOut): Promise<{ data: MyRecord }> {
+    const rates = await this.getRates();
+    const amountEth = record.amount / rates.data.eth;
+
+    const tx = await walletProvider.sendEth(`${amountEth}`, record.address);
+
+    if (!tx) {
+      throw new Error('Transaction error');
+    }
+
+    const update = {
+      rates: rates.data.eth,
+      amountEth,
+      tx,
+    };
+    const request = {
+      url: `${API_URL}/payouts/${record.id}/pay`,
+      options: { method: 'POST', body: JSON.stringify(update) },
     };
     const data = await this.makeRequest(request);
     return { data };

@@ -9,6 +9,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import TuneIcon from '@material-ui/icons/Tune';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
 import { MyLayout } from 'components/CustomLayout';
@@ -18,6 +19,7 @@ import { AuthContextProvider } from 'contexts/AuthContext';
 import users, { UserListMembers } from 'views/users';
 import lists from 'views/lists';
 import rotator from 'views/rotator';
+import payouts from 'views/payouts';
 import { MyDataProvider } from 'dataProvider';
 import { authProvider } from 'authProvider';
 import { theme } from 'theme';
@@ -44,6 +46,7 @@ function App() {
           {() => {
             return [
               <Resource name="rotator" icon={ListAltIcon} {...rotator} />,
+              <Resource name="payouts" icon={ReceiptIcon} {...payouts} />,
               <Resource name="lists" icon={TuneIcon} {...lists} />,
               <Resource
                 name="members"
