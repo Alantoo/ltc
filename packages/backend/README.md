@@ -127,6 +127,7 @@ pm2 logs main --lines 1000
 ### Port forward
 ```
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8282
+sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
 ```
 
 ### Generate SSL sertificate
