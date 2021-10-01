@@ -25,7 +25,13 @@ import bitpay from 'assets/pay/bitpay.png';
 import { PayOutButton, PayOutHistory } from 'components/PayOut';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
-import { List, RotatorItem, rotateStatus } from 'dataProvider';
+import {
+  DataProvider,
+  List,
+  RotatorItem,
+  ItemStatus,
+  rotateStatus,
+} from 'dataProvider';
 import { getDateStr } from 'helpers';
 
 import { MyTheme } from 'theme';
@@ -42,7 +48,9 @@ type ClassKey =
   | 'activeItemText'
   | 'activeItemTable'
   | 'table'
-  | 'balanceRow';
+  | 'balanceRow'
+  | 'verifyInput'
+  | 'verifyInputError';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
@@ -125,7 +133,76 @@ const styles = (theme: Theme) => {
       justifyContent: 'space-between',
       alignItems: 'flex-start',
     },
+    verifyInput: {
+      height: 21,
+      width: 400,
+    },
+    verifyInputError: {
+      fontSize: 13,
+      color: 'red',
+    },
   });
+};
+
+type CheckFormProps = WithStyles<ClassKey> & {
+  itemId: string | number;
+  selectId: string | number;
+  dataProvider: DataProvider;
+  onUpdate: (data: ItemStatus) => void;
+};
+
+const CheckForm = ({
+  classes,
+  itemId,
+  selectId,
+  dataProvider,
+  onUpdate,
+}: CheckFormProps) => {
+  const [text, setText] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const onFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    setError('');
+    dataProvider
+      .addItemApproveUser(itemId, selectId, text)
+      .then((data) => {
+        onUpdate(data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setText(e.target.value);
+  };
+
+  return (
+    <form action="#" onSubmit={onFormSubmit}>
+      <input
+        className={classes.verifyInput}
+        type="text"
+        value={text}
+        onChange={onChange}
+        placeholder="Transaction ID"
+        disabled={loading}
+      />
+      <button disabled={loading}>verify</button>
+      <br />
+      <div className={classes.verifyInputError}>{error}</div>
+    </form>
+  );
 };
 
 type ProfileProps = WithStyles<ClassKey>;
@@ -278,6 +355,18 @@ const ProfileView = ({ classes }: ProfileProps) => {
     ],
   );
 
+  const onUserSelectUpdate = useCallback(
+    (data) => {
+      if (!data) {
+        return;
+      }
+      const { item, list } = data || {};
+      updateActiveItem(item);
+      updateItemsList(list);
+    },
+    [updateActiveItem, updateItemsList],
+  );
+
   if (!user) {
     return null;
   }
@@ -334,6 +423,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
                   e.preventDefault();
                   onUserSelect(item.id, index);
                 };
+
+                const onApproveUpdate = (data: ItemStatus) => {
+                  onUserSelectUpdate(data);
+                };
                 return (
                   <tr key={item.id}>
                     <td>{index + 1}</td>
@@ -344,6 +437,19 @@ const ProfileView = ({ classes }: ProfileProps) => {
                       >
                         {item.user.name}
                       </button>
+                      <br />
+                      {item.isSelected && !item.isPaid ? (
+                        <>
+                          {item.payAddress} - {item.payAmount} {item.payType}
+                          <CheckForm
+                            itemId={activeItem.id}
+                            selectId={item.id}
+                            onUpdate={onApproveUpdate}
+                            dataProvider={dataProvider}
+                            classes={classes}
+                          />
+                        </>
+                      ) : null}
                     </td>
                   </tr>
                 );
@@ -391,10 +497,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
-      <div className={classes.balanceRow}>
-        <Typography variant="h6">Balance: ${userBalance || 0}</Typography>
-        <PayOutButton />
-      </div>
+      {/*<div className={classes.balanceRow}>*/}
+      {/*  <Typography variant="h6">Balance: ${userBalance || 0}</Typography>*/}
+      {/*  <PayOutButton />*/}
+      {/*</div>*/}
 
       {activeOrList}
 

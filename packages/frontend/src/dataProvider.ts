@@ -56,6 +56,10 @@ export type RotatorItem = MyRecord & {
   createdAt: string;
   status: string;
   isSelected: boolean;
+  isPaid: boolean;
+  payType?: string;
+  payAddress?: string;
+  payAmount?: string;
 };
 
 export type PayOut = MyRecord & {
@@ -158,6 +162,19 @@ export class DataProvider {
     const data = await this.makeRequest<ItemStatus>(url, {
       method: 'POST',
       data: { selectedItemId, index },
+    });
+    return data;
+  }
+
+  async addItemApproveUser(
+    itemId: string | number,
+    selectedItemId: string | number,
+    trId: string,
+  ): Promise<ItemStatus> {
+    const url = `${API_URL}/rotator/${itemId}/confirm-select`;
+    const data = await this.makeRequest<ItemStatus>(url, {
+      method: 'POST',
+      data: { selectedItemId, trId },
     });
     return data;
   }
