@@ -532,7 +532,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
         </div>
       ) : null}
 
-      <PayOutHistory />
+      {/*<PayOutHistory />*/}
     </Container>
   );
 };

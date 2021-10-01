@@ -217,6 +217,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     const selected = await this.selectService.getSelectedFor(item.id);
     const selectedDetail = selected.find((i) => i.id === selectedItemId);
 
+    // TODO remove before production
     // if (!selectedDetail || trInfo.value !== selectedDetail.payAmount) {
     //   throw new NotFoundException('Transaction not correct amount');
     // }

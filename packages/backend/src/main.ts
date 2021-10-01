@@ -27,7 +27,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception.getStatus();
 
-    if (exception) {
+    if (exception && !exception.message.startsWith('Cannot GET')) {
       response.status(status).json({
         message: exception.message,
         statusCode: status,
