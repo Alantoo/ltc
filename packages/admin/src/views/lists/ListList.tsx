@@ -6,6 +6,7 @@ export const ListList = (props: ListProps) => {
     <List {...props}>
       <Datagrid rowClick="show">
         <TextField source="name" />
+        <TextField source="entryPrice" />
         <TextField source="price" />
         <TextField source="selectCount" />
         <TextField source="rotateTime" />
