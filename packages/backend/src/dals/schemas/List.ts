@@ -25,6 +25,10 @@ export class List extends Document {
   name: string;
 
   @ApiProperty()
+  @Prop({ type: Number, required: true, default: 2.95 })
+  entryPrice: number;
+
+  @ApiProperty()
   @Prop({ type: Number, required: true })
   price: number;
 

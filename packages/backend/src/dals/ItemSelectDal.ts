@@ -33,10 +33,28 @@ export class ItemSelectDal extends BaseDal<ItemSelectDocument> {
     parentId: string,
     childId: string,
     index: number,
+    options: {
+      payType: string;
+      payAddress: string;
+      payAmount: number;
+    },
   ): Promise<Array<RawItemSelectDocument>> {
-    const item = new this.Model({ parentId, childId, index });
+    const { payType, payAddress, payAmount } = options;
+    const item = new this.Model({
+      parentId,
+      childId,
+      index,
+      payType,
+      payAddress,
+      payAmount,
+    });
     await item.save();
     return this.getSelectedFor(parentId);
+  }
+
+  async getByTrId(trId: string): Promise<RawItemSelectDocument> {
+    const item = await this.Model.findOne({ payTx: trId });
+    return item;
   }
 
   async deleteFor(itemId): Promise<void> {

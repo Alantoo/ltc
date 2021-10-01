@@ -37,6 +37,12 @@ export class RotatorItem extends Document {
   @Prop()
   status: string;
 
+  @Prop({ type: String })
+  payType: string;
+
+  @Prop({ type: String })
+  payAddress: string;
+
   @ApiProperty()
   @Prop({ type: Date })
   removeAt: Date;

@@ -23,8 +23,18 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
 
   async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest();
     const response = ctx.getResponse();
+    const request = ctx.getRequest();
+    const status = exception.getStatus();
+
+    if (exception) {
+      response.status(status).json({
+        message: exception.message,
+        statusCode: status,
+      });
+      return;
+    }
+
     if (request.url.startsWith('/admin')) {
       response.sendFile(join(__dirname, '../admin', 'index.html'));
     } else {

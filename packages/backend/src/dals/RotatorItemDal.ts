@@ -2,6 +2,7 @@ import { Document, FilterQuery, ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, ListQuery, Model } from './BaseDal';
+import { ItemSelectSimple } from '../services/ItemSelectService';
 
 import {
   RawRotatorItemDocument,
@@ -11,6 +12,11 @@ import {
 
 export type RawRotatorItemDocumentForUi = RawRotatorItemDocument & {
   isSelected: boolean;
+  isPaid?: boolean;
+  payType?: string;
+  payAddress?: string;
+  payAmount?: number;
+  payTx?: string;
 };
 
 export {
@@ -215,7 +221,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   async getRandomFor(
     listId: ObjectId,
     userId: ObjectId,
-    selected: Array<{ id: string; index: number }>,
+    selected: Array<ItemSelectSimple>,
     defaultListSize: number,
     refer?: ObjectId,
   ): Promise<Array<RawRotatorItemDocumentForUi>> {
@@ -278,8 +284,13 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
       const selectedItem = selectedList.find(
         (item) => item.id.toString() === id,
       );
+      const selectedItemInfo = selected.find(
+        (item) => item.id.toString() === id,
+      );
+      const { id: ii, index: i, ...rest } = selectedItemInfo;
       resultList[index] = {
         ...selectedItem.toJSON(),
+        ...rest,
         isSelected: true,
       };
     });

@@ -6,6 +6,8 @@ import { UserService } from './UserService';
 import { ListService, ListConfig } from './ListService';
 import { ItemSelectService, ItemSelectSimple } from './ItemSelectService';
 import { PaySelectService } from './PaySelectService';
+import { PaymentService, TransactionInfo } from './PaymentService';
+
 import {
   RotatorItemDal,
   RotatorItemDocument,
@@ -48,6 +50,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
   userService: UserService;
   selectService: ItemSelectService;
   paySelectService: PaySelectService;
+  paymentService: PaymentService;
 
   constructor(
     @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
@@ -55,6 +58,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     @Inject(ListService) listService: ListService,
     @Inject(ItemSelectService) selectService: ItemSelectService,
     @Inject(PaySelectService) paySelectService: PaySelectService,
+    @Inject(PaymentService) paymentService: PaymentService,
   ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
@@ -62,6 +66,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     this.listService = listService;
     this.selectService = selectService;
     this.paySelectService = paySelectService;
+    this.paymentService = paymentService;
 
     setTimeout(() => {
       this.checkRotatorExpire().catch((err) => {
@@ -116,8 +121,11 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       payStatus === 'charge:delayed' ||
       payStatus === 'charge:resolved'
     ) {
+      const info = await this.paymentService.chargeGetInfo(paymentCode);
       await this.rotatorItemDal.updateInternal(item.id, {
         status: rotateStatus.SELECT,
+        payType: info.currency,
+        payAddress: info.from,
       });
     }
   }
@@ -140,7 +148,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     const rotatorList = await this.listService.getListConfig(item.list);
     const selected = await this.selectService.getSelectedFor(item.id);
     const list = await this.getRandomFor(item, selected, rotatorList);
-    if (selected.length === list.length) {
+    if (this.isAllPayed(selected, list)) {
       // done
       item = await this.addToRotation(id, rotatorList.rotateTimeMs);
     }
@@ -169,11 +177,65 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       rotatorList,
     );
     const list = await this.getRandomFor(item, selected, rotatorList);
-    if (selected.length === list.length) {
+    if (this.isAllPayed(selected, list)) {
       // done
       item = await this.addToRotation(id, rotatorList.rotateTimeMs);
     }
     return { item, list };
+  }
+
+  async selectConfirm(
+    id: string,
+    selectedItemId: string,
+    trId: string,
+    user: UserData,
+  ): Promise<ItemStatus> {
+    const item = await this.getOne(id, user);
+    if (!item) {
+      throw new NotFoundException();
+    }
+    const selectedItem = await this.getOne(selectedItemId, {});
+    if (!selectedItem) {
+      throw new NotFoundException();
+    }
+    let trInfo: TransactionInfo;
+    try {
+      const currency = selectedItem.payType;
+      trInfo = await this.paymentService.getTxInfo(currency, trId);
+    } catch (err) {
+      throw new NotFoundException('Can not get transaction info');
+    }
+
+    if (!trInfo) {
+      throw new NotFoundException('Can not get transaction info');
+    }
+
+    if (!trInfo.success) {
+      throw new NotFoundException('Transaction not approved yet');
+    }
+
+    const selected = await this.selectService.getSelectedFor(item.id);
+    const selectedDetail = selected.find((i) => i.id === selectedItemId);
+
+    // if (!selectedDetail || trInfo.value !== selectedDetail.payAmount) {
+    //   throw new NotFoundException('Transaction not correct amount');
+    // }
+    //
+    // if (!selectedDetail || trInfo.to !== selectedDetail.payAddress) {
+    //   throw new NotFoundException('Transaction not correct address');
+    // }
+
+    const already = await this.selectService.getByTrId(trId);
+    if (already) {
+      throw new NotFoundException('Transaction already exist');
+    } else {
+      await this.selectService.updateInternal(selectedDetail._id, {
+        isPaid: true,
+        payTx: trId,
+      });
+    }
+
+    return this.getStatus(id, user);
   }
 
   private async addSelectedItem(
@@ -182,23 +244,41 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     selectIndex: number,
     rotatorList: ListConfig,
   ): Promise<Array<ItemSelectSimple>> {
+    const amount = await this.paymentService.getCoinsAmount(
+      item.payType,
+      rotatorList.price,
+    );
     const selected = await this.selectService.addSelectedFor(
       item.id,
       selectedItem.id,
       selectIndex,
+      {
+        payType: item.payType,
+        payAddress: item.payAddress,
+        payAmount: amount,
+      },
     );
     // add selected
-    await this.paySelectService.addSelectPay({
-      userId: selectedItem.user,
-      fromUserId: item.user,
-      listId: rotatorList.id,
-      amount: rotatorList.price,
-    });
-    await this.userService.incrementBalance(
-      selectedItem.user.toString(),
-      rotatorList.price,
-    );
+    // await this.paySelectService.addSelectPay({
+    //   userId: selectedItem.user,
+    //   fromUserId: item.user,
+    //   listId: rotatorList.id,
+    //   amount: rotatorList.price,
+    // });
+    // await this.userService.incrementBalance(
+    //   selectedItem.user.toString(),
+    //   rotatorList.price,
+    // );
     return selected;
+  }
+
+  private isAllPayed(
+    selected: Array<ItemSelectSimple>,
+    list: Array<RawRotatorItemDocumentForUi>,
+  ): boolean {
+    const isAllSelected = selected.length === list.length;
+    const notPayed = selected.find((item) => !item.isPaid);
+    return isAllSelected && !notPayed;
   }
 
   private async checkRotatorExpire() {
@@ -247,7 +327,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
 
   private async getRandomFor(
     item: RawRotatorItemDocument,
-    selected: Array<{ id: string; index: number }>,
+    selected: Array<ItemSelectSimple>,
     rotatorList: ListConfig,
   ): Promise<Array<RawRotatorItemDocumentForUi>> {
     const userInfo = await this.userService.getOne(item.user, {});

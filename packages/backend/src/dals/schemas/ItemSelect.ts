@@ -40,6 +40,21 @@ export class ItemSelect extends Document {
 
   @Prop({ type: Number })
   index: number;
+
+  @Prop({ type: Boolean, default: false })
+  isPaid: boolean;
+
+  @Prop({ type: String })
+  payType: string;
+
+  @Prop({ type: String })
+  payAddress: string;
+
+  @Prop({ type: Number })
+  payAmount: number;
+
+  @Prop({ type: String })
+  payTx: string;
 }
 
 export class ItemSelectCreateDto extends PickType(ItemSelect, [

@@ -115,6 +115,8 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
         list: listId,
         user: user.id,
         status: rotateStatus.SELECT,
+        payType: 'BTC',
+        payAddress: 'bc1q869savt4dz5ws8ydawcpec37mz7zjawmj2gz93',
       };
 
       await this.rotatorService.create(data, user);
@@ -123,7 +125,7 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
       const charge = await this.paymentService.chargesCreate({
         name: `List name - ${list.name}`,
         description: `List price - "$${list.price}"`,
-        price: '1.11',
+        price: `${list.entryPrice}`,
       });
 
       const data: RotatorItemCreateDto = {
@@ -160,6 +162,23 @@ export class RotatorController extends ApiController<RotatorItemDocument> {
       id,
       selectedItemId,
       index,
+      user,
+    );
+    return { item, list };
+  }
+
+  @Post(':id/confirm-select')
+  @UseGuards(AuthRoles([]))
+  async selectConfirm(
+    @Param('id') id: string,
+    @Body() body: { selectedItemId: string; trId: string },
+    @User() user: UserData,
+  ): Promise<ItemStatus> {
+    const { selectedItemId, trId } = body || {};
+    const { item, list } = await this.rotatorService.selectConfirm(
+      id,
+      selectedItemId,
+      trId,
       user,
     );
     return { item, list };
