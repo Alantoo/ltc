@@ -37,9 +37,10 @@ export class ItemSelectDal extends BaseDal<ItemSelectDocument> {
       payType: string;
       payAddress: string;
       payAmount: number;
+      payQrCode: string;
     },
   ): Promise<Array<RawItemSelectDocument>> {
-    const { payType, payAddress, payAmount } = options;
+    const { payType, payAddress, payAmount, payQrCode } = options;
     const item = new this.Model({
       parentId,
       childId,
@@ -47,6 +48,7 @@ export class ItemSelectDal extends BaseDal<ItemSelectDocument> {
       payType,
       payAddress,
       payAmount,
+      payQrCode,
     });
     await item.save();
     return this.getSelectedFor(parentId);

@@ -5,18 +5,18 @@ export type DataContextType = {
   dataProvider: DataProvider;
   payOutPopupOpened: boolean;
   setPayOutPopupOpened: (value: boolean) => void;
-  userBalance: number;
-  refreshUserBalance: () => void;
+  // userBalance: number;
+  // refreshUserBalance: () => void;
 };
 
 const defaultContext = {
   dataProvider: defaultDataProvider,
   payOutPopupOpened: false,
   setPayOutPopupOpened: () => ({}),
-  userBalance: 0,
-  refreshUserBalance: () => {
-    return '';
-  },
+  // userBalance: 0,
+  // refreshUserBalance: () => {
+  //   return '';
+  // },
 };
 
 export const DataContext = createContext<DataContextType>(defaultContext);
@@ -28,24 +28,24 @@ type Props = {
 
 export const DataContextProvider = ({ children, dataProvider }: Props) => {
   const [payOutPopupOpened, setPayOutPopupOpened] = useState(false);
-  const [userBalance, setUserBalance] = useState(0);
-  const [userBalanceCache, setUserBalanceCache] = useState(0);
+  // const [userBalance, setUserBalance] = useState(0);
+  // const [userBalanceCache, setUserBalanceCache] = useState(0);
 
-  const refreshUserBalance = useCallback(() => {
-    setUserBalanceCache(userBalanceCache + 1);
-  }, [userBalanceCache, setUserBalanceCache]);
+  // const refreshUserBalance = useCallback(() => {
+  //   setUserBalanceCache(userBalanceCache + 1);
+  // }, [userBalanceCache, setUserBalanceCache]);
 
-  useEffect(() => {
-    dataProvider
-      .getUserBalance()
-      .then((data) => {
-        setUserBalance(data.balance);
-      })
-      .catch((err) => {
-        setUserBalance(0);
-        console.error(err);
-      });
-  }, [userBalanceCache]);
+  // useEffect(() => {
+  //   dataProvider
+  //     .getUserBalance()
+  //     .then((data) => {
+  //       setUserBalance(data.balance);
+  //     })
+  //     .catch((err) => {
+  //       setUserBalance(0);
+  //       console.error(err);
+  //     });
+  // }, [userBalanceCache]);
 
   return (
     <DataContext.Provider
@@ -53,8 +53,8 @@ export const DataContextProvider = ({ children, dataProvider }: Props) => {
         dataProvider,
         payOutPopupOpened,
         setPayOutPopupOpened,
-        userBalance,
-        refreshUserBalance,
+        // userBalance,
+        // refreshUserBalance,
       }}
     >
       {children}

@@ -20,6 +20,7 @@ export type ItemSelectSimple = {
   payType?: string;
   payAddress?: string;
   payAmount?: number;
+  payQrCode?: string;
   payTx?: string;
 };
 
@@ -34,16 +35,7 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
 
   async getSelectedFor(parentId: string): Promise<Array<ItemSelectSimple>> {
     const list = await this.itemSelectDal.getSelectedFor(parentId);
-    return list.map((item: RawItemSelectDocument) => ({
-      _id: item.id.toString(),
-      id: item.childId.toString(),
-      index: item.index,
-      isPaid: item.isPaid,
-      payType: item.payType,
-      payAddress: item.payAddress,
-      payAmount: item.payAmount,
-      payTx: item.payTx,
-    }));
+    return list.map(this.normalizeToSimple);
   }
 
   async addSelectedFor(
@@ -54,6 +46,7 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
       payType: string;
       payAddress: string;
       payAmount: number;
+      payQrCode: string;
     },
   ): Promise<Array<ItemSelectSimple>> {
     const list = await this.itemSelectDal.addSelectedFor(
@@ -62,16 +55,7 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
       index,
       options,
     );
-    return list.map((item: RawItemSelectDocument) => ({
-      _id: item.id.toString(),
-      id: item.childId.toString(),
-      index: item.index,
-      isPaid: item.isPaid,
-      payType: item.payType,
-      payAddress: item.payAddress,
-      payAmount: item.payAmount,
-      payTx: item.payTx,
-    }));
+    return list.map(this.normalizeToSimple);
   }
 
   async getByTrId(trId: string): Promise<ItemSelectSimple> {
@@ -79,6 +63,14 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
     if (!item) {
       return;
     }
+    return this.normalizeToSimple(item);
+  }
+
+  async deleteFor(itemId: string): Promise<void> {
+    await this.itemSelectDal.deleteFor(itemId);
+  }
+
+  private normalizeToSimple(item: RawItemSelectDocument): ItemSelectSimple {
     return {
       _id: item.id.toString(),
       id: item.childId.toString(),
@@ -87,11 +79,8 @@ export class ItemSelectService extends DalService<ItemSelectDocument> {
       payType: item.payType,
       payAddress: item.payAddress,
       payAmount: item.payAmount,
+      payQrCode: item.payQrCode,
       payTx: item.payTx,
     };
-  }
-
-  async deleteFor(itemId: string): Promise<void> {
-    await this.itemSelectDal.deleteFor(itemId);
   }
 }

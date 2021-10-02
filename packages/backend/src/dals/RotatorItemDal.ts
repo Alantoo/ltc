@@ -17,6 +17,7 @@ export type RawRotatorItemDocumentForUi = RawRotatorItemDocument & {
   payAddress?: string;
   payAmount?: number;
   payTx?: string;
+  payQrCode?: string;
 };
 
 export {

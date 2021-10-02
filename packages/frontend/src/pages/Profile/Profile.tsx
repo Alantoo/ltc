@@ -50,7 +50,8 @@ type ClassKey =
   | 'table'
   | 'balanceRow'
   | 'verifyInput'
-  | 'verifyInputError';
+  | 'verifyInputError'
+  | 'verifyImg';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
@@ -141,6 +142,10 @@ const styles = (theme: Theme) => {
       fontSize: 13,
       color: 'red',
     },
+    verifyImg: {
+      width: 150,
+      height: 150,
+    },
   });
 };
 
@@ -209,9 +214,7 @@ type ProfileProps = WithStyles<ClassKey>;
 
 const ProfileView = ({ classes }: ProfileProps) => {
   const { auth, user } = useContext(AuthContext);
-  const { dataProvider, userBalance, refreshUserBalance } = useContext(
-    DataContext,
-  );
+  const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
   const [list, setList] = useState<Array<List>>([]);
   const [historyList, setHistoryList] = useState<Array<RotatorItem>>([]);
@@ -265,7 +268,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   }, [historyCache]);
 
   useEffect(() => {
-    refreshUserBalance();
+    // refreshUserBalance();
     dataProvider
       .getUserStatus()
       .then((data) => {
@@ -441,6 +444,14 @@ const ProfileView = ({ classes }: ProfileProps) => {
                       {item.isSelected && !item.isPaid ? (
                         <>
                           {item.payAddress} - {item.payAmount} {item.payType}
+                          <br />
+                          {item.payQrCode ? (
+                            <img
+                              className={classes.verifyImg}
+                              src={item.payQrCode}
+                              alt="qr-code"
+                            />
+                          ) : null}
                           <CheckForm
                             itemId={activeItem.id}
                             selectId={item.id}

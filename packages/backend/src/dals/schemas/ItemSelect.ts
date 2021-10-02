@@ -54,6 +54,9 @@ export class ItemSelect extends Document {
   payAmount: number;
 
   @Prop({ type: String })
+  payQrCode: string;
+
+  @Prop({ type: String })
   payTx: string;
 }
 

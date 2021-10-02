@@ -60,6 +60,7 @@ export type RotatorItem = MyRecord & {
   payType?: string;
   payAddress?: string;
   payAmount?: string;
+  payQrCode?: string;
 };
 
 export type PayOut = MyRecord & {

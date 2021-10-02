@@ -67,12 +67,9 @@ const styles = (theme: Theme) => {
 type PayOutPopupProps = WithStyles<ClassKey>;
 
 const PayOutPopupView = ({ classes }: PayOutPopupProps) => {
-  const {
-    dataProvider,
-    payOutPopupOpened,
-    setPayOutPopupOpened,
-    refreshUserBalance,
-  } = useContext(DataContext);
+  const { dataProvider, payOutPopupOpened, setPayOutPopupOpened } = useContext(
+    DataContext,
+  );
   const [amount, setAmount] = useState('');
   const [address, setAddress] = useState('');
   const [amountError, setAmountError] = useState('');
@@ -120,7 +117,7 @@ const PayOutPopupView = ({ classes }: PayOutPopupProps) => {
           }
         } else {
           setIsSuccess(true);
-          refreshUserBalance();
+          // refreshUserBalance();
         }
       })
       .catch((err) => {

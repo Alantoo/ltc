@@ -212,7 +212,6 @@ export class AuthProvider {
     const delay = parseInt(expiresIn, 10);
     this.token = token;
     this.payload = JSON.parse(atob(token.split('.')[1]));
-    console.log(this.payload);
     this.refreshToken(delay);
     if (refreshInfo) {
       this.refreshTokenInfo = refreshInfo;

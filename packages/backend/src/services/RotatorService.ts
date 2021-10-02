@@ -233,6 +233,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       await this.selectService.updateInternal(selectedDetail._id, {
         isPaid: true,
         payTx: trId,
+        payQrCode: '',
       });
     }
 
@@ -249,6 +250,11 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       item.payType,
       rotatorList.price,
     );
+    const qrCode = await this.paymentService.getQrCode(
+      item.payType,
+      item.payAddress,
+      amount,
+    );
     const selected = await this.selectService.addSelectedFor(
       item.id,
       selectedItem.id,
@@ -257,6 +263,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
         payType: item.payType,
         payAddress: item.payAddress,
         payAmount: amount,
+        payQrCode: qrCode,
       },
     );
     // add selected
