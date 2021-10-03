@@ -284,7 +284,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     selected: Array<ItemSelectSimple>,
     list: Array<RawRotatorItemDocumentForUi>,
   ): boolean {
-    const isAllSelected = selected.length === list.length;
+    const isAllSelected = list.length >= selected.length;
     const notPayed = selected.find((item) => !item.isPaid);
     return isAllSelected && !notPayed;
   }
