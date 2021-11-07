@@ -181,12 +181,16 @@ export class DataProvider {
   }
 
   async getUserBalance(): Promise<{ balance: number }> {
-    const user = await this.authProvider?.getUser();
-    if (!user) {
-      throw new Error('No user');
-    }
-    const url = `${API_URL}/users/${user.id}/balance`;
+    const url = `${API_URL}/users/me/balance`;
     const data = await this.makeRequest<{ balance: number }>(url, {
+      method: 'GET',
+    });
+    return data;
+  }
+
+  async getUserReferrals(): Promise<ListResult<any>> {
+    const url = `${API_URL}/users/me/referrals`;
+    const data = await this.makeRequest<ListResult<any>>(url, {
       method: 'GET',
     });
     return data;

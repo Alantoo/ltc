@@ -43,21 +43,6 @@ export class UserController extends ApiController<UserDocument> {
     this.authService = authService;
   }
 
-  @ApiResponse({ type: UserModel })
-  @Get(':id/balance')
-  @UseGuards(AuthRoles([]))
-  async getBalance(
-    @Param('id') id: string,
-    @User() user: UserData,
-  ): Promise<{ balance: number }> {
-    // check admin or owner
-    const obj: RawUserDocument = await super.getOne(id, user);
-    if (!user.isAdmin && user.id.toString() !== obj.id.toString()) {
-      throw new UnauthorizedException();
-    }
-    return { balance: obj.balance };
-  }
-
   @Get()
   @UseGuards(AuthRoles([roles.ADMIN]))
   async getList(
@@ -78,6 +63,44 @@ export class UserController extends ApiController<UserDocument> {
       this.logger.log(`${this.constructor.name} get list error: ${error}`);
       throw error;
     }
+  }
+
+  @ApiResponse({ type: UserModel })
+  @Get('/me/referrals')
+  @UseGuards(AuthRoles([]))
+  async getReferrals(
+    @Query() query,
+    @User() user: UserData,
+  ): Promise<ListResult<UserDocument>> {
+    try {
+      const sort = query.sort ? JSON.parse(query.sort) : undefined;
+      const range = query.range ? JSON.parse(query.range) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : {};
+
+      filter['refer.id'] = user.id;
+
+      const data = await this.userService.getComplexList(
+        { filter, range, sort },
+        user,
+      );
+      return data;
+    } catch (error) {
+      this.logger.log(
+        `${this.constructor.name} get referrals list error: ${error}`,
+      );
+      throw error;
+    }
+  }
+
+  @ApiResponse({ type: UserModel })
+  @Get('/me/balance')
+  @UseGuards(AuthRoles([]))
+  async getBalance(@User() user: UserData): Promise<{ balance: number }> {
+    const obj: RawUserDocument = await super.getOne(user.id, user);
+    if (!user.isAdmin && user.id.toString() !== obj.id.toString()) {
+      throw new UnauthorizedException();
+    }
+    return { balance: obj.balance };
   }
 
   @ApiResponse({ type: UserModel })

@@ -39,12 +39,12 @@ export class UserDal extends BaseDal<UserDocument> {
   ): Array<any> {
     const { filter, range, sort } = query;
     let skip = 0;
-    let limit = undefined;
+    let limit = 100;
     if (range) {
       skip = range[0];
       limit = range[1] - range[0] + 1;
     }
-    let sortRule = undefined;
+    let sortRule: Record<string, number> = { createdAt: 1 };
     if (sort) {
       sortRule = { [sort[0]]: sort[1].toLowerCase() === 'asc' ? 1 : -1 };
     }
