@@ -1,5 +1,5 @@
 import { defaultTheme, RaThemeOptions } from 'react-admin';
-import { createTheme, Theme } from '@material-ui/core/styles';
+import { createMuiTheme, Theme } from '@material-ui/core/styles';
 import {
   Palette,
   PaletteOptions,
@@ -35,4 +35,4 @@ const themeOptions: MyThemeOptions = {
   },
 };
 
-export const theme = createTheme(themeOptions);
+export const theme = createMuiTheme(themeOptions);
