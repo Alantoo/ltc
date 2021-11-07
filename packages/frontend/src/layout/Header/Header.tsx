@@ -6,6 +6,7 @@ import {
   WithStyles,
   Theme,
 } from '@material-ui/core/styles';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import logo from 'assets/logo.png';
@@ -13,14 +14,20 @@ import { formTypes } from 'components/LoginPage';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
-type ClassKey = 'header' | 'headerContainer' | 'logo' | 'menu';
+type ClassKey =
+  | 'header'
+  | 'headerContainer'
+  | 'logo'
+  | 'menu'
+  | 'dropdownMenu'
+  | 'dropdownMenuTrigger';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     header: {
       display: 'block',
-      padding: '15px 0',
+      padding: '0 0',
     },
     headerContainer: {
       display: 'flex',
@@ -39,20 +46,52 @@ const styles = (theme: Theme) => {
       },
     },
     menu: {
-      listStyle: 'none',
-      margin: 0,
-      padding: 0,
-      '& li': {
+      '& > ul': {
+        listStyle: 'none',
+        margin: 0,
+        padding: 0,
+      },
+      '& > ul > li': {
         display: 'inline-block',
-        marginLeft: 30,
+        padding: '25px 20px',
         whiteSpace: 'nowrap',
       },
-      '& a': {
+      '& > ul > li a': {
         color: 'inherit',
         textDecoration: 'none',
         '&:hover': {
           textDecoration: 'underline',
         },
+      },
+    },
+    dropdownMenuTrigger: {
+      position: 'relative',
+      paddingRight: '30px !important',
+      transition: 'background ease 0.3s',
+      '& > svg': {
+        position: 'absolute',
+      },
+      '&:hover': {
+        background: '#eee',
+      },
+      '&:hover > .dropdownMenu': {
+        display: 'block',
+      },
+    },
+    dropdownMenu: {
+      position: 'absolute',
+      top: '100%',
+      right: 0,
+      boxShadow: '0px 5px 12px #ccc',
+      border: 'solid 1px #ccc',
+      display: 'none',
+      '& > ul': {
+        listStyle: 'none',
+        margin: 0,
+        padding: '5px 20px',
+      },
+      '& > ul > li': {
+        margin: '5px 0',
       },
     },
   });
@@ -96,8 +135,16 @@ const HeaderView = ({ classes }: HeaderProps) => {
             </li>
             {loading ? null : user ? (
               <>
-                <li>
+                <li className={classes.dropdownMenuTrigger}>
                   <Link to="/profile">Profile</Link>
+                  <ArrowDropDownIcon />
+                  <div className={`${classes.dropdownMenu} dropdownMenu`}>
+                    <ul>
+                      <li>
+                        <Link to="/profile/referrals">Referrals</Link>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
                 <li>
                   <a href="" onClick={onLogOutClick}>

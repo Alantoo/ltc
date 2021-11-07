@@ -19,6 +19,7 @@ import { Header } from 'layout/Header';
 import { Footer } from 'layout/Footer';
 import { Home } from 'pages/Home';
 import { Profile } from 'pages/Profile';
+import { Referrals } from 'pages/Referrals';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -99,7 +100,8 @@ const LayoutView = ({ classes }: LayoutProps) => {
             <div>
               <Header />
               <Switch>
-                <Route path="/profile/" component={Profile} />
+                <Route path="/profile/" component={Profile} exact />
+                <Route path="/profile/referrals/" component={Referrals} />
               </Switch>
             </div>
             <Footer />
