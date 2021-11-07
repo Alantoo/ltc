@@ -28,6 +28,7 @@ const styles = (theme: Theme) => {
     header: {
       display: 'block',
       padding: '0 0',
+      zIndex: 1,
     },
     headerContainer: {
       display: 'flex',
@@ -82,7 +83,8 @@ const styles = (theme: Theme) => {
       position: 'absolute',
       top: '100%',
       right: 0,
-      boxShadow: '0px 5px 12px #ccc',
+      background: '#fff',
+      boxShadow: '0px 5px 12px rgba(0,0,0,0.5)',
       border: 'solid 1px #ccc',
       display: 'none',
       '& > ul': {
@@ -141,7 +143,7 @@ const HeaderView = ({ classes }: HeaderProps) => {
                   <div className={`${classes.dropdownMenu} dropdownMenu`}>
                     <ul>
                       <li>
-                        <Link to="/profile/referrals">Referrals</Link>
+                        <Link to="/profile/referrals">Referral List</Link>
                       </li>
                     </ul>
                   </div>
