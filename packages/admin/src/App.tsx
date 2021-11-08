@@ -19,7 +19,7 @@ import { AuthContextProvider } from 'contexts/AuthContext';
 import users, { UserListMembers } from 'views/users';
 import lists from 'views/lists';
 import rotator from 'views/rotator';
-import payouts from 'views/payouts';
+import rewards from 'views/rewards';
 import { MyDataProvider } from 'dataProvider';
 import { authProvider } from 'authProvider';
 import { theme } from 'theme';
@@ -46,7 +46,7 @@ function App() {
           {() => {
             return [
               <Resource name="rotator" icon={ListAltIcon} {...rotator} />,
-              <Resource name="payouts" icon={ReceiptIcon} {...payouts} />,
+              <Resource name="rewards" icon={ReceiptIcon} {...rewards} />,
               <Resource name="lists" icon={TuneIcon} {...lists} />,
               <Resource
                 name="members"

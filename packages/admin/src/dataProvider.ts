@@ -209,36 +209,4 @@ export class MyDataProvider implements DataProvider {
     const data = await this.makeRequest(request);
     return { data };
   }
-
-  async getRates(): Promise<{ data: { eth: number } }> {
-    const request = {
-      url: `${API_URL}/payouts/rates`,
-      options: { method: 'GET' },
-    };
-    const data = await this.makeRequest(request);
-    return { data };
-  }
-
-  async approvePayOut(record: PayOut): Promise<{ data: MyRecord }> {
-    const rates = await this.getRates();
-    const amountEth = record.amount / rates.data.eth;
-
-    const tx = await walletProvider.sendEth(`${amountEth}`, record.address);
-
-    if (!tx) {
-      throw new Error('Transaction error');
-    }
-
-    const update = {
-      rates: rates.data.eth,
-      amountEth,
-      tx,
-    };
-    const request = {
-      url: `${API_URL}/payouts/${record.id}/pay`,
-      options: { method: 'POST', body: JSON.stringify(update) },
-    };
-    const data = await this.makeRequest(request);
-    return { data };
-  }
 }

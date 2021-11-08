@@ -7,6 +7,7 @@ export type ListDocument = List & Document;
 export type RawListDocument = LeanDocument<ListDocument>;
 
 const options: SchemaOptions = {
+  timestamps: true,
   toJSON: {
     virtuals: true,
     transform: function (doc, ret) {
@@ -39,6 +40,14 @@ export class List extends Document {
   @ApiProperty()
   @Prop({ type: String, default: '60d' })
   rotateTime: string;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  updatedAt: Date;
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

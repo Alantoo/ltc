@@ -7,6 +7,7 @@ import { ListService, ListConfig } from './ListService';
 import { ItemSelectService, ItemSelectSimple } from './ItemSelectService';
 import { PaySelectService } from './PaySelectService';
 import { PaymentService, TransactionInfo } from './PaymentService';
+import { RewardService } from './RewardService';
 
 import {
   RotatorItemDal,
@@ -51,6 +52,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
   selectService: ItemSelectService;
   paySelectService: PaySelectService;
   paymentService: PaymentService;
+  rewardService: RewardService;
 
   constructor(
     @Inject(RotatorItemDal) rotatorItemDal: RotatorItemDal,
@@ -59,6 +61,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     @Inject(ItemSelectService) selectService: ItemSelectService,
     @Inject(PaySelectService) paySelectService: PaySelectService,
     @Inject(PaymentService) paymentService: PaymentService,
+    @Inject(RewardService) rewardService: RewardService,
   ) {
     super({ baseDal: rotatorItemDal });
     this.rotatorItemDal = rotatorItemDal;
@@ -67,6 +70,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     this.selectService = selectService;
     this.paySelectService = paySelectService;
     this.paymentService = paymentService;
+    this.rewardService = rewardService;
 
     setTimeout(() => {
       this.checkRotatorExpire().catch((err) => {
@@ -235,6 +239,15 @@ export class RotatorService extends DalService<RotatorItemDocument> {
         payTx: trId,
         payQrCode: '',
       });
+      await this.rewardService.addRecord({
+        listId: selectedItem.list,
+        toUserId: selectedItem.user,
+        fromUserId: user.id,
+        payType: selectedDetail.payType,
+        payAddress: selectedDetail.payAddress,
+        payAmount: selectedDetail.payAmount,
+        payTx: trId,
+      });
     }
 
     return this.getStatus(id, user);
@@ -284,8 +297,15 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     selected: Array<ItemSelectSimple>,
     list: Array<RawRotatorItemDocumentForUi>,
   ): boolean {
-    const isAllSelected = list.length >= selected.length;
-    const notPayed = selected.find((item) => !item.isPaid);
+    const sel = [];
+    list.forEach((item) => {
+      const selI = selected.find((el) => el.id === item.id);
+      if (selI) {
+        sel.push(selI);
+      }
+    });
+    const isAllSelected = selected.length >= list.length;
+    const notPayed = sel.find((item) => !item.isPaid);
     return isAllSelected && !notPayed;
   }
 

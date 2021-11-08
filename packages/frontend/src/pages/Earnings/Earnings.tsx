@@ -14,7 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import { DataContext } from 'contexts/DataContext';
-import { Referral } from 'dataProvider';
+import { Reward } from 'dataProvider';
 import { MyTheme } from 'theme';
 
 type ClassKey = 'root' | 'loading';
@@ -30,21 +30,21 @@ const styles = (theme: Theme) => {
   });
 };
 
-type ReferralsProps = WithStyles<ClassKey>;
+type EarningsProps = WithStyles<ClassKey>;
 
-const ReferralsView = ({ classes }: ReferralsProps) => {
+const EarningsView = ({ classes }: EarningsProps) => {
   const { dataProvider } = useContext(DataContext);
   const [loading, setLoading] = useState(true);
-  const [referrals, setReferrals] = useState<Array<Referral>>([]);
+  const [rewards, setRewards] = useState<Array<Reward>>([]);
 
   useEffect(() => {
     dataProvider
-      .getUserReferrals()
+      .getUserRewards()
       .then(({ data }) => {
-        setReferrals(data);
+        setRewards(data);
       })
       .catch((err) => {
-        setReferrals([]);
+        setRewards([]);
         console.error(err);
       })
       .finally(() => {
@@ -64,26 +64,28 @@ const ReferralsView = ({ classes }: ReferralsProps) => {
 
   return (
     <Container maxWidth="xl">
-      {referrals.length ? (
+      {rewards.length ? (
         <div>
-          <Typography variant="h5">Referrals</Typography>
+          <Typography variant="h5">Earnings</Typography>
           <TableContainer component="div">
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  {/*<TableCell>Status</TableCell>*/}
-                  {/*<TableCell>Created at</TableCell>*/}
+                  <TableCell>List</TableCell>
+                  <TableCell>From</TableCell>
+                  <TableCell>Currency</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Amount</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {referrals.map((referral) => (
-                  <TableRow key={referral.id}>
-                    <TableCell>{referral.name}</TableCell>
-                    <TableCell>{referral.email}</TableCell>
-                    {/*<TableCell>{referral.status.toUpperCase()}</TableCell>*/}
-                    {/*<TableCell>{getDateStr(historyItem.createdAt)}</TableCell>*/}
+                {rewards.map((reward) => (
+                  <TableRow key={reward.id}>
+                    <TableCell>{reward.list.name}</TableCell>
+                    <TableCell>{reward.fromUser.name}</TableCell>
+                    <TableCell>{reward.payType}</TableCell>
+                    <TableCell>{reward.payAddress}</TableCell>
+                    <TableCell>{reward.payAmount}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -92,13 +94,13 @@ const ReferralsView = ({ classes }: ReferralsProps) => {
         </div>
       ) : (
         <div>
-          <Typography>No Referrals yet</Typography>
+          <Typography>No Earnings yet</Typography>
         </div>
       )}
     </Container>
   );
 };
 
-export const Referrals = withStyles(styles)(ReferralsView);
+export const Earnings = withStyles(styles)(EarningsView);
 
-export default Referrals;
+export default Earnings;

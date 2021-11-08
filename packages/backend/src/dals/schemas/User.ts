@@ -7,6 +7,7 @@ export type UserDocument = User & Document;
 export type RawUserDocument = LeanDocument<UserDocument>;
 
 const options: SchemaOptions = {
+  timestamps: true,
   toJSON: {
     virtuals: true,
     transform: function (doc, ret) {
@@ -54,6 +55,14 @@ export class User extends Document {
     ref: User.name,
   })
   refer: MongooseSchema.Types.ObjectId;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  updatedAt: Date;
 }
 
 export class UserCreateDto extends PickType(User, [

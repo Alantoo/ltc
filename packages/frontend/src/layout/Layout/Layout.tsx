@@ -14,12 +14,12 @@ import {
 } from '@material-ui/core/styles';
 import { ScrollToTop } from 'components/ScrollToTop';
 import { AuthPopup } from 'components/LoginPage';
-import { PayOutPopup } from 'components/PayOut';
 import { Header } from 'layout/Header';
 import { Footer } from 'layout/Footer';
 import { Home } from 'pages/Home';
 import { Profile } from 'pages/Profile';
 import { Referrals } from 'pages/Referrals';
+import { Earnings } from 'pages/Earnings';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -102,6 +102,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
               <Switch>
                 <Route path="/profile/" component={Profile} exact />
                 <Route path="/profile/referrals/" component={Referrals} />
+                <Route path="/profile/rewards/" component={Earnings} />
               </Switch>
             </div>
             <Footer />
@@ -110,7 +111,6 @@ const LayoutView = ({ classes }: LayoutProps) => {
       </Switch>
       <ScrollToTop />
       <AuthPopup />
-      <PayOutPopup />
     </>
   );
 };

@@ -46,6 +46,14 @@ export class RotatorItem extends Document {
   @ApiProperty()
   @Prop({ type: Date })
   removeAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  updatedAt: Date;
 }
 
 export class RotatorItemCreateDto extends PickType(RotatorItem, []) {

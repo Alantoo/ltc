@@ -1,11 +1,12 @@
 import { Document, LeanDocument, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaOptions, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { RotatorItem } from './RotatorItem';
+import { User } from './User';
+import { List } from './List';
 
-export type ItemSelectDocument = ItemSelect & Document;
+export type RewardDocument = Reward & Document;
 
-export type RawItemSelectDocument = LeanDocument<ItemSelectDocument>;
+export type RawRewardDocument = LeanDocument<RewardDocument>;
 
 const options: SchemaOptions = {
   timestamps: true,
@@ -21,41 +22,44 @@ const options: SchemaOptions = {
 };
 
 @Schema(options)
-export class ItemSelect extends Document {
+export class Reward extends Document {
   @ApiProperty()
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     required: true,
-    ref: RotatorItem.name,
+    ref: List.name,
   })
-  parentId: MongooseSchema.Types.ObjectId;
+  listId: MongooseSchema.Types.ObjectId;
 
   @ApiProperty()
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     required: true,
-    ref: RotatorItem.name,
+    ref: User.name,
   })
-  childId: MongooseSchema.Types.ObjectId;
+  toUserId: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: Number })
-  index: number;
+  @ApiProperty()
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    required: true,
+    ref: User.name,
+  })
+  fromUserId: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: Boolean, default: false })
-  isPaid: boolean;
-
+  @ApiProperty()
   @Prop({ type: String })
   payType: string;
 
+  @ApiProperty()
   @Prop({ type: String })
   payAddress: string;
 
+  @ApiProperty()
   @Prop({ type: Number })
   payAmount: number;
 
-  @Prop({ type: String })
-  payQrCode: string;
-
+  @ApiProperty()
   @Prop({ type: String })
   payTx: string;
 
@@ -68,10 +72,14 @@ export class ItemSelect extends Document {
   updatedAt: Date;
 }
 
-export class ItemSelectCreateDto extends PickType(ItemSelect, [
-  'parentId',
-  'childId',
-  'index',
+export class RewardCreateDto extends PickType(Reward, [
+  'listId',
+  'toUserId',
+  'fromUserId',
+  'payType',
+  'payAddress',
+  'payAmount',
+  'payTx',
 ]) {}
 
-export const ItemSelectSchema = SchemaFactory.createForClass(ItemSelect);
+export const RewardSchema = SchemaFactory.createForClass(Reward);

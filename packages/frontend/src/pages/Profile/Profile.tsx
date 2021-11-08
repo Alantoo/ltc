@@ -22,7 +22,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
-import { PayOutButton, PayOutHistory } from 'components/PayOut';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
 import {

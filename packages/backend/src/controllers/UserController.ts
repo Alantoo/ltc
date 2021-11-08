@@ -23,6 +23,7 @@ import {
   UserDocument,
   RawUserDocument,
 } from '../services/UserService';
+import { RewardService, RewardDocument } from '../services/RewardService';
 import { AuthService } from '../services/AuthService';
 
 @ApiTags('users')
@@ -31,15 +32,17 @@ export class UserController extends ApiController<UserDocument> {
   protected logger = new Logger(UserController.name);
 
   private userService: UserService;
-
+  private rewardService: RewardService;
   private authService: AuthService;
 
   constructor(
     @Inject(UserService) userService: UserService,
+    @Inject(RewardService) rewardService: RewardService,
     @Inject(AuthService) authService: AuthService,
   ) {
     super({ baseService: userService });
     this.userService = userService;
+    this.rewardService = rewardService;
     this.authService = authService;
   }
 
@@ -80,6 +83,33 @@ export class UserController extends ApiController<UserDocument> {
       filter['refer.id'] = user.id;
 
       const data = await this.userService.getComplexList(
+        { filter, range, sort },
+        user,
+      );
+      return data;
+    } catch (error) {
+      this.logger.log(
+        `${this.constructor.name} get referrals list error: ${error}`,
+      );
+      throw error;
+    }
+  }
+
+  @ApiResponse({ type: UserModel })
+  @Get('/me/rewards')
+  @UseGuards(AuthRoles([]))
+  async getRewards(
+    @Query() query,
+    @User() user: UserData,
+  ): Promise<ListResult<RewardDocument>> {
+    try {
+      const sort = query.sort ? JSON.parse(query.sort) : undefined;
+      const range = query.range ? JSON.parse(query.range) : undefined;
+      const filter = query.filter ? JSON.parse(query.filter) : {};
+
+      filter['toUser.id'] = user.id;
+
+      const data = await this.rewardService.getComplexList(
         { filter, range, sort },
         user,
       );

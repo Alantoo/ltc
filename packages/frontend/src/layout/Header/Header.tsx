@@ -145,6 +145,9 @@ const HeaderView = ({ classes }: HeaderProps) => {
                       <li>
                         <Link to="/profile/referrals">Referral List</Link>
                       </li>
+                      <li>
+                        <Link to="/profile/rewards">Earnings</Link>
+                      </li>
                     </ul>
                   </div>
                 </li>

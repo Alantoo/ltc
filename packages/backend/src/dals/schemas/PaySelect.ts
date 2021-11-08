@@ -49,6 +49,14 @@ export class PaySelect extends Document {
 
   @Prop({ type: Number })
   amount: number;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty()
+  @Prop({ type: Date })
+  updatedAt: Date;
 }
 
 export class PaySelectCreateDto extends PickType(PaySelect, [

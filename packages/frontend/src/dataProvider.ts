@@ -39,6 +39,27 @@ type MyRecord = {
   id: string | number;
 };
 
+export type Referral = MyRecord & {
+  name: string;
+  email: string;
+};
+
+export type Reward = {
+  id: string;
+  payType: string;
+  payAddress: string;
+  payAmount: number;
+  list: {
+    name: string;
+  };
+  toUser: {
+    name: string;
+  };
+  fromUser: {
+    name: string;
+  };
+};
+
 export type List = MyRecord & {
   name: string;
   price: number;
@@ -188,29 +209,17 @@ export class DataProvider {
     return data;
   }
 
-  async getUserReferrals(): Promise<ListResult<any>> {
+  async getUserReferrals(): Promise<ListResult<Referral>> {
     const url = `${API_URL}/users/me/referrals`;
-    const data = await this.makeRequest<ListResult<any>>(url, {
+    const data = await this.makeRequest<ListResult<Referral>>(url, {
       method: 'GET',
     });
     return data;
   }
 
-  async createPayOutRequest(reg: {
-    amount: string;
-    address: string;
-  }): Promise<SingleResult<ReqResp>> {
-    const url = `${API_URL}/payouts`;
-    const data = await this.makeRequest<ReqResp>(url, {
-      method: 'POST',
-      data: reg,
-    });
-    return data;
-  }
-
-  async getPayOutHistory(): Promise<ListResult<PayOut>> {
-    const url = `${API_URL}/payouts?sort=%5B%22createdAt%22%2C%22DESC%22%5D`;
-    const data = await this.makeRequest<ListResult<PayOut>>(url, {
+  async getUserRewards(): Promise<ListResult<Reward>> {
+    const url = `${API_URL}/users/me/rewards`;
+    const data = await this.makeRequest<ListResult<Reward>>(url, {
       method: 'GET',
     });
     return data;
