@@ -22,6 +22,7 @@ import { Referrals } from 'pages/Referrals';
 import { Earnings } from 'pages/Earnings';
 import { History } from 'pages/History';
 import { Settings } from 'pages/Settings';
+import { Terms } from 'pages/Terms';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -96,12 +97,20 @@ const LayoutView = ({ classes }: LayoutProps) => {
           <Home />
           <Footer />
         </Route>
+        <Route path="/terms/">
+          <div>
+            <Header />
+            <Terms />
+          </div>
+          <Footer />
+        </Route>
 
         <PrivateOrPublicRoute classes={classes} publicRedirect="/" path="/">
           <>
             <div>
               <Header />
               <Switch>
+                <Route path="/terms/" component={Terms} />
                 <Route path="/profile/" component={Profile} exact />
                 <Route path="/profile/referrals/" component={Referrals} />
                 <Route path="/profile/rewards/" component={Earnings} />

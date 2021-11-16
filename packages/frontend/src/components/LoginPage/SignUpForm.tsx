@@ -7,6 +7,8 @@ import {
 } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { MyTheme } from 'theme';
@@ -20,7 +22,8 @@ type ClassKey =
   | 'field'
   | 'formError'
   | 'button'
-  | 'links';
+  | 'links'
+  | 'terms';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
@@ -50,6 +53,16 @@ const styles = (theme: Theme) => {
     links: {
       textAlign: 'center',
     },
+    terms: {
+      marginTop: 5,
+      marginBottom: 10,
+      '& span': {
+        lineHeight: '17px',
+      },
+      '& .text': {
+        fontSize: 14,
+      },
+    },
   });
 };
 
@@ -75,6 +88,7 @@ const SignUpFormView = (props: SignUpFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+  const [terms, setTerms] = useState(false);
   const [error, setError] = useState(initError);
   const [passwordProps] = useState<any>({
     autoComplete: 'new-password',
@@ -89,6 +103,9 @@ const SignUpFormView = (props: SignUpFormProps) => {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!terms) {
+      return;
+    }
     if (!email) {
       setError('Email required');
       return;
@@ -177,6 +194,12 @@ const SignUpFormView = (props: SignUpFormProps) => {
     },
     [setPassword2, setError],
   );
+
+  const onTermsChange = (e: React.ChangeEvent) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    setTerms(e.target.checked);
+  };
 
   return (
     <form
@@ -270,6 +293,26 @@ const SignUpFormView = (props: SignUpFormProps) => {
           />
         </FormControl>
       </div>
+      <div className={classes.terms}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={terms}
+              color="primary"
+              onChange={onTermsChange}
+              name="checkedA"
+            />
+          }
+          label={
+            <span className="text">
+              Click box if you agree with Global Money List{' '}
+              <a href="/terms" target="_blank">
+                Terms of Service
+              </a>
+            </span>
+          }
+        />
+      </div>
       {error ? (
         <Typography className={classes.formError} variant="body2">
           {error}
@@ -279,7 +322,7 @@ const SignUpFormView = (props: SignUpFormProps) => {
         <Button
           variant="contained"
           type="submit"
-          disabled={loading}
+          disabled={loading || !terms}
           className={classes.button}
         >
           Sign up
