@@ -57,6 +57,8 @@ type SignUpFormProps = WithStyles<ClassKey> & {
   onFormSubmit: (data: {
     email: string;
     name: string;
+    firstName: string;
+    lastName: string;
     password: string;
   }) => void;
   onLoginClick: () => void;
@@ -65,9 +67,18 @@ type SignUpFormProps = WithStyles<ClassKey> & {
 const SignUpFormView = (props: SignUpFormProps) => {
   const { classes, error: initError, active, loading } = props;
   const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [error, setError] = useState(initError);
+  const [passwordProps] = useState<any>({
+    autocomplete: 'new-password',
+    form: {
+      autoComplete: 'off',
+    },
+  });
 
   useEffect(() => {
     setError(initError);
@@ -76,7 +87,23 @@ const SignUpFormView = (props: SignUpFormProps) => {
   const onFormSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      props.onFormSubmit({ email, name, password });
+      if (!email) {
+        setError('Email required');
+        return;
+      }
+      if (!name) {
+        setError('Name required');
+        return;
+      }
+      if (!password) {
+        setError('Password required');
+        return;
+      }
+      if (password !== password2) {
+        setError('Password mismatch');
+        return;
+      }
+      props.onFormSubmit({ email, name, firstName, lastName, password });
     },
     [email, password, name, props.onFormSubmit],
   );
@@ -98,6 +125,24 @@ const SignUpFormView = (props: SignUpFormProps) => {
     [setName, setError],
   );
 
+  const onFirstNameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setFirstName(value);
+      setError('');
+    },
+    [setFirstName, setError],
+  );
+
+  const onLastNameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setLastName(value);
+      setError('');
+    },
+    [setLastName, setError],
+  );
+
   const onEmailChange = useCallback(
     (e) => {
       const value = e.target.value;
@@ -114,6 +159,15 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('');
     },
     [setPassword, setError],
+  );
+
+  const onPassword2Change = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setPassword2(value);
+      setError('');
+    },
+    [setPassword2, setError],
   );
 
   return (
@@ -142,6 +196,32 @@ const SignUpFormView = (props: SignUpFormProps) => {
       <div>
         <FormControl className={classes.field}>
           <TextField
+            id="sign-up-firstName"
+            name="sign-up-firstName"
+            label="First Name"
+            value={firstName}
+            onChange={onFirstNameChange}
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-lastName"
+            name="sign-up-lastName"
+            label="Last Name"
+            value={lastName}
+            onChange={onLastNameChange}
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
             id="sign-up-email"
             name="sign-up-email"
             label="Email"
@@ -161,6 +241,21 @@ const SignUpFormView = (props: SignUpFormProps) => {
             type="password"
             value={password}
             onChange={onPasswordChange}
+            inputProps={passwordProps}
+            fullWidth
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-password2"
+            name="sign-up-password2"
+            label="Confirm Password"
+            type="password"
+            value={password2}
+            onChange={onPassword2Change}
+            inputProps={passwordProps}
             fullWidth
           />
         </FormControl>

@@ -49,7 +49,14 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() body: { email: string; name: string; password: string },
+    @Body()
+    body: {
+      email: string;
+      name: string;
+      firstName: string;
+      lastName: string;
+      password: string;
+    },
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<LoginResult> {
@@ -58,6 +65,8 @@ export class AuthController {
     const result = await this.authService.registerUser(
       body.email,
       body.name,
+      body.firstName,
+      body.lastName,
       body.password,
       basename,
     );

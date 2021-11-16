@@ -11,6 +11,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { MyTheme } from 'theme';
 
+const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+const nameRegExp = /^[a-zA-Z0-9]+$/i;
+
 type ClassKey =
   | 'form'
   | 'formTitle'
@@ -57,6 +60,8 @@ type SignUpFormProps = WithStyles<ClassKey> & {
   onFormSubmit: (data: {
     email: string;
     name: string;
+    firstName: string;
+    lastName: string;
     password: string;
   }) => void;
   onLoginClick: () => void;
@@ -65,21 +70,51 @@ type SignUpFormProps = WithStyles<ClassKey> & {
 const SignUpFormView = (props: SignUpFormProps) => {
   const { classes, error: initError, active, loading } = props;
   const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [error, setError] = useState(initError);
+  const [passwordProps] = useState<any>({
+    autoComplete: 'new-password',
+    form: {
+      autoComplete: 'off',
+    },
+  });
 
   useEffect(() => {
     setError(initError);
   }, [initError]);
 
-  const onFormSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      props.onFormSubmit({ email, name, password });
-    },
-    [email, password, name, props.onFormSubmit],
-  );
+  const onFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      setError('Email required');
+      return;
+    }
+    if (!emailRegExp.test(email)) {
+      setError('Email incorrect');
+      return;
+    }
+    if (!name) {
+      setError('Name required');
+      return;
+    }
+    if (!nameRegExp.test(name)) {
+      setError('Name incorrect');
+      return;
+    }
+    if (!password) {
+      setError('Password required');
+      return;
+    }
+    if (password !== password2) {
+      setError('Password mismatch');
+      return;
+    }
+    props.onFormSubmit({ email, name, firstName, lastName, password });
+  };
 
   const onLoginClick = useCallback(
     (e: React.MouseEvent) => {
@@ -96,6 +131,24 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('');
     },
     [setName, setError],
+  );
+
+  const onFirstNameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setFirstName(value);
+      setError('');
+    },
+    [setFirstName, setError],
+  );
+
+  const onLastNameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setLastName(value);
+      setError('');
+    },
+    [setLastName, setError],
   );
 
   const onEmailChange = useCallback(
@@ -116,6 +169,15 @@ const SignUpFormView = (props: SignUpFormProps) => {
     [setPassword, setError],
   );
 
+  const onPassword2Change = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setPassword2(value);
+      setError('');
+    },
+    [setPassword2, setError],
+  );
+
   return (
     <form
       onSubmit={onFormSubmit}
@@ -134,6 +196,33 @@ const SignUpFormView = (props: SignUpFormProps) => {
             label="Name"
             value={name}
             onChange={onNameChange}
+            helperText="You can use upper- and lower-case letters or numbers only. Your username will be shown in your affiliate URL."
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-firstName"
+            name="sign-up-firstName"
+            label="First Name"
+            value={firstName}
+            onChange={onFirstNameChange}
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-lastName"
+            name="sign-up-lastName"
+            label="Last Name"
+            value={lastName}
+            onChange={onLastNameChange}
             fullWidth
             autoComplete="off"
           />
@@ -161,6 +250,22 @@ const SignUpFormView = (props: SignUpFormProps) => {
             type="password"
             value={password}
             onChange={onPasswordChange}
+            inputProps={passwordProps}
+            helperText="Use up to 20 characters with a mix of letters, numbers and symbols."
+            fullWidth
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-password2"
+            name="sign-up-password2"
+            label="Confirm Password"
+            type="password"
+            value={password2}
+            onChange={onPassword2Change}
+            inputProps={passwordProps}
             fullWidth
           />
         </FormControl>

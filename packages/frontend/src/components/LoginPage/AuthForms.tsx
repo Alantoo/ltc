@@ -81,7 +81,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
   );
 
   const onSignUpFormSubmit = useCallback(
-    ({ email, name, password }) => {
+    ({ email, name, firstName, lastName, password }) => {
       setLoading(true);
 
       auth
@@ -89,6 +89,8 @@ const AuthFormsView = (props: AuthFormsProps) => {
           email,
           password,
           name,
+          firstName,
+          lastName,
         })
         .then(() => {
           history.push('/profile');

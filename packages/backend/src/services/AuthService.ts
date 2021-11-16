@@ -81,6 +81,8 @@ export type JwtPayload = {
   id: string;
   email: string;
   name: string;
+  firstName: string;
+  lastName: string;
   isAdmin: boolean;
   isVerified: boolean;
   balance: number;
@@ -115,6 +117,8 @@ export class AuthService {
   async registerUser(
     email: string,
     name: string,
+    firstName: string,
+    lastName: string,
     pass: string,
     referUsername?: string,
   ): Promise<{
@@ -148,6 +152,8 @@ export class AuthService {
       {
         email,
         name,
+        firstName,
+        lastName,
         password: this.encodePass(pass),
         refer: referUser ? referUser.id : undefined,
       },
@@ -319,11 +325,22 @@ export class AuthService {
   }
 
   private createToken(user: RawUserDocument): string {
-    const { id, email, name, balance, isAdmin, isVerified } = user;
+    const {
+      id,
+      email,
+      name,
+      firstName,
+      lastName,
+      balance,
+      isAdmin,
+      isVerified,
+    } = user;
     const payload: JwtPayload = {
       id,
       email,
       name,
+      firstName,
+      lastName,
       balance,
       isAdmin,
       isVerified,

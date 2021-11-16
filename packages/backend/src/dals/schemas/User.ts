@@ -37,6 +37,14 @@ export class User extends Document {
   @Prop({ type: String, required: true, unique: true })
   name: string;
 
+  @ApiProperty()
+  @Prop({ type: String })
+  firstName: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  lastName: string;
+
   @Prop({ type: Number, default: 0 })
   balance: number;
 
@@ -69,6 +77,8 @@ export class UserCreateDto extends PickType(User, [
   'email',
   'password',
   'name',
+  'firstName',
+  'lastName',
 ]) {}
 
 export class UserUpdateDto extends PickType(User, ['name']) {}

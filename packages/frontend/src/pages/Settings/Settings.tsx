@@ -10,8 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { AuthContext } from 'contexts/AuthContext';
-import { DataContext } from 'contexts/DataContext';
 import { MyTheme } from 'theme';
+
+const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 
 type ClassKey =
   | 'root'
@@ -81,23 +82,39 @@ const SettingsView = ({ classes }: SettingsProps) => {
   const [error, setError] = useState('');
   const [email, setEmail] = useState(user ? user.email : '');
   const [name] = useState(user ? user.name : '');
+  const [firstName, setFirstName] = useState(user ? user.firstName : '');
+  const [lastName, setLastName] = useState(user ? user.lastName : '');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [passwordProps] = useState<any>({
-    autocomplete: 'new-password',
+    autoComplete: 'new-password',
     form: {
-      autocomplete: 'off',
+      autoComplete: 'off',
     },
   });
+
+  console.log(user);
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) {
       return;
     }
+
+    if (!emailRegExp.test(email)) {
+      setError('Email incorrect');
+      return;
+    }
+
+    if (password !== password2) {
+      setError('Password mismatch');
+      return;
+    }
+
     setLoading(true);
     setError('');
     auth
-      .updateInfo({ email, password })
+      .updateInfo({ email, password, firstName, lastName })
       .then(() => {
         setPassword('');
       })
@@ -140,11 +157,35 @@ const SettingsView = ({ classes }: SettingsProps) => {
     setError('');
   };
 
+  const onFirstNameChange = (e: React.FormEvent) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const val = e.target.value as string;
+    setFirstName(val);
+    setError('');
+  };
+
+  const onLastNameChange = (e: React.FormEvent) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const val = e.target.value as string;
+    setLastName(val);
+    setError('');
+  };
+
   const onPasswordChange = (e: React.FormEvent) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const val = e.target.value as string;
     setPassword(val);
+    setError('');
+  };
+
+  const onPassword2Change = (e: React.FormEvent) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const val = e.target.value as string;
+    setPassword2(val);
     setError('');
   };
 
@@ -175,37 +216,41 @@ const SettingsView = ({ classes }: SettingsProps) => {
             </div>
           </div>
 
-          {/*<div className={classes.row}>*/}
-          {/*  <div className={classes.cell}>*/}
-          {/*    <Typography className={classes.label}>*/}
-          {/*      <label htmlFor="firstName">First Name</label>*/}
-          {/*    </Typography>*/}
-          {/*  </div>*/}
-          {/*  <div className={classes.cell}>*/}
-          {/*    <TextField*/}
-          {/*      id="firstName"*/}
-          {/*      name="firstName"*/}
-          {/*      placeholder="First Name"*/}
-          {/*      fullWidth*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
+          <div className={classes.row}>
+            <div className={classes.cell}>
+              <Typography className={classes.label}>
+                <label htmlFor="firstName">First Name</label>
+              </Typography>
+            </div>
+            <div className={classes.cell}>
+              <TextField
+                id="firstName"
+                name="firstName"
+                placeholder="First Name"
+                value={firstName}
+                onChange={onFirstNameChange}
+                fullWidth
+              />
+            </div>
+          </div>
 
-          {/*<div className={classes.row}>*/}
-          {/*  <div className={classes.cell}>*/}
-          {/*    <Typography className={classes.label}>*/}
-          {/*      <label htmlFor="lastName">Last Name</label>*/}
-          {/*    </Typography>*/}
-          {/*  </div>*/}
-          {/*  <div className={classes.cell}>*/}
-          {/*    <TextField*/}
-          {/*      id="lastName"*/}
-          {/*      name="lastName"*/}
-          {/*      placeholder="Last Name"*/}
-          {/*      fullWidth*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
+          <div className={classes.row}>
+            <div className={classes.cell}>
+              <Typography className={classes.label}>
+                <label htmlFor="lastName">Last Name</label>
+              </Typography>
+            </div>
+            <div className={classes.cell}>
+              <TextField
+                id="lastName"
+                name="lastName"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={onLastNameChange}
+                fullWidth
+              />
+            </div>
+          </div>
 
           <div className={classes.row}>
             <div className={classes.cell}>
@@ -237,6 +282,26 @@ const SettingsView = ({ classes }: SettingsProps) => {
                 name="no-password"
                 value={password}
                 onChange={onPasswordChange}
+                placeholder="password"
+                type="password"
+                fullWidth
+                inputProps={passwordProps}
+              />
+            </div>
+          </div>
+
+          <div className={classes.row}>
+            <div className={classes.cell}>
+              <Typography className={classes.label}>
+                <label htmlFor="no-password2">Confirm Password</label>
+              </Typography>
+            </div>
+            <div className={classes.cell}>
+              <TextField
+                id="no-password2"
+                name="no-password2"
+                value={password2}
+                onChange={onPassword2Change}
                 placeholder="password"
                 type="password"
                 fullWidth

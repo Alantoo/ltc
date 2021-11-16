@@ -5,6 +5,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 export type JwtPayload = {
   id: string;
   email: string;
+  name: string;
+  firstName: string;
+  lastName: string;
   isAdmin: boolean;
   isVerified: boolean;
 };
@@ -96,16 +99,20 @@ export class AuthProvider {
   async register({
     email,
     name,
+    firstName,
+    lastName,
     password,
   }: {
     email: string;
     name: string;
+    firstName: string;
+    lastName: string;
     password: string;
   }): Promise<any> {
     const loginUrl = `${API_URL}/auth/register`;
     const request = new Request(loginUrl, {
       method: 'POST',
-      body: JSON.stringify({ email, name, password }),
+      body: JSON.stringify({ email, name, firstName, lastName, password }),
       headers: new Headers({ 'Content-Type': 'application/json' }),
       credentials: process.env.REACT_APP_HTTP_CRED as RequestCredentials,
     });

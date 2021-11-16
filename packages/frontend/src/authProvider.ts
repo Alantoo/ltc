@@ -5,6 +5,8 @@ export type JwtPayload = {
   id: string;
   email: string;
   name: string;
+  firstName: string;
+  lastName: string;
   balance: number;
   roles: string[];
   isVerified: boolean;
@@ -115,16 +117,20 @@ export class AuthProvider {
   async register({
     email,
     name,
+    firstName,
+    lastName,
     password,
   }: {
     email: string;
     name: string;
+    firstName: string;
+    lastName: string;
     password: string;
   }): Promise<any> {
     const registerUrl = `${API_URL}/auth/register`;
     const data = await fetchJson<LoginResult>(registerUrl, {
       method: 'POST',
-      data: { email, name, password },
+      data: { email, name, firstName, lastName, password },
     });
     this.setToken(data.loginInfo, data.refreshInfo);
     const username = this.payload ? this.payload.name : '';
@@ -155,7 +161,12 @@ export class AuthProvider {
     });
   }
 
-  async updateInfo(data: { email: string; password: string }): Promise<void> {
+  async updateInfo(data: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }): Promise<void> {
     const updateUrl = `${API_URL}/users/me`;
     await fetchJson<void>(updateUrl, {
       method: 'PUT',
