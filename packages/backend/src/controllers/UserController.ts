@@ -157,6 +157,43 @@ export class UserController extends ApiController<UserDocument> {
     return super.create(body);
   }
 
+  @ApiResponse({ type: UserModel })
+  @Put('/me')
+  @UseGuards(AuthRoles([]))
+  async updateMe(
+    @Body() body: RawUserDocument,
+    @User() user: UserData,
+  ): Promise<SingleResult<UserDocument>> {
+    const id = user.id.toString();
+    const obj: RawUserDocument = await super.getOne(id, user);
+    if (id !== obj.id.toString()) {
+      throw new UnauthorizedException();
+    }
+    if (!user.isAdmin) {
+      delete body.isAdmin;
+      delete body.isBlocked;
+      delete body.isVerified;
+      delete body.name;
+      delete body.code;
+      delete body.refer;
+      delete body.balance;
+    }
+    if (body.password) {
+      body.password = this.authService.encodePass(body.password);
+    } else {
+      delete body.password;
+    }
+    const newEmail = (body.email || '').toLowerCase();
+    if (newEmail && newEmail !== user.email) {
+      const exist = await this.userService.findByEmail(newEmail);
+      if (exist) {
+        throw new UnprocessableEntityException('Email already exist');
+      }
+      body.isVerified = false;
+    }
+    return super.update(id, body, user);
+  }
+
   @Put(':id')
   @UseGuards(AuthRoles([]))
   async update(
@@ -172,9 +209,17 @@ export class UserController extends ApiController<UserDocument> {
     if (!user.isAdmin) {
       delete body.isAdmin;
       delete body.isBlocked;
+      delete body.isVerified;
+      delete body.email;
+      delete body.name;
+      delete body.code;
+      delete body.refer;
+      delete body.balance;
     }
     if (body.password) {
       body.password = this.authService.encodePass(body.password);
+    } else {
+      delete body.password;
     }
     return super.update(id, body, user);
   }

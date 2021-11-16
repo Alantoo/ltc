@@ -155,6 +155,16 @@ export class AuthProvider {
     });
   }
 
+  async updateInfo(data: { email: string; password: string }): Promise<void> {
+    const updateUrl = `${API_URL}/users/me`;
+    await fetchJson<void>(updateUrl, {
+      method: 'PUT',
+      data,
+      token: this.token,
+    });
+    await this.waitForTokenRefresh(true);
+  }
+
   async sendVerificationCode(): Promise<any> {
     const sendVerifyUrl = `${API_URL}/auth/sendVerify`;
     await fetchJson<void>(sendVerifyUrl, { token: this.token });
@@ -179,11 +189,13 @@ export class AuthProvider {
 
     this.isRefreshing = fetchJson<LoginInfo>(refreshUrl)
       .catch(() => {
+        this.isRefreshing = null;
         this.clearToken();
         console.log('Token renewal failure');
         return { token: '', expiresIn: '0' } as LoginInfo;
       })
       .then((loginInfo) => {
+        this.isRefreshing = null;
         if (loginInfo && loginInfo.token) {
           this.setToken(loginInfo);
           return true;
@@ -195,13 +207,13 @@ export class AuthProvider {
     return this.isRefreshing;
   }
 
-  private waitForTokenRefresh(): Promise<any> {
+  private waitForTokenRefresh(force?: boolean): Promise<any> {
     if (this.isRefreshing) {
       return this.isRefreshing.then(() => {
         this.isRefreshing = null;
         return true;
       });
-    } else if (!this.token) {
+    } else if (!this.token || force) {
       return this.getRefreshedToken();
     }
     return Promise.resolve();

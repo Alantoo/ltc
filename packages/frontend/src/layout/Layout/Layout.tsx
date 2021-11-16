@@ -20,6 +20,8 @@ import { Home } from 'pages/Home';
 import { Profile } from 'pages/Profile';
 import { Referrals } from 'pages/Referrals';
 import { Earnings } from 'pages/Earnings';
+import { History } from 'pages/History';
+import { Settings } from 'pages/Settings';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -103,6 +105,8 @@ const LayoutView = ({ classes }: LayoutProps) => {
                 <Route path="/profile/" component={Profile} exact />
                 <Route path="/profile/referrals/" component={Referrals} />
                 <Route path="/profile/rewards/" component={Earnings} />
+                <Route path="/profile/history/" component={History} />
+                <Route path="/profile/settings/" component={Settings} />
               </Switch>
             </div>
             <Footer />

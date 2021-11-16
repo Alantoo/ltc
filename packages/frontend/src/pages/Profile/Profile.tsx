@@ -14,12 +14,6 @@ import {
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import gpay from 'assets/pay/gpay.png';
 import bitpay from 'assets/pay/bitpay.png';
 import { AuthContext } from 'contexts/AuthContext';
@@ -31,12 +25,12 @@ import {
   ItemStatus,
   rotateStatus,
 } from 'dataProvider';
-import { getDateStr } from 'helpers';
 
 import { MyTheme } from 'theme';
 
 type ClassKey =
   | 'root'
+  | 'text'
   | 'verify'
   | 'grid'
   | 'gridItem'
@@ -46,7 +40,6 @@ type ClassKey =
   | 'activeItemTitle'
   | 'activeItemText'
   | 'activeItemTable'
-  | 'table'
   | 'balanceRow'
   | 'verifyInput'
   | 'verifyInputError'
@@ -56,6 +49,15 @@ const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {},
+    text: {
+      '& a': {
+        color: '#0fa5df',
+        textDecoration: 'none',
+      },
+      '& a:hover': {
+        textDecoration: 'underline',
+      },
+    },
     grid: {
       margin: '0 -10px 30px -10px',
       padding: 0,
@@ -119,14 +121,6 @@ const styles = (theme: Theme) => {
     verify: {
       padding: '30px 0',
       textAlign: 'center',
-    },
-    table: {
-      margin: '10px 0 20px',
-      borderCollapse: 'collapse',
-      '& td': {
-        padding: 4,
-        border: 'solid 1px black',
-      },
     },
     balanceRow: {
       display: 'flex',
@@ -216,8 +210,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
   const [list, setList] = useState<Array<List>>([]);
-  const [historyList, setHistoryList] = useState<Array<RotatorItem>>([]);
-  const [historyCache, setHistoryCache] = useState(0);
   const [activeItem, setActiveItem] = useState<RotatorItem>();
   const [activeItemList, setActiveItemList] = useState<List>();
   const [itemsList, setItemsList] = useState<Array<RotatorItem>>([]);
@@ -227,14 +219,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const updateActiveItem = useCallback(
     (newActiveItem) => {
       if (newActiveItem && newActiveItem.status === rotateStatus.ADDED) {
-        setHistoryCache(historyCache + 1);
         setActiveItem(undefined);
         updateItemsList([]);
       } else if (JSON.stringify(activeItem) !== JSON.stringify(newActiveItem)) {
         setActiveItem(newActiveItem);
       }
     },
-    [activeItem, setActiveItem, historyCache, setHistoryList, setItemsList],
+    [activeItem, setActiveItem, setItemsList],
   );
 
   const updateItemsList = useCallback(
@@ -254,17 +245,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
     },
     [setItemsList, itemsListCacheTimer, itemsListCache, setItemsListCache],
   );
-
-  useEffect(() => {
-    dataProvider
-      .getUserHistory()
-      .then((data) => {
-        setHistoryList(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [historyCache]);
 
   useEffect(() => {
     // refreshUserBalance();
@@ -321,14 +301,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
           } else {
             window.location.reload();
           }
-
-          setHistoryCache(historyCache + 1);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [dataProvider, historyCache, setHistoryCache],
+    [dataProvider],
   );
 
   const onUserSelect = useCallback(
@@ -347,14 +325,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
           console.error(err);
         });
     },
-    [
-      dataProvider,
-      activeItem,
-      updateActiveItem,
-      updateItemsList,
-      historyCache,
-      setHistoryCache,
-    ],
+    [dataProvider, activeItem, updateActiveItem, updateItemsList],
   );
 
   const onUserSelectUpdate = useCallback(
@@ -372,6 +343,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
   if (!user) {
     return null;
   }
+
+  const userLink = `${window.location.origin}/${encodeURIComponent(
+    user.name,
+  )}/`;
 
   if (!user.isVerified) {
     return (
@@ -507,40 +482,19 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
+      <Typography className={classes.text}>
+        Share your free Global MoneyList website link below:
+        <br />
+        <a href={userLink} target="_blank">
+          {userLink}
+        </a>
+      </Typography>
       {/*<div className={classes.balanceRow}>*/}
       {/*  <Typography variant="h6">Balance: ${userBalance || 0}</Typography>*/}
       {/*  <PayOutButton />*/}
       {/*</div>*/}
 
       {activeOrList}
-
-      {historyList.length ? (
-        <div>
-          <Typography variant="h5">History</Typography>
-          <TableContainer component="div">
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>List name</TableCell>
-                  <TableCell>User email</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Created at</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {historyList.map((historyItem) => (
-                  <TableRow key={historyItem.id}>
-                    <TableCell>{historyItem.list.name}</TableCell>
-                    <TableCell>{historyItem.user.email}</TableCell>
-                    <TableCell>{historyItem.status.toUpperCase()}</TableCell>
-                    <TableCell>{getDateStr(historyItem.createdAt)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-      ) : null}
 
       {/*<PayOutHistory />*/}
     </Container>

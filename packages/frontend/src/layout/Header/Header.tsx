@@ -26,9 +26,10 @@ const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     header: {
+      position: 'relative',
       display: 'block',
       padding: '0 0',
-      zIndex: 1,
+      zIndex: 100,
     },
     headerContainer: {
       display: 'flex',
@@ -143,10 +144,16 @@ const HeaderView = ({ classes }: HeaderProps) => {
                   <div className={`${classes.dropdownMenu} dropdownMenu`}>
                     <ul>
                       <li>
+                        <Link to="/profile/settings">Account Settings</Link>
+                      </li>
+                      <li>
                         <Link to="/profile/referrals">Referral List</Link>
                       </li>
                       <li>
                         <Link to="/profile/rewards">Earnings</Link>
+                      </li>
+                      <li>
+                        <Link to="/profile/history">History</Link>
                       </li>
                     </ul>
                   </div>
