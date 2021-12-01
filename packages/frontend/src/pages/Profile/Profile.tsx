@@ -57,6 +57,21 @@ const styles = (theme: Theme) => {
       '& a:hover': {
         textDecoration: 'underline',
       },
+      '& .h2': {
+        margin: 0,
+        marginBottom: '1%',
+      },
+      '& .h3': {
+        margin: 0,
+        marginBottom: '1%',
+      },
+      '& p': {
+        margin: 0,
+        marginBottom: '1%',
+      },
+      '& .center': {
+        textAlign: 'center',
+      },
     },
     grid: {
       margin: '0 -10px 30px -10px',
@@ -495,6 +510,132 @@ const ProfileView = ({ classes }: ProfileProps) => {
       {/*</div>*/}
 
       {activeOrList}
+
+      <Typography component="div" className={classes.text}>
+        <h2 className="h2 center">Takes less than 5 minutes to get started!</h2>
+        <h3 className="h3">The Money Lists</h3>
+        <p>
+          The money lists work by using an algorithm to randomly rotate each
+          member username through the money lists of other members free Global
+          Money List websites. All positions in the money lists randomly rotate
+          every ten seconds. There are six separate Money Lists your username
+          can rotate through. There’s a $1.00 Money List, $5.00 Money List,
+          $10.00 Money List, $20.00 Money List, $50.00 Money List, and a $100.00
+          Money List you can be added to.
+        </p>
+        <p>
+          Here’s the cost to be added to our various Money Lists. All payments
+          must be made in one of the many cryptocurrencies we accept!
+        </p>
+        <p>
+          $100.00 Money List is $2.95 per 60-day entry. You must also pay two
+          random members $100.00 each in cryptocurrency before you can be added
+          to this Money List.
+          <br />
+          $50.00 Money List is $2.95 per 60-day entry. You must also pay three
+          random members $50.00 each in cryptocurrency before you can be added
+          to this Money List.
+          <br />
+          $20.00 Money List is $2.95 per 60-day entry. You must also pay four
+          random members $20.00 each in cryptocurrency before you can be added
+          to this Money List.
+          <br />
+          $10.00 Money List is $2.95 per 60-day entry. You must also pay five
+          random members $10.00 each in cryptocurrency before you can be added
+          to this Money List.
+          <br />
+          $5.00 Money List is $2.95 per 60-day entry. You must also pay six
+          random members $5.00 each in cryptocurrency before you can be added to
+          this Money List.
+          <br />
+          $1.00 Money List is $2.95 per 60-day entry. You must also pay seven
+          random members $1.00 each in cryptocurrency before you can be added to
+          this Money List.
+        </p>
+        <p>
+          All earnings will be paid to you with one of the cryptocurrencies
+          listed below.
+          <br />
+          Ethereum
+          <br />
+          Polygon
+          <br />
+          Bitcoin
+          <br />
+          Dogecoin
+          <br />
+          Litecoin
+          <br />
+          Stellar Lumens
+          <br />
+          Ripple network
+          <br />
+          all ERC-20 tokens
+        </p>
+        <p>
+          You can join any of the money lists after you have signed up. You can
+          pay to be added to the money lists as many times as you like! Global
+          Money List currently signup hundreds of new members daily increasing
+          your chance to win! Make sure to add yourself to the Money Lists as
+          soon as possible!
+        </p>
+        <h3 className="h3">How to be added to the money lists</h3>
+        <ul>
+          <li>
+            You must download Coinbase free cryptocurrency wallet to
+            automatically collect your earnings. Click here to download. To
+            purchase cryptocurrency from Coinbase you must first create an
+            account.
+          </li>
+          <li>Select one of our six Global Money Lists to enter.</li>
+          <li>Make the $2.95 process fee.</li>
+          <li>
+            When your payment is accepted, you’re taken to a page where the
+            money list you paid to be added to is now present.
+          </li>
+          <li>
+            You must now click on the required number of members randomly
+            rotating through the money list revolver starting at #1.
+          </li>
+          <li>
+            Each of the members who username you’ve clicked on in the money list
+            will be paid directly by you from your Coinbase wallet into their
+            Coinbase wallet.
+          </li>
+          <li>
+            Once payment is made to selected member, you must copy and paste the
+            correct transaction i.d. from payment receipt into required slot and
+            then click on verify button. You must verify each payment made to
+            the selected members to be added to the money list.
+          </li>
+          <li>
+            If you signed up on one of our members affiliate links that member
+            will automatically be locked in the #1 position of the money list
+            and receive the first payment.
+          </li>
+        </ul>
+        <h3 className="h3">Referral List</h3>
+        <p>
+          Building your referral list is the most important way to create
+          residual income using this online lottery system. Here’s how it works!
+          When someone click on your affiliate link and sign up, they’re
+          automatically added to your referral list. When any member listed in
+          your referral list pay to be added to any of our money lists, your
+          username will be locked in the #1 position of their money list. Once
+          clicked on You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00,
+          or $100.00 in cryptocurrency depending on which money list your
+          referral decides to be added to. Your referral will now click on the
+          required amount members usernames randomly rotating through the money
+          list to have themselves added to that money list. There is no limit to
+          how large your referral list can grow to be, so the larger the list
+          the more income for you. There’s absolutely no cost to you for
+          building your referral list. Go to your homepage and copy your
+          affiliate link to share with all of your family, friends, and network
+          associates. This will rapidly grow your referral list causing you to
+          earn unlimited amounts of income even long after you stopped promoting
+          this system.
+        </p>
+      </Typography>
 
       {/*<PayOutHistory />*/}
     </Container>
