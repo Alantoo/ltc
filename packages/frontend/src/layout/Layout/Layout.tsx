@@ -23,6 +23,7 @@ import { Earnings } from 'pages/Earnings';
 import { History } from 'pages/History';
 import { Settings } from 'pages/Settings';
 import { Terms } from 'pages/Terms';
+import { Privacy } from 'pages/Privacy';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -104,6 +105,13 @@ const LayoutView = ({ classes }: LayoutProps) => {
           </div>
           <Footer />
         </Route>
+        <Route path="/privacy/">
+          <div>
+            <Header />
+            <Privacy />
+          </div>
+          <Footer />
+        </Route>
 
         <PrivateOrPublicRoute classes={classes} publicRedirect="/" path="/">
           <>
@@ -111,6 +119,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
               <Header />
               <Switch>
                 <Route path="/terms/" component={Terms} />
+                <Route path="/privacy/" component={Privacy} />
                 <Route path="/profile/" component={Profile} exact />
                 <Route path="/profile/referrals/" component={Referrals} />
                 <Route path="/profile/rewards/" component={Earnings} />

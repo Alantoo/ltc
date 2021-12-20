@@ -5,6 +5,7 @@ import {
   WithStyles,
   Theme,
 } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import socialFb from 'assets/social/fb.png';
@@ -97,10 +98,10 @@ const FooterView = ({ classes }: FooterProps) => {
         <Typography variant="body2" component="div">
           <ul className={classes.footerMenu}>
             <li>
-              <a href="#">Privacy Policy</a>
+              <Link to="/privacy">Privacy Policy</Link>
             </li>
             <li>
-              <a href="#">Term of Use</a>
+              <Link to="/terms">Term of Use</Link>
             </li>
             <li>
               <a href="#">About Us</a>
