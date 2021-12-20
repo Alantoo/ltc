@@ -390,15 +390,22 @@ const ProfileView = ({ classes }: ProfileProps) => {
     activeOrList = (
       <div className={classes.activeItem}>
         <Typography className={classes.activeItemTitle} variant="h5">
-          {name} Global Money List Rotator
+          {name} Global Money List
         </Typography>
         <Typography className={classes.activeItemText}>
-          You are about to enter the {name} Global Money List Rotator, but first
-          you must click on six of our members usernames listed below to
-          complete your entry. If #1 in the list has already been selected
-          please proceed to click on the remaining position #2 through #6. The
-          six members selected will earn {name} each and you'll be entering the
-          money list for a total of 60 days.
+          You are about to enter the {name} Money List, but first you{' '}
+          <b>must</b> click on seven of our members usernames randomly rotating
+          through the money list starting at #1-7. The seven members selected
+          will earn {name} each in the cryptocurrency of their choice and you’ll
+          be entering the {name} money list for a total of 60 days. Once payment
+          is made to the selected member, you must copy and paste the correct
+          transaction i.d. from payment receipt into the designated slot and
+          then click on verify button. You <b>must</b> verify each payment made
+          to the selected members to be added to the {name} money list. After
+          each payment made to selected members Check your email for transaction
+          receipt. You must make sure to send the correct cryptocurrency to each
+          member’s crypto address or those funds will be lost and never
+          recovered.
         </Typography>
 
         <Typography className={classes.activeItemTable} component="div">
