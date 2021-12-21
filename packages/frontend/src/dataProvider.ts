@@ -63,6 +63,9 @@ export type Reward = {
 export type List = MyRecord & {
   name: string;
   price: number;
+  entryPrice: number;
+  rotateTime: string;
+  selectCount: number;
 };
 
 export type User = MyRecord & {

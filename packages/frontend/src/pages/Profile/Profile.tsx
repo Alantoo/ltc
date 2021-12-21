@@ -14,8 +14,6 @@ import {
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import gpay from 'assets/pay/gpay.png';
-import bitpay from 'assets/pay/bitpay.png';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
 import {
@@ -25,8 +23,51 @@ import {
   ItemStatus,
   rotateStatus,
 } from 'dataProvider';
-
 import { MyTheme } from 'theme';
+
+const rotateTimeToStr = (rotateTime: string): string => {
+  const num = parseInt(rotateTime.slice(0, -1), 10);
+  const mes = rotateTime.slice(-1);
+  const measure = mes === 'd' ? 'day' : 'minute';
+  return `${num}-${measure}`;
+};
+
+const countToStr = (count: number): string => {
+  switch (count) {
+    case 1: {
+      return 'one';
+    }
+    case 2: {
+      return 'two';
+    }
+    case 3: {
+      return 'three';
+    }
+    case 4: {
+      return 'four';
+    }
+    case 5: {
+      return 'five';
+    }
+    case 6: {
+      return 'six';
+    }
+    case 7: {
+      return 'seven';
+    }
+    case 8: {
+      return 'eight';
+    }
+    case 9: {
+      return 'nine';
+    }
+    default: {
+      return 'unknown';
+    }
+  }
+};
+
+const IS_DEV = window.localStorage['IS_DEV'] === 't';
 
 type ClassKey =
   | 'root'
@@ -92,19 +133,21 @@ const styles = (theme: Theme) => {
       textAlign: 'center',
     },
     gridItemBottom: {
-      display: 'flex',
       padding: '10px 15px',
+      textAlign: 'center',
       '& > a': {
-        width: '50%',
-        marginLeft: 5,
+        display: 'inline-block',
+        margin: '0 5px',
+        padding: '10px 20px',
+        borderRadius: 20,
+        background: '#052f85',
+        color: 'white',
+        textDecoration: 'none',
+        cursor: 'pointer',
+        transition: 'background 0.3s ease',
       },
-      '& > a:first-child': {
-        marginLeft: 0,
-      },
-      '& img': {
-        display: 'block',
-        width: '100%',
-        height: 'auto',
+      '& > a:hover': {
+        background: '#114abe',
       },
     },
     activeItem: {
@@ -469,35 +512,36 @@ const ProfileView = ({ classes }: ProfileProps) => {
   } else {
     activeOrList = (
       <ul className={classes.grid}>
-        {list.map(({ id, name, price }) => {
-          const onPayClick = (e: React.MouseEvent) => {
-            e.preventDefault();
-            onPaySubmit(id);
-          };
+        {list.map(
+          ({ id, name, price, entryPrice, selectCount, rotateTime }) => {
+            const onPayClick = (e: React.MouseEvent) => {
+              e.preventDefault();
+              onPaySubmit(id);
+            };
 
-          const onPayDirectClick = (e: React.MouseEvent) => {
-            e.preventDefault();
-            onPaySubmit(id, true);
-          };
+            const onPayDirectClick = (e: React.MouseEvent) => {
+              e.preventDefault();
+              onPaySubmit(id, true);
+            };
 
-          return (
-            <li key={id} className={classes.gridItem}>
-              <Typography className={classes.gridItemTop} component="div">
-                60-day entry into the {name}
-                <br />
-                Global Money List revolver For ${price}
-              </Typography>
-              <div className={classes.gridItemBottom}>
-                <a href="#" onClick={onPayClick}>
-                  <img src={gpay} alt="gpay" />
-                </a>
-                <a href="#" onClick={onPayDirectClick}>
-                  <img src={bitpay} alt="bitpay" />
-                </a>
-              </div>
-            </li>
-          );
-        })}
+            return (
+              <li key={id} className={classes.gridItem}>
+                <Typography className={classes.gridItemTop} component="div">
+                  {rotateTimeToStr(rotateTime)} entry into {name} <br />
+                  Money List for ${entryPrice.toFixed(2)} plus pay <br />{' '}
+                  {countToStr(selectCount)} members ${price.toFixed(2)} each in{' '}
+                  <br /> Cryptocurrency
+                </Typography>
+                <Typography className={classes.gridItemBottom} component="div">
+                  <a onClick={onPayClick}>Pay Now</a>
+                  {IS_DEV ? (
+                    <a onClick={onPayDirectClick}>Pay Dev Now</a>
+                  ) : null}
+                </Typography>
+              </li>
+            );
+          },
+        )}
       </ul>
     );
   }
