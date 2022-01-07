@@ -93,7 +93,7 @@ const FooterView = ({ classes }: FooterProps) => {
           </li>
         </ul>
         <Typography variant="body2" component="div">
-          Copyright 2017 LetterCopy.com. All rights reserved.
+          Copyright 2022 Globalmoneylist.com. All rights reserved.
         </Typography>
         <Typography variant="body2" component="div">
           <ul className={classes.footerMenu}>
@@ -104,10 +104,10 @@ const FooterView = ({ classes }: FooterProps) => {
               <Link to="/terms">Term of Use</Link>
             </li>
             <li>
-              <a href="#">About Us</a>
+              <a href="/Contact">Contact Us</a>
             </li>
             <li>
-              <a href="#">FAQ</a>
+              <a href="/FAQ">FAQ</a>
             </li>
           </ul>
         </Typography>

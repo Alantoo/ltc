@@ -89,7 +89,7 @@ const HomeView = ({ classes }: HomeProps) => {
             <h2 className="h2">
               EARN HUNDREDS OF DOLLARS IN CRYPTOCURRENCY DAILY
             </h2>
-            <h3 className="h3">
+            {/* <h3 className="h3">
               The easiest way you’ll ever receive Bitcoins!
             </h3>
             <p>***Make unlimited cash flow in our cryptocurrency lists***</p>
@@ -99,10 +99,16 @@ const HomeView = ({ classes }: HomeProps) => {
             </p>
             <h3 className="h3">
               Takes less than 5 minutes to start earning a lifetime of income
-            </h3>
+            </h3> */}
             <a href="#" className="btn">
-              GET YOUR FREE WEBSITE NOW!
+              Global Money List
             </a>
+            <h3 className="h3">
+              The online cryptocurrency lottery to the world
+            </h3>
+            <h3 className="h3">
+              Win hundreds of dollars in cryptocurrency daily
+            </h3>
           </Typography>
         </Container>
       </div>
@@ -165,7 +171,6 @@ const HomeView = ({ classes }: HomeProps) => {
       <div className={classes.bgSlide}>
         <Container maxWidth="xl">
           <Typography component="div">
-            <h3>How you’ll earn using the Global Money List system</h3>
             <hr />
             <ul>
               <li>

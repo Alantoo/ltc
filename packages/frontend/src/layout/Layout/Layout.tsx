@@ -24,6 +24,8 @@ import { History } from 'pages/History';
 import { Settings } from 'pages/Settings';
 import { Terms } from 'pages/Terms';
 import { Privacy } from 'pages/Privacy';
+import { FAQ } from 'pages/FAQ';
+import { Contact } from 'pages/Contact';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
@@ -112,6 +114,20 @@ const LayoutView = ({ classes }: LayoutProps) => {
           </div>
           <Footer />
         </Route>
+        <Route path="/faq/">
+          <div>
+            <Header />
+            <FAQ />
+          </div>
+          <Footer />
+        </Route>
+        <Route path="/contact/">
+          <div>
+            <Header />
+            <Contact />
+          </div>
+          <Footer />
+        </Route>
 
         <PrivateOrPublicRoute classes={classes} publicRedirect="/" path="/">
           <>
@@ -120,6 +136,8 @@ const LayoutView = ({ classes }: LayoutProps) => {
               <Switch>
                 <Route path="/terms/" component={Terms} />
                 <Route path="/privacy/" component={Privacy} />
+                <Route path="/faq/" component={FAQ} />
+                <Route path="/contact/" component={Contact} />
                 <Route path="/profile/" component={Profile} exact />
                 <Route path="/profile/referrals/" component={Referrals} />
                 <Route path="/profile/rewards/" component={Earnings} />
