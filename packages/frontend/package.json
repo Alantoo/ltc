@@ -10,8 +10,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "tsc": "tsc --noEmit",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "format": "prettier --write \"src/**/*.ts\""
+    "lint": "eslint \"{src,apps,libs,test}/**/*.{js,ts,jsx,tsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx}\""
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",

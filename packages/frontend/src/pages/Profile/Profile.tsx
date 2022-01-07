@@ -634,12 +634,18 @@ const ProfileView = ({ classes }: ProfileProps) => {
         <ul>
           <li>
             You must download Coinbase free cryptocurrency wallet to
-            automatically collect your earnings.</li> 
-            <a href="https://wallet.coinbase.com/?utm_source=google_search_b&utm_medium=cpc&utm_campaign=15497172649&utm_content=133267465160&utm_term=coinbase&utm_creative=567664243589&cb_device=c&cb_placement=&cb_country=us&cb_city=open&cb_language=en_us&gclid=CjwKCAiA-9uNBhBTEiwAN3IlNFxO-wyKywn67Y8mqMhJof9hg1rN5bH5jaMaEr3-4i_NFZDQTuk_UhoCcocQAvD_BwE" className="link">
-                Click here to download.
-              </a> 
-            <li>To purchase cryptocurrency from Coinbase you must first create an
-            account.</li>
+            automatically collect your earnings.
+          </li>
+          <a
+            href="https://wallet.coinbase.com/?utm_source=google_search_b&utm_medium=cpc&utm_campaign=15497172649&utm_content=133267465160&utm_term=coinbase&utm_creative=567664243589&cb_device=c&cb_placement=&cb_country=us&cb_city=open&cb_language=en_us&gclid=CjwKCAiA-9uNBhBTEiwAN3IlNFxO-wyKywn67Y8mqMhJof9hg1rN5bH5jaMaEr3-4i_NFZDQTuk_UhoCcocQAvD_BwE"
+            className="link"
+          >
+            Click here to download.
+          </a>
+          <li>
+            To purchase cryptocurrency from Coinbase you must first create an
+            account.
+          </li>
           <li>Select one of our six Global Money Lists to enter.</li>
           <li>Make the $2.95 process fee.</li>
           <li>
@@ -668,9 +674,14 @@ const ProfileView = ({ classes }: ProfileProps) => {
           </li>
         </ul>
         <h3 className="h3">Referral List</h3>
-        <p>One-time process fee That allows you to be paid by your referral list members.</p>
-        <a href="https://commerce.coinbase.com/checkout/efe635d4-9272-4dc0-a50a-5ca8162ecee7">Click here to pay fee</a>
-           
+        <p>
+          One-time process fee That allows you to be paid by your referral list
+          members.
+        </p>
+        <a href="https://commerce.coinbase.com/checkout/efe635d4-9272-4dc0-a50a-5ca8162ecee7">
+          Click here to pay fee
+        </a>
+
         <p>
           Building your referral list is the most important way to create
           residual income using this online lottery system. Here’s how it works!

@@ -18,9 +18,7 @@ type Props = {
   children: React.ReactElement;
 };
 
-export const DataProviderContextProvider = ({
-  children,
-}: Props) => {
+export const DataProviderContextProvider = ({ children }: Props) => {
   const [dataset, setDataset] = useState('');
 
   return (
