@@ -227,20 +227,26 @@ const HomeView = ({ classes }: HomeProps) => {
             <h3 className="center">Referral List</h3>
             <p>
               Building your referral list is the most important way to create
-              residual income using this money-making opportunity. Here’s how it
-              works! When someone signs up while visiting your free Global Money
-              List website, they’re automatically added to your referral list.
-              When any member listed in your referral list pay to be added to
-              the Global Money List revolvers, your username will be locked in
-              the #1 position of their money list revolver. Once clicked on
-              You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00, or
-              $100.00 in cryptocurrency depending on which money list revolver
-              your referral decides to be added to. Your referral will now click
-              on five more members usernames rotating through the money list in
-              order to have themselves added to the money list. There is no
-              limit how large your referral list can grow to be, so the larger
-              the list the more income for you. There’s absolutely no cost to
-              you for building your referral list.
+              residual income using this online lottery system. Here’s how it
+              works! When someone click on your affiliate link and sign up,
+              they’re automatically added to your referral list. When any member
+              listed in your referral list pay to be added to any of our money
+              lists, your username will be locked in the #1 position of their
+              money list. Once clicked on You’ll be paid either $1.00, $5.00,
+              $10.00, $20.00, $50.00, or $100.00 in cryptocurrency depending on
+              which money list your referral decides to be added to. Your
+              referral will now click on the required number of members
+              usernames randomly rotating through the money list to have
+              themselves added to that money list. There is no limit to how
+              large your referral list can grow to be, so the larger the list
+              the more income for you. There’s a one-time process fee of $1.95
+              that will allow you to be paid by members in your referral list,
+              but this fee will be waived if you pay to be added to one of our
+              six money lists first. Go to your homepage and copy your affiliate
+              link to share with all of your family, friends, and network
+              associates. This will rapidly grow your referral list causing you
+              to earn unlimited amounts of income even long after you stopped
+              promoting this system
             </p>
             <h3 className="center">
               Hey, what are you waiting on?
