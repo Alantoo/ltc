@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { Layout } from 'layout/Layout';
 import { AuthContextProvider } from 'contexts/AuthContext';
 import { DataContextProvider } from 'contexts/DataContext';
@@ -9,6 +9,16 @@ import { DataProvider } from './dataProvider';
 import { theme } from 'theme';
 
 const dataProvider = new DataProvider({ authProvider });
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   let basename = '';
@@ -26,6 +36,7 @@ function App() {
       <AuthContextProvider auth={authProvider}>
         <DataContextProvider dataProvider={dataProvider}>
           <Router basename={basename}>
+            <ScrollToTop />
             <Layout />
           </Router>
         </DataContextProvider>
