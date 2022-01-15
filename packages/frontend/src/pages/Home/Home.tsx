@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -163,7 +164,9 @@ const HomeView = ({ classes }: HomeProps) => {
             <h3 className="center">
               Hey, what are you waiting on?
               <br />
-              Join Now!
+              <Link to="/register" className="link">
+                Join Now!
+              </Link>
             </h3>
           </Typography>
         </Container>
@@ -251,9 +254,9 @@ const HomeView = ({ classes }: HomeProps) => {
             <h3 className="center">
               Hey, what are you waiting on?
               <br />
-              <a href="#" className="link">
+              <Link to="/register" className="link">
                 Join Now!
-              </a>
+              </Link>
             </h3>
           </Typography>
         </Container>
