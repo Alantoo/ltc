@@ -17,7 +17,7 @@ import { MyTheme } from 'theme';
 type ClassKey = 'root' | 'holder' | 'card' | 'closeBtn';
 
 const styles = (theme: Theme) => {
-  const psTheme = theme as MyTheme;
+  const myTheme = theme as MyTheme;
   return createStyles({
     root: {},
     holder: {
@@ -35,7 +35,7 @@ const styles = (theme: Theme) => {
       maxWidth: 400,
       boxShadow:
         'inset 32.6px -32.6px 32.6px rgba(194, 194, 194, 0.176), inset -32.6px 32.6px 32.6px rgba(255, 255, 255, 0.176)',
-      [psTheme.breakpoints.down('sm')]: {
+      [myTheme.breakpoints.down('sm')]: {
         maxWidth: 500,
         margin: '0 auto',
       },
