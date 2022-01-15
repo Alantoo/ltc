@@ -104,10 +104,10 @@ const FooterView = ({ classes }: FooterProps) => {
               <Link to="/terms">Term of Use</Link>
             </li>
             <li>
-              <a href="/Contact">Contact Us</a>
+              <Link to="/contact">Contact Us</Link>
             </li>
             <li>
-              <a href="/FAQ">FAQ</a>
+              <Link to="/faq">FAQ</Link>
             </li>
           </ul>
         </Typography>
