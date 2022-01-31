@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -306,9 +307,9 @@ const SignUpFormView = (props: SignUpFormProps) => {
           label={
             <span className="text">
               Click box if you agree with Global Money List{' '}
-              <a href="/terms" target="_blank">
+              <Link to="/terms" target="_blank">
                 Terms of Service
-              </a>
+              </Link>
             </span>
           }
         />

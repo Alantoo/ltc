@@ -46,10 +46,8 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
       response.cookie('basename', '');
       if (name && referUser) {
         response.cookie('basename', name);
-        response.sendFile(join(__dirname, '../client', 'index.html'));
-      } else {
-        response.redirect('/');
       }
+      response.sendFile(join(__dirname, '../client', 'index.html'));
     }
   }
 }
