@@ -51,11 +51,13 @@ const AuthFormsView = (props: AuthFormsProps) => {
   }, [props.formType, setFormType]);
 
   const onRegisterClick = useCallback(() => {
-    setFormType(formTypes.SIGN_UP);
+    history.push('/register');
+    // setFormType(formTypes.SIGN_UP);
   }, [setFormType]);
 
   const onLoginClick = useCallback(() => {
-    setFormType(formTypes.LOGIN);
+    history.push('/login');
+    // setFormType(formTypes.LOGIN);
   }, [setFormType]);
 
   const onLoginFormSubmit = useCallback(

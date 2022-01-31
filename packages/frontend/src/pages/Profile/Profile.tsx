@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -71,6 +72,7 @@ const IS_DEV = window.localStorage['IS_DEV'] === 't';
 
 type ClassKey =
   | 'root'
+  | 'loading'
   | 'text'
   | 'verify'
   | 'grid'
@@ -90,6 +92,14 @@ const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {},
+    loading: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 30,
+    },
     text: {
       '& a': {
         color: '#0fa5df',
@@ -264,7 +274,7 @@ const CheckForm = ({
 type ProfileProps = WithStyles<ClassKey>;
 
 const ProfileView = ({ classes }: ProfileProps) => {
-  const { auth, user } = useContext(AuthContext);
+  const { auth, user, loading } = useContext(AuthContext);
   const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
   const [list, setList] = useState<Array<List>>([]);
@@ -398,8 +408,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
     [updateActiveItem, updateItemsList],
   );
 
+  if (loading) {
+    return <div className={classes.loading}>Loading...</div>;
+  }
+
   if (!user) {
-    return null;
+    return <Redirect to="/" />;
   }
 
   const userLink = `${window.location.origin}/${encodeURIComponent(

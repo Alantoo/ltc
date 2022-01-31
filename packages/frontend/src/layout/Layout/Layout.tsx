@@ -1,11 +1,5 @@
-import React, { useContext } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  RouteProps,
-  Redirect,
-} from 'react-router-dom';
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -26,7 +20,8 @@ import { Terms } from 'pages/Terms';
 import { Privacy } from 'pages/Privacy';
 import { FAQ } from 'pages/FAQ';
 import { Contact } from 'pages/Contact';
-import { AuthContext } from 'contexts/AuthContext';
+import { Login } from 'pages/Login';
+import { Register } from 'pages/Register';
 import { MyTheme } from 'theme';
 
 type ClassKey = 'root' | 'loading';
@@ -48,107 +43,30 @@ const styles = (theme: Theme) => {
   });
 };
 
-type PrivateOrPublicRouteProps = RouteProps &
-  WithStyles<ClassKey> & {
-    children: React.ReactElement;
-    privateRedirect?: string | undefined;
-    publicRedirect?: string | undefined;
-  };
-
-function PrivateOrPublicRoute({
-  classes,
-  children,
-  privateRedirect,
-  publicRedirect,
-  ...rest
-}: PrivateOrPublicRouteProps) {
-  const { user, loading } = useContext(AuthContext);
-
-  const isPrivateRoute = !privateRedirect;
-  const redirect = isPrivateRoute ? publicRedirect : privateRedirect;
-
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => {
-        if (loading) {
-          return <div className={classes.loading}>Loading...</div>;
-        }
-        return (isPrivateRoute && user) || (!isPrivateRoute && !user) ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: redirect,
-              state: { from: location },
-            }}
-          />
-        );
-      }}
-    />
-  );
-}
-
 type LayoutProps = WithStyles<ClassKey>;
 
 const LayoutView = ({ classes }: LayoutProps) => {
   return (
     <>
-      <Switch>
-        <Route path="/" exact>
-          <Header />
-          <Home />
-          <Footer />
-        </Route>
-        <Route path="/terms/">
-          <div>
-            <Header />
-            <Terms />
-          </div>
-          <Footer />
-        </Route>
-        <Route path="/privacy/">
-          <div>
-            <Header />
-            <Privacy />
-          </div>
-          <Footer />
-        </Route>
-        <Route path="/faq/">
-          <div>
-            <Header />
-            <FAQ />
-          </div>
-          <Footer />
-        </Route>
-        <Route path="/contact/">
-          <div>
-            <Header />
-            <Contact />
-          </div>
-          <Footer />
-        </Route>
-
-        <PrivateOrPublicRoute classes={classes} publicRedirect="/" path="/">
-          <>
-            <div>
-              <Header />
-              <Switch>
-                <Route path="/terms/" component={Terms} />
-                <Route path="/privacy/" component={Privacy} />
-                <Route path="/faq/" component={FAQ} />
-                <Route path="/contact/" component={Contact} />
-                <Route path="/profile/" component={Profile} exact />
-                <Route path="/profile/referrals/" component={Referrals} />
-                <Route path="/profile/rewards/" component={Earnings} />
-                <Route path="/profile/history/" component={History} />
-                <Route path="/profile/settings/" component={Settings} />
-              </Switch>
-            </div>
-            <Footer />
-          </>
-        </PrivateOrPublicRoute>
-      </Switch>
+      <div className="layout-body">
+        <Header />
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/terms/" component={Terms} />
+          <Route path="/privacy/" component={Privacy} />
+          <Route path="/faq/" component={FAQ} />
+          <Route path="/contact/" component={Contact} />
+          <Route path="/profile/" component={Profile} exact />
+          <Route path="/profile/referrals/" component={Referrals} />
+          <Route path="/profile/rewards/" component={Earnings} />
+          <Route path="/profile/history/" component={History} />
+          <Route path="/profile/settings/" component={Settings} />
+          <Route path="/login/" component={Login} />
+          <Route path="/register/" component={Register} />
+          <Redirect to="/" />
+        </Switch>
+      </div>
+      <Footer />
       <ScrollToTop />
       <AuthPopup />
     </>

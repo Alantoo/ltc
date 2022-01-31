@@ -166,15 +166,21 @@ const HeaderView = ({ classes }: HeaderProps) => {
               </>
             ) : (
               <>
+                {/*<li>*/}
+                {/*  <a href="" onClick={onSignUpClick}>*/}
+                {/*    Sign Up*/}
+                {/*  </a>*/}
+                {/*</li>*/}
                 <li>
-                  <a href="" onClick={onSignUpClick}>
-                    Sign Up
-                  </a>
+                  <Link to="/register">Sign Up</Link>
                 </li>
+                {/*<li>*/}
+                {/*  <a href="" onClick={onLogInClick}>*/}
+                {/*    Log in*/}
+                {/*  </a>*/}
+                {/*</li>*/}
                 <li>
-                  <a href="" onClick={onLogInClick}>
-                    Log in
-                  </a>
+                  <Link to="/login">Log in</Link>
                 </li>
               </>
             )}
