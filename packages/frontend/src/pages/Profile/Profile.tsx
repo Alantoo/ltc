@@ -647,7 +647,11 @@ const ProfileView = ({ classes }: ProfileProps) => {
             account.
           </li>
           <li>Select one of our six Global Money Lists to enter.</li>
-          <li>Make the $2.95 process fee.</li>
+          <li>
+            You must use your Coinbase cryptocurrency wallet to Make the $2.95
+            process fee to Global Money List.
+          </li>
+
           <li>
             When your payment is accepted, you’re taken to a page where the
             money list you paid to be added to is now present.

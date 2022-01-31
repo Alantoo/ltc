@@ -86,9 +86,9 @@ const HomeView = ({ classes }: HomeProps) => {
       <div className={`${classes.introSlide} gradientBg`}>
         <Container maxWidth="xl">
           <Typography component="div">
-            <h2 className="h2">
+            {/* <h2 className="h2">
               EARN HUNDREDS OF DOLLARS IN CRYPTOCURRENCY DAILY
-            </h2>
+            </h2> */}
             {/* <h3 className="h3">
               The easiest way you’ll ever receive Bitcoins!
             </h3>
@@ -148,6 +148,20 @@ const HomeView = ({ classes }: HomeProps) => {
               system is designed to deposit your winnings instantly into your
               cryptocurrency wallet.
             </p>
+            <h3 className="center">
+              Hey, what are you waiting on?
+              <br />
+              <a href="https://ltc.evg-soft.com/hr/register" className="link">
+                Join Now!
+              </a>
+            </h3>
+          </Typography>
+        </Container>
+      </div>
+      <div className={classes.bgSlide}>
+        <Container maxWidth="xl">
+          <Typography component="div">
+            <hr />
             <ul>
               <li>Free to signup</li>
               <li>Six money lists to choose from</li>
@@ -159,64 +173,6 @@ const HomeView = ({ classes }: HomeProps) => {
               <li>Unlimited entry into our money lists</li>
               <li>The easiest way you’ll ever receive Bitcoins</li>
               <li>Anybody anywhere can win</li>
-            </ul>
-            <h3 className="center">
-              Hey, what are you waiting on?
-              <br />
-              Join Now!
-            </h3>
-          </Typography>
-        </Container>
-      </div>
-      <div className={classes.bgSlide}>
-        <Container maxWidth="xl">
-          <Typography component="div">
-            <hr />
-            <ul>
-              <li>
-                Signup to create your <b>FREE</b> Global Money List account.
-              </li>
-              <li>
-                Make sure to go to your email account and validate your email
-                address.
-              </li>
-              <li>
-                Login your Global Money List account and select one of our three
-                Global Money List revolvers to enter.
-              </li>
-              <li>
-                Select your preferred payment option and make the required
-                payment to enter the Global Money List revolver you’ve selected.
-              </li>
-              <li>
-                When your payment is accepted, you’re taken to a page where The
-                Money List Revolver you paid to be added to is now present.
-              </li>
-              <li>
-                You <b>must</b> now click on six of our members usernames
-                rotating through the money list starting at #1-6. You
-                <b>must</b> complete this step to be added to The Money List
-                Revolver. If you signed up on one of our members free Global
-                Money List website that member will automatically be locked in
-                the #1 position of the money list revolver and receive the first
-                payment.
-              </li>
-              <li>
-                Each of the six members who username you’ve clicked on in The
-                Money List Revolver will be paid depending on which money list
-                revolver you selected to enter. For example, if you’ve selected
-                the $10.00 money list revolver for each of the six members whose
-                username received a click, they will be paid $10.00 in
-                cryptocurrency each.
-              </li>
-              <li>
-                Go to your homepage after login and copy the link to your free
-                Global Money List website to share with all of your family,
-                friends, and network associates. This will rapidly grow your
-                referral list causing you to earn unlimited amounts of income
-                even long after you stopped promoting this system. Please see
-                below for better understanding of the referral list.
-              </li>
             </ul>
           </Typography>
         </Container>
@@ -239,13 +195,15 @@ const HomeView = ({ classes }: HomeProps) => {
               on five more members usernames rotating through the money list in
               order to have themselves added to the money list. There is no
               limit how large your referral list can grow to be, so the larger
-              the list the more income for you. There’s absolutely no cost to
-              you for building your referral list.
+              the list the more income for you. There’s a one-time process fee
+              of $1.95 that will allow you to be paid by members in your
+              referral list, but this fee will be waived if you pay to be added
+              to one of our six money lists first.
             </p>
             <h3 className="center">
               Hey, what are you waiting on?
               <br />
-              <a href="#" className="link">
+              <a href="https://ltc.evg-soft.com/hr/register" className="link">
                 Join Now!
               </a>
             </h3>
