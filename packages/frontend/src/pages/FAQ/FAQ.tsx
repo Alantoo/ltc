@@ -58,11 +58,53 @@ const PrivacyView = ({ classes }: PrivacyProps) => {
           revolvers?
         </p>
         <p>
-          A) There’s a duration of 60 days for each paid entry into any of our
+          A) There`s a duration of 60 days for each paid entry into any of our
           six Money List.
         </p>
         <p>Q) How many times can I enter any of the Money List?</p>
-        <p>A) As often as you like. There’s no limits.</p>
+        <p>A) As often as you like. There`s no limits.</p>
+
+        <p>
+          Q) How will I know the link to my free Global Money List website is
+          actually mine?
+        </p>
+        <p>
+          A) If you look closely at the link to your free Global Money List
+          website, you`ll see your username which is uniquely yours.
+        </p>
+        <p>Q) How do I build my Referral list?</p>
+        <p>
+          A) Share your free Global Money List website link with friends,
+          family, and network associates.
+        </p>
+        <p>
+          Q) What happens when a member of my referral list pays to enter into
+          any of the Global Money List revolvers?
+        </p>
+        <p>
+          A) You will be locked in the first position of that particular Global
+          Money List revolver and automatically paid.
+        </p>
+        <p>Q) Does it cost to sign up and create an account?</p>
+        <p>A) No, it`s free to sign up and create an account.</p>
+        <p>Q) How do I receive my winnings?</p>
+        <p>
+          A) Our system will deposit your winnings directly into your
+          cryptocurrency wallet.
+        </p>
+        <p>
+          Q) Am I obligated to make payments on Global Money List using my
+          Coinbase cryptocurrency wallet?
+        </p>
+        <p>
+          A) You`re only obligated to use your Coinbase cryptocurrency wallet
+          when making a payment directly to Global Money List.
+        </p>
+        <p>Q) How much are Coinbase cryptocurrency wallets?</p>
+        <p>
+          A) They`re free! You can Click here to download a free Coinbase
+          cryptocurrency wallet.
+        </p>
       </Typography>
     </Container>
   );
