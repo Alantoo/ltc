@@ -693,14 +693,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
         </ul>
         <h3 className="h3">Referral List</h3>
         <p>
-          One-time process fee That allows you to be paid by your referral list
-          members.
-        </p>
-        <a href="https://commerce.coinbase.com/checkout/efe635d4-9272-4dc0-a50a-5ca8162ecee7">
-          Click here to pay fee
-        </a>
-
-        <p>
           Building your referral list is the most important way to create
           residual income using this online lottery system. Here’s how it works!
           When someone click on your affiliate link and sign up, they’re
