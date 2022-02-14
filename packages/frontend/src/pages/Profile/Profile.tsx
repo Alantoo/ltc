@@ -653,6 +653,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
           </li>
           <a
             href="https://wallet.coinbase.com/?utm_source=google_search_b&utm_medium=cpc&utm_campaign=15497172649&utm_content=133267465160&utm_term=coinbase&utm_creative=567664243589&cb_device=c&cb_placement=&cb_country=us&cb_city=open&cb_language=en_us&gclid=CjwKCAiA-9uNBhBTEiwAN3IlNFxO-wyKywn67Y8mqMhJof9hg1rN5bH5jaMaEr3-4i_NFZDQTuk_UhoCcocQAvD_BwE"
+            target="_blank"
             className="link"
           >
             Click here to download.
