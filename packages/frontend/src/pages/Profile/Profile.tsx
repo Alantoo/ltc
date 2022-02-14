@@ -440,11 +440,12 @@ const ProfileView = ({ classes }: ProfileProps) => {
     );
   }
 
-  let activeOrList = null;
+  let activeItemEl = null;
+  let listsListEl = null;
 
   if (activeItem) {
     const { name } = activeItemList || {};
-    activeOrList = (
+    activeItemEl = (
       <div className={classes.activeItem}>
         <Typography className={classes.activeItemTitle} variant="h5">
           {name} Global Money List
@@ -524,7 +525,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       </div>
     );
   } else {
-    activeOrList = (
+    listsListEl = (
       <ul className={classes.grid}>
         {list.map(
           ({ id, name, price, entryPrice, selectCount, rotateTime }) => {
@@ -574,7 +575,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       {/*  <PayOutButton />*/}
       {/*</div>*/}
 
-      {activeOrList}
+      {activeItemEl}
 
       <Typography component="div" className={classes.text}>
         <h2 className="h2 center">Takes less than 5 minutes to get started!</h2>
@@ -713,6 +714,8 @@ const ProfileView = ({ classes }: ProfileProps) => {
           this system.
         </p>
       </Typography>
+
+      {listsListEl}
 
       {/*<PayOutHistory />*/}
     </Container>
