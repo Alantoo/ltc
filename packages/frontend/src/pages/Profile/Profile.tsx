@@ -593,28 +593,28 @@ const ProfileView = ({ classes }: ProfileProps) => {
           must be made in one of the many cryptocurrencies we accept!
         </p>
         <p>
-          $100.00 Money List is $2.95 per 60-day entry. You must also pay two
-          random members $100.00 each in cryptocurrency before you can be added
+          <b>$100.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay two
+          random members <b>$100.00</b> each in cryptocurrency before you can be added
           to this Money List.
           <br />
-          $50.00 Money List is $2.95 per 60-day entry. You must also pay three
-          random members $50.00 each in cryptocurrency before you can be added
+          <b>$50.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay three
+          random members <b>$50.00</b> each in cryptocurrency before you can be added
           to this Money List.
           <br />
-          $20.00 Money List is $2.95 per 60-day entry. You must also pay four
-          random members $20.00 each in cryptocurrency before you can be added
+          <b>$20.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay four
+          random members <b>$20.00</b> each in cryptocurrency before you can be added
           to this Money List.
           <br />
-          $10.00 Money List is $2.95 per 60-day entry. You must also pay five
-          random members $10.00 each in cryptocurrency before you can be added
+          <b>$10.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay five
+          random members <b>$10.00</b> each in cryptocurrency before you can be added
           to this Money List.
           <br />
-          $5.00 Money List is $2.95 per 60-day entry. You must also pay six
-          random members $5.00 each in cryptocurrency before you can be added to
+          <b>$5.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay six
+          random members <b>$5.00</b> each in cryptocurrency before you can be added to
           this Money List.
           <br />
-          $1.00 Money List is $2.95 per 60-day entry. You must also pay seven
-          random members $1.00 each in cryptocurrency before you can be added to
+          $1.00 Money List is <b>$2.95</b> per 60-day entry. You must also pay seven
+          random members <b>$1.00</b> each in cryptocurrency before you can be added to
           this Money List.
         </p>
         <p>
