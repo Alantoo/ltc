@@ -708,12 +708,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
           money list to have themselves added to that money list. There is no
           limit to how large your referral list can grow to be, so the larger
           the list the more income for you. There’s a one-time process fee of
-          $1.95 that will allow you to be paid by members in your referral list,
-          but this fee will be waived if you pay to be added to one of our six
-          money lists first. Go to your homepage and copy your affiliate link to
-          share with all of your family, friends, and network associates. This
-          will rapidly grow your referral list causing you to earn unlimited
-          amounts of income even long after you stopped promoting this system.
+          <b>$1.95</b> that will allow you to be paid by members in your
+          referral list, but this fee will be waived if you pay to be added to
+          one of our six money lists first. Go to your homepage and copy your
+          affiliate link to share with all of your family, friends, and network
+          associates. This will rapidly grow your referral list causing you to
+          earn unlimited amounts of income even long after you stopped promoting
+          this system.
         </p>
       </Typography>
 
