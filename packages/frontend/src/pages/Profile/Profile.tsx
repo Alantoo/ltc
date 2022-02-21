@@ -594,29 +594,29 @@ const ProfileView = ({ classes }: ProfileProps) => {
           must be made in one of the many cryptocurrencies we accept!
         </p>
         <p>
-          <b>$100.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay two
-          random members <b>$100.00</b> each in cryptocurrency before you can be added
-          to this Money List.
+          <b>$100.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
+          also pay two random members <b>$100.00</b> each in cryptocurrency
+          before you can be added to this Money List.
           <br />
-          <b>$50.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay three
-          random members <b>$50.00</b> each in cryptocurrency before you can be added
-          to this Money List.
+          <b>$50.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
+          also pay three random members <b>$50.00</b> each in cryptocurrency
+          before you can be added to this Money List.
           <br />
-          <b>$20.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay four
-          random members <b>$20.00</b> each in cryptocurrency before you can be added
-          to this Money List.
+          <b>$20.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
+          also pay four random members <b>$20.00</b> each in cryptocurrency
+          before you can be added to this Money List.
           <br />
-          <b>$10.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay five
-          random members <b>$10.00</b> each in cryptocurrency before you can be added
-          to this Money List.
+          <b>$10.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
+          also pay five random members <b>$10.00</b> each in cryptocurrency
+          before you can be added to this Money List.
           <br />
-          <b>$5.00</b> Money List is <b>$2.95</b> per 60-day entry. You must also pay six
-          random members <b>$5.00</b> each in cryptocurrency before you can be added to
-          this Money List.
+          <b>$5.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
+          also pay six random members <b>$5.00</b> each in cryptocurrency before
+          you can be added to this Money List.
           <br />
-          $1.00 Money List is <b>$2.95</b> per 60-day entry. You must also pay seven
-          random members <b>$1.00</b> each in cryptocurrency before you can be added to
-          this Money List.
+          $1.00 Money List is <b>$2.95</b> per 60-day entry. You must also pay
+          seven random members <b>$1.00</b> each in cryptocurrency before you
+          can be added to this Money List.
         </p>
         <p>
           All earnings will be paid to you with one of the cryptocurrencies
@@ -704,15 +704,16 @@ const ProfileView = ({ classes }: ProfileProps) => {
           clicked on You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00,
           or $100.00 in cryptocurrency depending on which money list your
           referral decides to be added to. Your referral will now click on the
-          required amount members usernames randomly rotating through the money
-          list to have themselves added to that money list. There is no limit to
-          how large your referral list can grow to be, so the larger the list
-          the more income for you. There’s absolutely no cost to you for
-          building your referral list. Go to your homepage and copy your
-          affiliate link to share with all of your family, friends, and network
-          associates. This will rapidly grow your referral list causing you to
-          earn unlimited amounts of income even long after you stopped promoting
-          this system.
+          required number of members usernames randomly rotating through the
+          money list to have themselves added to that money list. There is no
+          limit to how large your referral list can grow to be, so the larger
+          the list the more income for you. There’s a one-time process fee of
+          $1.95 that will allow you to be paid by members in your referral list,
+          but this fee will be waived if you pay to be added to one of our six
+          money lists first. Go to your homepage and copy your affiliate link to
+          share with all of your family, friends, and network associates. This
+          will rapidly grow your referral list causing you to earn unlimited
+          amounts of income even long after you stopped promoting this system.
         </p>
       </Typography>
 
