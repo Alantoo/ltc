@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -9,6 +9,7 @@ import {
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import { AuthContext } from 'contexts/AuthContext';
 import banner from 'assets/banner.png';
 import blueBg from 'assets/blue-bg.png';
 import { MyTheme } from 'theme';
@@ -82,6 +83,13 @@ const styles = (theme: Theme) => {
 type HomeProps = WithStyles<ClassKey>;
 
 const HomeView = ({ classes }: HomeProps) => {
+  const { user, loading } = useContext(AuthContext);
+  if (loading) {
+    return null;
+  }
+  if (user) {
+    return <Redirect to="/profile" />;
+  }
   return (
     <div className={classes.root}>
       <div className={`${classes.introSlide} gradientBg`}>

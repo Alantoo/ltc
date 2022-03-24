@@ -127,15 +127,12 @@ const HeaderView = ({ classes }: HeaderProps) => {
     <div className={classes.header}>
       <Container className={classes.headerContainer} maxWidth="xl">
         <div className={classes.logo}>
-          <Link to="/">
+          <Link to={user ? '/profile' : '/'}>
             <img src={logo} alt="logo" />
           </Link>
         </div>
         <Typography className={classes.menu} component="div">
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
             {loading ? null : user ? (
               <>
                 <li className={classes.dropdownMenuTrigger}>
@@ -166,6 +163,9 @@ const HeaderView = ({ classes }: HeaderProps) => {
               </>
             ) : (
               <>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
                 {/*<li>*/}
                 {/*  <a href="" onClick={onSignUpClick}>*/}
                 {/*    Sign Up*/}
