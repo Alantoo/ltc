@@ -86,6 +86,7 @@ export type JwtPayload = {
   isAdmin: boolean;
   isVerified: boolean;
   balance: number;
+  btcAddress: string;
 };
 
 export type LoginInfo = {
@@ -120,6 +121,7 @@ export class AuthService {
     firstName: string,
     lastName: string,
     pass: string,
+    btcAddress: string,
     referUsername?: string,
   ): Promise<{
     loginInfo: LoginInfo;
@@ -154,6 +156,7 @@ export class AuthService {
         name,
         firstName,
         lastName,
+        btcAddress,
         password: this.encodePass(pass),
         refer: referUser ? referUser.id : undefined,
       },
@@ -334,6 +337,7 @@ export class AuthService {
       balance,
       isAdmin,
       isVerified,
+      btcAddress,
     } = user;
     const payload: JwtPayload = {
       id,
@@ -344,6 +348,7 @@ export class AuthService {
       balance,
       isAdmin,
       isVerified,
+      btcAddress,
     };
     return this.jwtService.sign(payload);
   }

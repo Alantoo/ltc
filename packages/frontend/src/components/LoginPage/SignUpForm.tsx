@@ -16,6 +16,7 @@ import { MyTheme } from 'theme';
 
 const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 const nameRegExp = /^[a-zA-Z0-9]+$/i;
+const btcAddrRegExp = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/i;
 
 type ClassKey =
   | 'form'
@@ -77,6 +78,7 @@ type SignUpFormProps = WithStyles<ClassKey> & {
     firstName: string;
     lastName: string;
     password: string;
+    btcAddress: string;
   }) => void;
   onLoginClick: () => void;
 };
@@ -87,6 +89,7 @@ const SignUpFormView = (props: SignUpFormProps) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [btcAddress, setBtcAddress] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [terms, setTerms] = useState(false);
@@ -123,6 +126,14 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('Name incorrect');
       return;
     }
+    // if (!btcAddress) {
+    //   setError('BTC wallet address required');
+    //   return;
+    // }
+    // if (!btcAddrRegExp.test(btcAddress)) {
+    //   setError('BTC wallet address incorrect');
+    //   return;
+    // }
     if (!password) {
       setError('Password required');
       return;
@@ -131,7 +142,14 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('Password mismatch');
       return;
     }
-    props.onFormSubmit({ email, name, firstName, lastName, password });
+    props.onFormSubmit({
+      email,
+      name,
+      firstName,
+      lastName,
+      password,
+      btcAddress,
+    });
   };
 
   const onLoginClick = useCallback(
@@ -176,6 +194,15 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('');
     },
     [setEmail, setError],
+  );
+
+  const onBtcAddressChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setBtcAddress(value);
+      setError('');
+    },
+    [setBtcAddress, setError],
   );
 
   const onPasswordChange = useCallback(
@@ -265,6 +292,19 @@ const SignUpFormView = (props: SignUpFormProps) => {
           />
         </FormControl>
       </div>
+      {/*<div>*/}
+      {/*  <FormControl className={classes.field}>*/}
+      {/*    <TextField*/}
+      {/*      id="sign-up-btc"*/}
+      {/*      name="sign-up-btc"*/}
+      {/*      label="BTC wallet address"*/}
+      {/*      value={btcAddress}*/}
+      {/*      onChange={onBtcAddressChange}*/}
+      {/*      fullWidth*/}
+      {/*      autoComplete="off"*/}
+      {/*    />*/}
+      {/*  </FormControl>*/}
+      {/*</div>*/}
       <div>
         <FormControl className={classes.field}>
           <TextField

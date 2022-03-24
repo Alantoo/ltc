@@ -2,7 +2,7 @@ import * as nodeCron from 'node-cron';
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DalService, ListQuery, ListResult } from './DalService';
 import { UserData } from './AuthService';
-import { UserService } from './UserService';
+import { UserService, RawUserDocument } from './UserService';
 import { ListService, ListConfig } from './ListService';
 import { ItemSelectService, ItemSelectSimple } from './ItemSelectService';
 import { PaySelectService } from './PaySelectService';
@@ -359,7 +359,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
     rotatorList: ListConfig,
   ): Promise<Array<RawRotatorItemDocumentForUi>> {
     const userInfo = await this.userService.getOne(item.user, {});
-    let referUser;
+    let referUser: RawUserDocument | undefined;
     try {
       referUser = await this.userService.getOne(userInfo.refer, {});
     } catch (err) {}
@@ -368,7 +368,7 @@ export class RotatorService extends DalService<RotatorItemDocument> {
       item.user,
       selected,
       rotatorList.selectCount,
-      referUser ? referUser.id : undefined,
+      referUser,
     );
     return list;
   }

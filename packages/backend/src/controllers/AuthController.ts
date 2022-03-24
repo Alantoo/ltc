@@ -56,6 +56,7 @@ export class AuthController {
       firstName: string;
       lastName: string;
       password: string;
+      btcAddress: string;
     },
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
@@ -68,6 +69,7 @@ export class AuthController {
       body.firstName,
       body.lastName,
       body.password,
+      body.btcAddress,
       basename,
     );
     this.setRefreshToken(result.refreshInfo, response);

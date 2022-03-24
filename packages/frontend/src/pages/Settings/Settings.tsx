@@ -13,6 +13,7 @@ import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
 
 const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+const btcAddrRegExp = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/i;
 
 type ClassKey =
   | 'root'
@@ -84,6 +85,7 @@ const SettingsView = ({ classes }: SettingsProps) => {
   const [name] = useState(user ? user.name : '');
   const [firstName, setFirstName] = useState(user ? user.firstName : '');
   const [lastName, setLastName] = useState(user ? user.lastName : '');
+  const [btcAddress, setBtcAddress] = useState(user ? user.btcAddress : '');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [passwordProps] = useState<any>({
@@ -93,7 +95,12 @@ const SettingsView = ({ classes }: SettingsProps) => {
     },
   });
 
-  console.log(user);
+  useEffect(() => {
+    setEmail(user ? user.email : '');
+    setFirstName(user ? user.firstName : '');
+    setLastName(user ? user.lastName : '');
+    setBtcAddress(user ? user.btcAddress : '');
+  }, [user]);
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +113,11 @@ const SettingsView = ({ classes }: SettingsProps) => {
       return;
     }
 
+    if (!btcAddrRegExp.test(btcAddress)) {
+      setError('BTC wallet address incorrect');
+      return;
+    }
+
     if (password !== password2) {
       setError('Password mismatch');
       return;
@@ -114,7 +126,7 @@ const SettingsView = ({ classes }: SettingsProps) => {
     setLoading(true);
     setError('');
     auth
-      .updateInfo({ email, password, firstName, lastName })
+      .updateInfo({ email, password, firstName, lastName, btcAddress })
       .then(() => {
         setPassword('');
       })
@@ -186,6 +198,14 @@ const SettingsView = ({ classes }: SettingsProps) => {
     // @ts-ignore
     const val = e.target.value as string;
     setPassword2(val);
+    setError('');
+  };
+
+  const onBtcAddressChange = (e: React.FormEvent) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const val = e.target.value as string;
+    setBtcAddress(val);
     setError('');
   };
 
@@ -265,6 +285,24 @@ const SettingsView = ({ classes }: SettingsProps) => {
                 value={email}
                 onChange={onEmailChange}
                 placeholder="email address"
+                fullWidth
+              />
+            </div>
+          </div>
+
+          <div className={classes.row}>
+            <div className={classes.cell}>
+              <Typography className={classes.label}>
+                <label htmlFor="filled-full-width">BTC wallet Address</label>
+              </Typography>
+            </div>
+            <div className={classes.cell}>
+              <TextField
+                id="btcAddress"
+                name="btcAddress"
+                value={btcAddress}
+                onChange={onBtcAddressChange}
+                placeholder="wallet address"
                 fullWidth
               />
             </div>

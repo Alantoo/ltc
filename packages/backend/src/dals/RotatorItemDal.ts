@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseDal, ListQuery, Model } from './BaseDal';
 import { ItemSelectSimple } from '../services/ItemSelectService';
-
+import { RawUserDocument } from '../services/UserService';
 import {
   RawRotatorItemDocument,
   RotatorItem,
@@ -224,10 +224,9 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
     userId: ObjectId,
     selected: Array<ItemSelectSimple>,
     defaultListSize: number,
-    refer?: ObjectId,
+    refer?: RawUserDocument | undefined,
   ): Promise<Array<RawRotatorItemDocumentForUi>> {
     const selectedIds = selected.map((item) => item.id);
-
     const referral = await this.getReferralItem(refer, listId);
     const isReferralSelected = referral
       ? selectedIds.some((id) => id.toString() === referral.id.toString())
@@ -318,9 +317,10 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   }
 
   private async getReferralItem(
-    userId?: ObjectId,
+    referUser?: RawUserDocument | undefined,
     listId?: ObjectId,
   ): Promise<RotatorItemDocument> {
+    const userId = referUser ? referUser.id : undefined;
     if (!userId || !listId) {
       return undefined;
     }
@@ -349,6 +349,8 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
         code: '',
         removeAt: new Date(),
         status: rotateStatus.REFER,
+        payType: 'BTC',
+        payAddress: referUser ? referUser.btcAddress : '',
       };
       const ref = await this.create(data);
       item = await this.Model.findOne({ _id: ref.id })

@@ -9,6 +9,7 @@ export type JwtPayload = {
   lastName: string;
   balance: number;
   roles: string[];
+  btcAddress: string;
   isVerified: boolean;
 };
 
@@ -120,17 +121,19 @@ export class AuthProvider {
     firstName,
     lastName,
     password,
+    btcAddress,
   }: {
     email: string;
     name: string;
     firstName: string;
     lastName: string;
     password: string;
+    btcAddress: string;
   }): Promise<any> {
     const registerUrl = `${API_URL}/auth/register`;
     const data = await fetchJson<LoginResult>(registerUrl, {
       method: 'POST',
-      data: { email, name, firstName, lastName, password },
+      data: { email, name, firstName, lastName, password, btcAddress },
     });
     this.setToken(data.loginInfo, data.refreshInfo);
     const username = this.payload ? this.payload.name : '';
@@ -166,6 +169,7 @@ export class AuthProvider {
     password: string;
     firstName: string;
     lastName: string;
+    btcAddress: string;
   }): Promise<void> {
     const updateUrl = `${API_URL}/users/me`;
     await fetchJson<void>(updateUrl, {

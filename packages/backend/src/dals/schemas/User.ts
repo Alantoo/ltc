@@ -48,6 +48,9 @@ export class User extends Document {
   @Prop({ type: Number, default: 0 })
   balance: number;
 
+  @Prop({ type: String })
+  btcAddress: string;
+
   @ApiProperty()
   @Prop()
   isVerified: boolean;
@@ -79,8 +82,9 @@ export class UserCreateDto extends PickType(User, [
   'name',
   'firstName',
   'lastName',
+  'btcAddress',
 ]) {}
 
-export class UserUpdateDto extends PickType(User, ['name']) {}
+export class UserUpdateDto extends PickType(User, ['name', 'btcAddress']) {}
 
 export const UserSchema = SchemaFactory.createForClass(User);
