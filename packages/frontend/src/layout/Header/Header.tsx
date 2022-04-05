@@ -135,6 +135,9 @@ const HeaderView = ({ classes }: HeaderProps) => {
           <ul>
             {loading ? null : user ? (
               <>
+                <li>
+                  <Link to="/profile">Home</Link>
+                </li>
                 <li className={classes.dropdownMenuTrigger}>
                   <Link to="/profile">Profile</Link>
                   <ArrowDropDownIcon />
