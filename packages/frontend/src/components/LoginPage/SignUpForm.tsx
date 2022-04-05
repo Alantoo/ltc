@@ -126,14 +126,14 @@ const SignUpFormView = (props: SignUpFormProps) => {
       setError('Name incorrect');
       return;
     }
-    // if (!btcAddress) {
-    //   setError('BTC wallet address required');
-    //   return;
-    // }
-    // if (!btcAddrRegExp.test(btcAddress)) {
-    //   setError('BTC wallet address incorrect');
-    //   return;
-    // }
+    if (!btcAddress) {
+      setError('BTC wallet address required');
+      return;
+    }
+    if (!btcAddrRegExp.test(btcAddress)) {
+      setError('BTC wallet address incorrect');
+      return;
+    }
     if (!password) {
       setError('Password required');
       return;
@@ -292,19 +292,19 @@ const SignUpFormView = (props: SignUpFormProps) => {
           />
         </FormControl>
       </div>
-      {/*<div>*/}
-      {/*  <FormControl className={classes.field}>*/}
-      {/*    <TextField*/}
-      {/*      id="sign-up-btc"*/}
-      {/*      name="sign-up-btc"*/}
-      {/*      label="BTC wallet address"*/}
-      {/*      value={btcAddress}*/}
-      {/*      onChange={onBtcAddressChange}*/}
-      {/*      fullWidth*/}
-      {/*      autoComplete="off"*/}
-      {/*    />*/}
-      {/*  </FormControl>*/}
-      {/*</div>*/}
+      <div>
+        <FormControl className={classes.field}>
+          <TextField
+            id="sign-up-btc"
+            name="sign-up-btc"
+            label="BTC wallet address"
+            value={btcAddress}
+            onChange={onBtcAddressChange}
+            fullWidth
+            autoComplete="off"
+          />
+        </FormControl>
+      </div>
       <div>
         <FormControl className={classes.field}>
           <TextField
