@@ -557,22 +557,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
             );
           },
         )}
-        <li key="affiliate" className={classes.gridItem}>
-          <Typography className={classes.gridItemTop} component="div">
-            Referral List Affiliate
-            <br />
-            One-time process fee of $1.95 That allows to be paid by your
-            referral list members
-          </Typography>
-          <Typography className={classes.gridItemBottom} component="div">
-            <a
-              href="https://commerce.coinbase.com/checkout/efe635d4-9272-4dc0-a50a-5ca8162ecee7"
-              target="_blank"
-            >
-              Pay Now
-            </a>
-          </Typography>
-        </li>
       </ul>
     );
   }
