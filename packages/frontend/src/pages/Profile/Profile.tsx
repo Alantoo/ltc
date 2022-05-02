@@ -582,7 +582,6 @@ const ProfileView = ({ classes }: ProfileProps) => {
       {activeItemEl}
 
       <Typography component="div" className={classes.text}>
-        <h2 className="h2 center">Takes less than 5 minutes to get started!</h2>
         <h3 className="h3">The Money Lists</h3>
         <p>
           The money lists work by using an algorithm to randomly rotate each
