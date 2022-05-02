@@ -83,6 +83,7 @@ type ClassKey =
   | 'activeItemTitle'
   | 'activeItemText'
   | 'activeItemTable'
+  | 'success'
   | 'balanceRow'
   | 'verifyInput'
   | 'verifyInputError'
@@ -190,6 +191,9 @@ const styles = (theme: Theme) => {
         width: '1%',
       },
     },
+    success: {
+      textAlign: 'center',
+    },
     verify: {
       padding: '30px 0',
       textAlign: 'center',
@@ -284,6 +288,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   const [list, setList] = useState<Array<List>>([]);
   const [activeItem, setActiveItem] = useState<RotatorItem>();
   const [activeItemList, setActiveItemList] = useState<List>();
+  const [activeItemSuccess, setActiveItemSuccess] = useState('');
   const [itemsList, setItemsList] = useState<Array<RotatorItem>>([]);
   const [itemsListCache, setItemsListCache] = useState(0);
   const itemsListCacheTimer = useRef<NodeJS.Timeout>();
@@ -292,6 +297,9 @@ const ProfileView = ({ classes }: ProfileProps) => {
     (newActiveItem) => {
       if (newActiveItem && newActiveItem.status === rotateStatus.ADDED) {
         setActiveItem(undefined);
+        if (activeItemList) {
+          setActiveItemSuccess(activeItemList.name);
+        }
         updateItemsList([]);
       } else if (JSON.stringify(activeItem) !== JSON.stringify(newActiveItem)) {
         setActiveItem(newActiveItem);
@@ -365,6 +373,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   const onPaySubmit = useCallback(
     (listId: string | number, direct?: boolean) => {
+      setActiveItemSuccess('');
       dataProvider
         .listStart(listId, direct)
         .then((data = { url: '' }) => {
@@ -445,6 +454,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
   }
 
   let activeItemEl = null;
+  let activeItemSuccessEl = null;
   let listsListEl = null;
 
   if (activeItem) {
@@ -565,6 +575,17 @@ const ProfileView = ({ classes }: ProfileProps) => {
     );
   }
 
+  if (activeItemSuccess) {
+    activeItemSuccessEl = (
+      <Typography className={classes.success} component="div">
+        <h3 className="h3">
+          Congratulation you’ve been entered into the {activeItemSuccess} Money
+          List
+        </h3>
+      </Typography>
+    );
+  }
+
   return (
     <Container maxWidth="xl">
       {/*<Typography className={classes.text}>*/}
@@ -580,6 +601,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       {/*</div>*/}
 
       {activeItemEl}
+      {activeItemSuccessEl}
 
       <Typography component="div" className={classes.text}>
         <h3 className="h3">The Money Lists</h3>
