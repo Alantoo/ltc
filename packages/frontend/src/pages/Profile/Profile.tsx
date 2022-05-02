@@ -185,6 +185,9 @@ const styles = (theme: Theme) => {
         border: 'solid 1px black',
         background: myTheme.palette.primary.main,
       },
+      '& td:first-child, & th:first-child': {
+        width: '1%',
+      },
     },
     verify: {
       padding: '30px 0',
