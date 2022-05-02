@@ -179,6 +179,7 @@ const styles = (theme: Theme) => {
       '& table button': {
         paddingTop: 4,
         paddingBottom: 4,
+        fontSize: 18,
       },
       '& td, & th': {
         padding: 10,
