@@ -1,5 +1,9 @@
 import { join } from 'path';
 import { readFileSync } from 'fs';
+import * as http from 'http';
+import * as https from 'https';
+import * as express from 'express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 import {
   Catch,
@@ -12,6 +16,8 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MainModule } from './MainModule';
 import { UserService } from './services/UserService';
+
+const SSL_PATH = process.env.SSL_PATH;
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
@@ -56,14 +62,14 @@ async function bootstrap() {
   let httpsOptions = undefined;
   if (process.env.NODE_ENV === 'production') {
     httpsOptions = {
-      key: readFileSync('./cert/privkey1.pem'),
-      cert: readFileSync('./cert/cert1.pem'),
-      ca: readFileSync('./cert/chain1.pem'),
+      key: readFileSync(`${SSL_PATH}/privkey.pem`),
+      cert: readFileSync(`${SSL_PATH}/cert.pem`),
+      ca: readFileSync(`${SSL_PATH}/chain.pem`),
     };
   }
-  const app = await NestFactory.create(MainModule, {
+  const server = express();
+  const app = await NestFactory.create(MainModule, new ExpressAdapter(server), {
     cors: true,
-    httpsOptions,
   });
 
   const config = new DocumentBuilder()
@@ -74,6 +80,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   console.log('PORT - ' + process.env.PORT);
+  console.log('PORT_HTTPS - ' + process.env.PORT_HTTPS);
   app.enableCors({
     origin: [
       'http://localhost:3003',
@@ -89,6 +96,11 @@ async function bootstrap() {
     new NotFoundExceptionFilter(appContext.get(UserService)),
   );
 
-  await app.listen(process.env.PORT);
+  await app.init();
+
+  http.createServer(server).listen(process.env.PORT);
+  https.createServer(httpsOptions, server).listen(process.env.PORT_HTTPS);
+
+  // await app.listen(process.env.PORT);
 }
 bootstrap();

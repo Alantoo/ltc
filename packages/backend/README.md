@@ -112,16 +112,24 @@ sudo systemctl enable mongod
 ```
 npm install pm2 -g
 
+sudo ln -s /home/ubuntu/.nvm/versions/node/v12.22.1/bin/node /usr/bin/node
+sudo ln -s /home/ubuntu/.nvm/versions/node/v12.22.1/bin/npm /usr/bin/npm
+sudo ln -s /home/ubuntu/.nvm/versions/node/v12.22.1/bin/pm2 /usr/bin/pm2
+
+sudo rm /usr/bin/node
+sudo rm /usr/bin/npm
+sudo rm /usr/bin/pm2
+
 From ~/src:
 
 export NODE_ENV=production
 
-pm2 start ./dist/main.js --name main
-pm2 start ./dist/main.js --name main:debug -- --inspect=0.0.0.0:30000
+sudo pm2 start ./dist/main.js --name main
+sudo pm2 start ./dist/main.js --name main:debug -- --inspect=0.0.0.0:30000
 or
-pm2 restart main --update-env
+sudo pm2 restart main --update-env
 
-pm2 logs main --lines 1000
+sudo pm2 logs main --lines 1000
 ```
 
 ### Port forward
@@ -130,7 +138,7 @@ sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8282
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443
 ```
 
-### Generate SSL sertificate
+### Generate SSL certificate
 
 ```
 sudo apt-get update
@@ -142,8 +150,26 @@ sudo apt-get install certbot
 
 sudo certbot certonly --manual
 
-HTTP folder access:
-/.well-known/acme-challenege/<xxxx>
+// --dry-run for test
+sudo certbot certonly --webroot -w /home/ubuntu/src/client -d ltc.evg-soft.com --force-renewal
+
+// Cert folder
+/etc/letsencrypt/live/ltc.evg-soft.com
+
+// check date 
+openssl x509 -noout -dates -in /etc/letsencrypt/live/ltc.evg-soft.com/cert.pem
+
+sudo crontab -e
+// add
+0 9 16 */3 * sudo certbot certonly --webroot -w /home/ubuntu/src/client -d ltc.evg-soft.com && sudo pm2 restart main
+
+// cron logs
+sudo systemctl status cron
+// or
+modify rsyslog config: open /etc/rsyslog.d/50-default.conf,remove # before cron.*
+restart rsyslog service: sudo service rsyslog restart
+restart cron service: sudo service cron restart
+cat /var/log/cron.log
 ```
 
 ### Docker image prepare
