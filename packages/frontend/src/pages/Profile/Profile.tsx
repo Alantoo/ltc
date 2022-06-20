@@ -588,13 +588,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
 
   return (
     <Container maxWidth="xl">
-      {/*<Typography className={classes.text}>*/}
-      {/*  Share your affiliate link below to build your referral list*/}
-      {/*  <br />*/}
-      {/*  <a href={userLink} target="_blank">*/}
-      {/*    {userLink}*/}
-      {/*  </a>*/}
-      {/*</Typography>*/}
+      <Typography className={classes.text}>
+        Share your affiliate link below to build your referral list
+        <br />
+        <a href={userLink} target="_blank">
+          {userLink}
+        </a>
+      </Typography>
       {/*<div className={classes.balanceRow}>*/}
       {/*  <Typography variant="h6">Balance: ${userBalance || 0}</Typography>*/}
       {/*  <PayOutButton />*/}
