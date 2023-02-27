@@ -29,12 +29,17 @@ const styles = (theme: Theme) => {
       position: 'relative',
       display: 'block',
       padding: '0 0',
+      margin: '0 auto',
       zIndex: 100,
+      width: '100%',
+      maxWidth: 1145,
     },
     headerContainer: {
       display: 'flex',
-      justifyContent: 'space-between',
       alignItems: 'center',
+      height: '112px',
+      padding: '0 !important',
+      margin: '0 !important',
     },
     logo: {
       maxWidth: 150,
@@ -48,15 +53,19 @@ const styles = (theme: Theme) => {
       },
     },
     menu: {
+      margin: '0 auto 0',
       '& > ul': {
         listStyle: 'none',
-        margin: 0,
         padding: 0,
+        display: 'flex',
+        gap: '28px',
       },
       '& > ul > li': {
         display: 'inline-block',
-        padding: '25px 20px',
+        fontFamily: 'Halant',
         whiteSpace: 'nowrap',
+        fontWeight: 700,
+        fontSize: '21px',
       },
       '& > ul > li a': {
         color: 'inherit',
@@ -82,7 +91,7 @@ const styles = (theme: Theme) => {
     },
     dropdownMenu: {
       position: 'absolute',
-      top: '100%',
+      top: 0,
       right: 0,
       background: '#fff',
       boxShadow: '0px 5px 12px rgba(0,0,0,0.5)',
@@ -136,7 +145,7 @@ const HeaderView = ({ classes }: HeaderProps) => {
             {loading ? null : user ? (
               <>
                 <li>
-                  <Link to="/profile">Home</Link>
+                  <Link to="/">Home</Link>
                 </li>
                 <li className={classes.dropdownMenuTrigger}>
                   <Link to="/profile">Profile</Link>
@@ -169,21 +178,17 @@ const HeaderView = ({ classes }: HeaderProps) => {
                 <li>
                   <Link to="/">Home</Link>
                 </li>
-                {/*<li>*/}
-                {/*  <a href="" onClick={onSignUpClick}>*/}
-                {/*    Sign Up*/}
-                {/*  </a>*/}
-                {/*</li>*/}
+                <li>
+                  <Link to="/about">About</Link>
+                </li>
+                <li>
+                  <Link to="/faqs">FAQs</Link>
+                </li>
                 <li>
                   <Link to="/register">Sign Up</Link>
                 </li>
-                {/*<li>*/}
-                {/*  <a href="" onClick={onLogInClick}>*/}
-                {/*    Log in*/}
-                {/*  </a>*/}
-                {/*</li>*/}
                 <li>
-                  <Link to="/login">Log in</Link>
+                  <Link to="/login">Login</Link>
                 </li>
               </>
             )}
