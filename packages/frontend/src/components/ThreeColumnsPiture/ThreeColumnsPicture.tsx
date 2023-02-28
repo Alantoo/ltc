@@ -4,6 +4,7 @@ type ColumnOptions = {
   isList: boolean;
   lineContent: string;
   list: string[];
+  extraClass?: string;
 };
 type ThreeColumnsPictureProps = {
   leftColumn: ColumnOptions;
@@ -32,8 +33,12 @@ export const ThreeColumnsPicture = ({
       <ul
         className={
           leftColumn.list.length === 0
-            ? styles.leftColumn + ' ' + styles.withoutDisc
-            : styles.leftColumn
+            ? styles.column +
+              ' ' +
+              styles.withoutDisc +
+              ' ' +
+              leftColumn.extraClass
+            : styles.column + ' ' + leftColumn.extraClass
         }
       >
         {leftColumn.isList ? (
@@ -43,7 +48,17 @@ export const ThreeColumnsPicture = ({
         )}
       </ul>
       <img src={img} alt={imgAlt} width={imgWidth} height={imgHeight} />
-      <ul className={styles.rightColumn}>
+      <ul
+        className={
+          rightColumn.list.length === 0
+            ? styles.column +
+              ' ' +
+              styles.withoutDisc +
+              ' ' +
+              rightColumn.extraClass
+            : styles.column + ' ' + rightColumn.extraClass
+        }
+      >
         {rightColumn.isList ? (
           rightColumn.list.map((item, index) => <li key={index}>{item}</li>)
         ) : (

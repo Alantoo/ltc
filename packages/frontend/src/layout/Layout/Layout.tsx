@@ -23,6 +23,7 @@ import { Contact } from 'pages/Contact';
 import { Login } from 'pages/Login';
 import { Register } from 'pages/Register';
 import { MyTheme } from 'theme';
+import About from 'pages/About/About';
 
 type ClassKey = 'root' | 'loading';
 
@@ -63,6 +64,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
           <Route path="/profile/settings/" component={Settings} />
           <Route path="/login/" component={Login} />
           <Route path="/register/" component={Register} />
+          <Route path="/about/" component={About} />
           <Redirect to="/" />
         </Switch>
       </div>
