@@ -28,6 +28,7 @@ const styles = (theme: Theme) => {
   return createStyles({
     root: {
       overflow: 'hidden',
+      paddingBottom: '50px',
       '& .center': {
         textAlign: 'center',
       },
