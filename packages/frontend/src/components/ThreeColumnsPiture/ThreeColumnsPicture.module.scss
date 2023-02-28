@@ -1,0 +1,46 @@
+.container{
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  padding: 30px 64px 0 ;
+  & img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover ;
+    object-position: top;
+    top: 0;
+    right: 41px;
+    z-index: 1;
+  }
+  & ul{
+    position: relative;
+    z-index: 3;
+    padding: 0;
+    width: 30%;
+    &.withoutDisc{
+      list-style: none;
+    }
+
+    &:last-child{
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      width: 31.6%;
+      padding: 5px 35px 0 0
+    }
+    & li {
+      color:white;
+      font-size: 17px;
+      line-height: 27px;
+    }
+  }
+}
+
+@media (max-width: 1300px) {
+  .container{
+    padding: 30px 16px 0 32px;
+  }
+}

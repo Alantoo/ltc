@@ -1,0 +1,39 @@
+.container{
+  display: flex;
+  gap: 105px;
+  width: 100%;
+  max-width: 1180px;
+  align-items: center;
+  margin: 20px auto 0 ;
+  & * {
+    padding: 0;
+    margin: 0;
+  }
+  & h3 {
+    color: black;
+    font-family: 'ABeeZee';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 59px;
+  }
+  & button{
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 25px;
+    padding: 17px 64px;
+    color: white;
+    border-radius: 3px;
+    background: #FF8121;
+    border: unset;
+    width: 224px;
+    height: 69px;
+    text-transform: uppercase;
+    white-space: pre;
+  }
+}
+@media (min-width: 1445px) {
+  .container{
+    margin-left:auto ;
+  }
+
+}

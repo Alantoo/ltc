@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import {
   withStyles,
   createStyles,
@@ -7,21 +7,42 @@ import {
   Theme,
 } from '@material-ui/core/styles';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import { AuthContext } from 'contexts/AuthContext';
 import banner from 'assets/banner.png';
 import blueBg from 'assets/blue-bg.png';
 import { MyTheme } from 'theme';
-
-type ClassKey = 'root' | 'introSlide' | 'simpleSlide' | 'bgSlide';
+import { MainImgWithContent } from '../../components/MainImgWithContent';
+import { Paragraph } from '../../components/Paragraph';
+import { ThreeColumnsPicture } from '../../components/ThreeColumnsPiture';
+import editWithPerson from 'assets/snapEdit.png';
+import { WhatAreYouWaitingOn } from '../../components/WhatAreYouWaitingFor';
+type ClassKey =
+  | 'root'
+  | 'introSlide'
+  | 'simpleSlide'
+  | 'bgSlide'
+  | 'threeColumnsPicture';
 
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {
+      overflow: 'hidden',
       '& .center': {
         textAlign: 'center',
+      },
+      '& .buttonInImg': {
+        background: '#FF8121',
+        borderRadius: '5px',
+        fontFamily: 'Halant',
+        fontWeight: '700',
+        fontSize: '21px',
+        color: 'white',
+        border: 'unset',
+        padding: '10px 24px',
+        margin: '36px auto 0',
+        height: '48px',
+        width: 152,
       },
     },
     introSlide: {
@@ -77,6 +98,9 @@ const styles = (theme: Theme) => {
         margin: '25px auto',
       },
     },
+    threeColumnsPicture: {
+      margin: '32px 0 0 0',
+    },
   });
 };
 
@@ -92,133 +116,64 @@ const HomeView = ({ classes }: HomeProps) => {
   }
   return (
     <div className={classes.root}>
-      <div className={`${classes.introSlide} gradientBg`}>
-        <Container maxWidth="xl">
-          <Typography component="div">
-            {/* <h2 className="h2">
-              EARN HUNDREDS OF DOLLARS IN CRYPTOCURRENCY DAILY
-            </h2> */}
-            {/* <h3 className="h3">
-              The easiest way you’ll ever receive Bitcoins!
-            </h3>
-            <p>***Make unlimited cash flow in our cryptocurrency lists***</p>
-            <p>
-              ***Build your referral list and make money on autopilot without
-              spending a dime***
-            </p>
-            <h3 className="h3">
-              Takes less than 5 minutes to start earning a lifetime of income
-            </h3> */}
-            <a href="#" className="btn">
-              Global Money List
-            </a>
-            <h3 className="h3">
-              The online cryptocurrency lottery to the world
-            </h3>
-            <h3 className="h3">
-              Win hundreds of dollars in cryptocurrency daily
-            </h3>
-          </Typography>
-        </Container>
-      </div>
-      <div className={classes.simpleSlide}>
-        <Container maxWidth="xl">
-          <Typography component="div">
-            <h3 className="h3 center">Global Money List</h3>
-
-            <p className="center">
-              The online cryptocurrency lottery to the world
-            </p>
-            <p className="center">
-              Win hundreds of dollars in cryptocurrency daily
-            </p>
-            <p>
-              Welcome to Global Money List the easiest way to win unlimited
-              amounts of cryptocurrencies. When you join Global Money List you
-              can be added to any of our six money lists. Every time a member
-              clicks on your username rotating through the money lists, you’ll
-              be paid either $1.00, $5.00, $10.00, $20.00, $50.00, or $100.00 in
-              bitcoin or other cryptocurrencies. You’ll also receive an
-              affiliate link to share with others and build your referral list.
-            </p>
-            <p>
-              What makes Global Money List system cheat proof is that the
-              members select the winners who are randomly rotating through the
-              money lists. Global Money List guarantees you as many as seven
-              members will be paid prior to any member entering the money lists.
-              Members who enter any of our money list will consistently rotate
-              for a whopping 60 days! Can you imagine walking into a casino and
-              having the opportunity to pay a one-time fee to have unlimited
-              play on a slot machine for 60 days. This is exactly what Global
-              Money List is offering you with our one-of-a-kind lottery system.
-              Our money lists automatically rotate our members username randomly
-              every 10 seconds giving you the best possibility to make hundreds
-              maybe even thousands of dollars in cryptocurrency every day! Our
-              system is designed to deposit your winnings instantly into your
-              cryptocurrency wallet.
-            </p>
-            <h3 className="center">
-              Hey, what are you waiting on?
-              <br />
-              <Link to="/register" className="link">
-                Join Now!
-              </Link>
-            </h3>
-          </Typography>
-        </Container>
-      </div>
-      <div className={classes.bgSlide}>
-        <Container maxWidth="xl">
-          <Typography component="div">
-            <hr />
-            <ul>
-              <li>Free to signup</li>
-              <li>Six money lists to choose from</li>
-              <li>Each entry is for 60 days</li>
-              <li>Share your affiliate link to build your referral list</li>
-              <li>Winnings instantly deposited into your crypto wallet</li>
-              <li>Build your referral list and make money on autopilot</li>
-              <li>Our money list system is cheat proof</li>
-              <li>Unlimited entry into our money lists</li>
-              <li>The easiest way you’ll ever receive Bitcoins</li>
-              <li>Anybody anywhere can win</li>
-            </ul>
-          </Typography>
-        </Container>
-      </div>
-      <div className={classes.simpleSlide}>
-        <Container maxWidth="xl">
-          <Typography component="div">
-            <h3 className="center">Referral List</h3>
-            <p>
-              Building your referral list is the most important way to create
-              residual income using this money-making opportunity. Here’s how it
-              works! When someone signs up while visiting your free Global Money
-              List website, they’re automatically added to your referral list.
-              When any member listed in your referral list pay to be added to
-              the Global Money List revolvers, your username will be locked in
-              the #1 position of their money list revolver. Once clicked on
-              You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00, or
-              $100.00 in cryptocurrency depending on which money list revolver
-              your referral decides to be added to. Your referral will now click
-              on five more members usernames rotating through the money list in
-              order to have themselves added to the money list. There is no
-              limit how large your referral list can grow to be, so the larger
-              the list the more income for you. There’s a one-time process fee
-              of $1.95 that will allow you to be paid by members in your
-              referral list, but this fee will be waived if you pay to be added
-              to one of our six money lists first.
-            </p>
-            <h3 className="center">
-              Hey, what are you waiting on?
-              <br />
-              <Link to="/register" className="link">
-                Join Now!
-              </Link>
-            </h3>
-          </Typography>
-        </Container>
-      </div>
+      <MainImgWithContent
+        title="global money list"
+        subtitle="The greatest Residual Income System Ever! Earn hundreds of dollars in bitcoin daily"
+      >
+        <button className="buttonInImg">Join Now</button>
+      </MainImgWithContent>
+      <Paragraph
+        title="Welcome to Global Money List the easiest way to earn unlimited amounts of Bitcoin or Ethereum cryptocurrency daily."
+        subtitle="When you join Global Money List you can be added to any of our six money lists. Every time a member clicks on your username rotating through the money lists, you’ll be paid either$1.00, $5.00, $10.00, $20.00, $50.00, or $100.00 in Bitcoin or Ethereum. You’ll also receive an affiliate link to share with others and build your referral list which allows you to make money on autopilot."
+        subtitleTopMargin={15}
+        subtitleLineHeight="26.78px"
+        containerMargin={'42px auto 0 117px'}
+      />
+      <ThreeColumnsPicture
+        leftColumn={{
+          isList: false,
+          lineContent: `What makes Global Money List system cheat proof is that themembers select the winners who are 
+          randomly rotating throughthe money lists. Global Money List guarantees you as many asseven members will be 
+          paid prior to any member entering themoney lists. Members who enter any of our money lists willconsistently 
+          rotate for a whopping 60 days! Can you imaginewalking into a casino and having the opportunity to pay 
+          aone-time fee to have unlimited play on a slot machine for 60days. This is exactly what Global Money List is
+           offering you withour one-of-a-kind residual income system. Our money listsautomatically rotate our members
+            username randomly every10 seconds giving you the best possibility to make hundredsmaybe even thousands of
+             dollars in Bitcoin or Ethereumcryptocurrency every day! Our system is designed to deposityour winnings 
+             instantly into your cryptocurrency wallet.`,
+          list: [],
+        }}
+        rightColumn={{
+          isList: true,
+          lineContent: '',
+          list: [
+            'Free to signup',
+            'Six money lists to choose from',
+            'Each entry is for 60 days',
+            'Share your affiliate link to build your referral list',
+            'Winnings instantly deposited into your crypto wallet',
+            'Build your referral list and make money on autopilot',
+            'Our money list system is cheat proof',
+            'Unlimited entry into our money lists',
+            'The easiest way you’ll ever receive Bitcoins',
+            'Anybody anywhere can participate and win',
+          ],
+        }}
+        img={editWithPerson}
+        imgAlt="picture with person and money"
+        imgWidth={1478}
+        imgHeight={535}
+        extraClass={classes.threeColumnsPicture}
+      />
+      <Paragraph
+        title={`Referral List`}
+        subtitle={`Building your referral list is the most important way to create residual income using this system. Here’s how it works! When someone click on your affiliate link and sign up, they’reautomatically added to your referral list. When any member listed in your referral list pay to be added to any of our money lists, your username will be locked in the #1 position of theirmoney list. Once clicked on You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00, or $100.00 in cryptocurrency depending on which money list your referral decides to be added to.Your referral will now click on the required number of members usernames randomly rotating through the money list to have themselves added to that money list. There is no limit tohow large your referral list can grow to be, so the larger the list the more income for you. Go to your homepage and copy your affiliate link to share with all of your family, friends, andnetwork associates. This will rapidly grow your referral list causing you to earn unlimited amounts of income even long after you stopped promoting this system.
+        `}
+        subtitleTopMargin={3}
+        subtitleLineHeight="31px"
+        containerMargin="70px auto 0 71px"
+      />
+      <WhatAreYouWaitingOn />
     </div>
   );
 };
