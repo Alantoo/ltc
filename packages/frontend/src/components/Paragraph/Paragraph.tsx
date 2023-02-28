@@ -6,6 +6,7 @@ type ParagraphProps = {
   subtitleTopMargin: number;
   subtitleLineHeight: string;
   containerMargin: string;
+  extraSubtitle?: string[];
 };
 export const Paragraph = ({
   title,
@@ -13,6 +14,7 @@ export const Paragraph = ({
   subtitle,
   subtitleLineHeight,
   containerMargin,
+  extraSubtitle,
 }: ParagraphProps) => {
   return (
     <div style={{ margin: containerMargin }} className={styles.container}>
@@ -22,6 +24,16 @@ export const Paragraph = ({
       >
         {subtitle}
       </span>
+      {extraSubtitle?.map((item) => (
+        <span
+          style={{
+            marginTop: subtitleTopMargin,
+            lineHeight: subtitleLineHeight,
+          }}
+        >
+          {item}
+        </span>
+      ))}
     </div>
   );
 };

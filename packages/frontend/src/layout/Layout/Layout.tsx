@@ -17,13 +17,13 @@ import { Earnings } from 'pages/Earnings';
 import { History } from 'pages/History';
 import { Settings } from 'pages/Settings';
 import { Terms } from 'pages/Terms';
-import { Privacy } from 'pages/Privacy';
 import { FAQ } from 'pages/FAQ';
 import { Contact } from 'pages/Contact';
 import { Login } from 'pages/Login';
 import { Register } from 'pages/Register';
 import { MyTheme } from 'theme';
 import About from 'pages/About/About';
+import Privacy from 'pages/Privacy/Privacy';
 
 type ClassKey = 'root' | 'loading';
 

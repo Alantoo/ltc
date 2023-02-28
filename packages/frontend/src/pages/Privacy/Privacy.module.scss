@@ -1,0 +1,33 @@
+.largeBottomPadding{
+  padding-bottom: 230px;
+}
+.textCenter{
+  text-align: start;
+  margin: 30px auto 0;
+  max-width: 1166px;
+}
+.additionalTermsContainer{
+  display: flex;
+  flex-direction: column;
+  margin: 30px auto 0;
+  max-width: 1166px;
+  & h3{
+    margin: 0;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 29px;
+  }
+  ul {
+    padding-left: 20px;
+    li{
+
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 20px;
+    }
+  }
+}
