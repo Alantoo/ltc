@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
+import { MainImgWithContent } from '../../components/MainImgWithContent';
 
 const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 const btcAddrRegExp = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/i;
@@ -214,167 +215,173 @@ const SettingsView = ({ classes }: SettingsProps) => {
   }
 
   return (
-    <Container maxWidth="xl">
-      <div>
-        <Typography variant="h5">Account Settings</Typography>
-        <form action="#" className={classes.form} onSubmit={onFormSubmit}>
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="accountName">Account Name</label>
-              </Typography>
+    <>
+      <MainImgWithContent
+        title="SETTINGS"
+        subtitle="Global Money List - Settings"
+      />
+      <Container maxWidth="xl">
+        <div>
+          <Typography variant="h5">Account Settings</Typography>
+          <form action="#" className={classes.form} onSubmit={onFormSubmit}>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="accountName">Account Name</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="accountName"
+                  name="accountName"
+                  placeholder="account name"
+                  value={name}
+                  fullWidth
+                  disabled
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="accountName"
-                name="accountName"
-                placeholder="account name"
-                value={name}
-                fullWidth
-                disabled
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="firstName">First Name</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="firstName">First Name</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={firstName}
+                  onChange={onFirstNameChange}
+                  fullWidth
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="firstName"
-                name="firstName"
-                placeholder="First Name"
-                value={firstName}
-                onChange={onFirstNameChange}
-                fullWidth
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="lastName">Last Name</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="lastName">Last Name</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={lastName}
+                  onChange={onLastNameChange}
+                  fullWidth
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="lastName"
-                name="lastName"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={onLastNameChange}
-                fullWidth
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="filled-full-width">Email Address</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="filled-full-width">Email Address</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={onEmailChange}
+                  placeholder="email address"
+                  fullWidth
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="email"
-                name="email"
-                value={email}
-                onChange={onEmailChange}
-                placeholder="email address"
-                fullWidth
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="filled-full-width">BTC wallet Address</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="filled-full-width">BTC wallet Address</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="btcAddress"
+                  name="btcAddress"
+                  value={btcAddress}
+                  onChange={onBtcAddressChange}
+                  placeholder="wallet address"
+                  fullWidth
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="btcAddress"
-                name="btcAddress"
-                value={btcAddress}
-                onChange={onBtcAddressChange}
-                placeholder="wallet address"
-                fullWidth
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="no-password">Password</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="no-password">Password</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="no-password"
+                  name="no-password"
+                  value={password}
+                  onChange={onPasswordChange}
+                  placeholder="password"
+                  type="password"
+                  fullWidth
+                  inputProps={passwordProps}
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="no-password"
-                name="no-password"
-                value={password}
-                onChange={onPasswordChange}
-                placeholder="password"
-                type="password"
-                fullWidth
-                inputProps={passwordProps}
-              />
-            </div>
-          </div>
 
-          <div className={classes.row}>
-            <div className={classes.cell}>
-              <Typography className={classes.label}>
-                <label htmlFor="no-password2">Confirm Password</label>
-              </Typography>
+            <div className={classes.row}>
+              <div className={classes.cell}>
+                <Typography className={classes.label}>
+                  <label htmlFor="no-password2">Confirm Password</label>
+                </Typography>
+              </div>
+              <div className={classes.cell}>
+                <TextField
+                  id="no-password2"
+                  name="no-password2"
+                  value={password2}
+                  onChange={onPassword2Change}
+                  placeholder="password"
+                  type="password"
+                  fullWidth
+                  inputProps={passwordProps}
+                />
+              </div>
             </div>
-            <div className={classes.cell}>
-              <TextField
-                id="no-password2"
-                name="no-password2"
-                value={password2}
-                onChange={onPassword2Change}
-                placeholder="password"
-                type="password"
-                fullWidth
-                inputProps={passwordProps}
-              />
-            </div>
-          </div>
 
-          {error ? (
-            <Typography className={classes.errors}>{error}</Typography>
-          ) : null}
+            {error ? (
+              <Typography className={classes.errors}>{error}</Typography>
+            ) : null}
 
-          <div className={classes.buttons}>
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              type="submit"
-            >
-              Save
-            </Button>
-            {user.isVerified ? null : (
+            <div className={classes.buttons}>
               <Button
                 variant="contained"
                 color="primary"
                 disabled={loading}
-                onClick={onSendClick}
+                type="submit"
               >
-                {isSent ? 'Send again' : 'Verify email'}
+                Save
               </Button>
-            )}
-          </div>
-        </form>
-      </div>
-    </Container>
+              {user.isVerified ? null : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={onSendClick}
+                >
+                  {isSent ? 'Send again' : 'Verify email'}
+                </Button>
+              )}
+            </div>
+          </form>
+        </div>
+      </Container>
+    </>
   );
 };
 
