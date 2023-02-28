@@ -5,7 +5,7 @@ import {
   WithStyles,
   Theme,
 } from '@material-ui/core/styles';
-import top from 'assets/top.png';
+import top from 'assets/top.webp';
 import { MyTheme } from 'theme';
 
 type ClassKey = 'root';
@@ -15,8 +15,8 @@ const styles = (theme: Theme) => {
   return createStyles({
     root: {
       position: 'fixed',
-      bottom: 20,
-      right: 20,
+      bottom: 179,
+      right: 149,
       opacity: 0,
       transition: 'opacity 0.3s ease',
       '&.showed': {
