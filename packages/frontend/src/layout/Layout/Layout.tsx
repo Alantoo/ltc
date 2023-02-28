@@ -54,7 +54,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
           <Route path="/" component={Home} exact />
           <Route path="/terms/" component={Terms} />
           <Route path="/privacy/" component={Privacy} />
-          <Route path="/faq/" component={FAQ} />
+          <Route path="/faqs/" component={FAQ} />
           <Route path="/contact/" component={Contact} />
           <Route path="/profile/" component={Profile} exact />
           <Route path="/profile/referrals/" component={Referrals} />

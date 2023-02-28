@@ -1,0 +1,21 @@
+.FAQContainer{
+  box-shadow: unset !important;
+  font-style: normal;
+  font-weight: 600;
+  & .FAQHeaderContainer{
+    background: #474747;
+    border-radius: 10px !important;
+    color: white;
+    font-family: 'Big Shoulders Display';
+    font-size: 24px;
+    line-height: 29px;
+  }
+  & .FAQContentContainer{
+    border: unset !important;
+    font-family: 'Open Sans';
+    font-size: 16px;
+    line-height: 22px;
+    color: #85858D;
+  }
+
+}

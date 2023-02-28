@@ -119,6 +119,7 @@ const HomeView = ({ classes }: HomeProps) => {
       <MainImgWithContent
         title="global money list"
         subtitle="The greatest Residual Income System Ever! Earn hundreds of dollars in bitcoin daily"
+        align="center"
       >
         <button className="buttonInImg">Join Now</button>
       </MainImgWithContent>
