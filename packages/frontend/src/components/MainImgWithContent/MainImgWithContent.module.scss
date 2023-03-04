@@ -44,6 +44,9 @@
     width: 100%;
     & .content{
       max-width: 90%;
+      &.alignLeft{
+        align-items: center !important;
+      }
       & h3, &p {
         text-align: center;
       }
