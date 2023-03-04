@@ -16,7 +16,7 @@ const styles = (theme: Theme) => {
     root: {
       position: 'fixed',
       bottom: 179,
-      right: 149,
+      right: '10%',
       opacity: 0,
       transition: 'opacity 0.3s ease',
       '&.showed': {
