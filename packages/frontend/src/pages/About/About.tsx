@@ -2,11 +2,11 @@ import { MainImgWithContent } from '../../components/MainImgWithContent';
 import { Paragraph } from '../../components/Paragraph';
 import styles from './About.module.scss';
 import { ThreeColumnsPicture } from '../../components/ThreeColumnsPiture';
-import threeColumnImg from 'assets/snapEdit2.png';
 import { CryptoCard } from './CryptoCard';
 import bitcoin from 'assets/bitcoin.png';
 import ethereum from 'assets/ethereum.png';
 import { HowToBeAdded } from './HowToBeAdded';
+import phone from 'assets/threeColumnImage/phone.png';
 const About = () => {
   return (
     <div className={styles.container}>
@@ -46,10 +46,10 @@ const About = () => {
           isList: true,
           lineContent: '',
         }}
-        img={threeColumnImg}
+        img={phone}
         imgAlt={'phone with money'}
-        imgWidth={1440}
-        imgHeight={492}
+        imgWidth={360}
+        imgHeight={520}
         extraClass={styles.threeColumnContainer}
       />
       <p className={styles.earningWillBePaid}>

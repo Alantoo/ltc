@@ -14,7 +14,6 @@ import { MyTheme } from 'theme';
 import { MainImgWithContent } from '../../components/MainImgWithContent';
 import { Paragraph } from '../../components/Paragraph';
 import { ThreeColumnsPicture } from '../../components/ThreeColumnsPiture';
-import editWithPerson from 'assets/snapEdit.png';
 import { WhatAreYouWaitingOn } from '../../components/WhatAreYouWaitingFor';
 type ClassKey =
   | 'root'
@@ -22,12 +21,11 @@ type ClassKey =
   | 'simpleSlide'
   | 'bgSlide'
   | 'threeColumnsPicture';
-
+import person from 'assets/threeColumnImage/person.png';
 const styles = (theme: Theme) => {
   const myTheme = theme as MyTheme;
   return createStyles({
     root: {
-      overflow: 'hidden',
       paddingBottom: '50px',
       '& .center': {
         textAlign: 'center',
@@ -161,10 +159,10 @@ const HomeView = ({ classes }: HomeProps) => {
             'Anybody anywhere can participate and win',
           ],
         }}
-        img={editWithPerson}
+        img={person}
         imgAlt="picture with person and money"
-        imgWidth={1478}
-        imgHeight={535}
+        imgWidth={360}
+        imgHeight={520}
         extraClass={classes.threeColumnsPicture}
       />
       <Paragraph

@@ -1,10 +1,29 @@
 .container{
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 520px;
+  grid-template-columns: 1fr 1fr 1fr;
   position: relative;
   width: 100%;
   z-index: 2;
-  padding: 30px 64px 0 ;
+  & .leftColumn{
+    position: relative;
+    & ul {
+      width: 80%;
+      padding: 43px 0 0 44px;
+
+    }
+  }
+  & .midColumn{
+    position: relative;
+  }
+  & .rightColumn{
+    position: relative;
+    & ul {
+      width: 80%;
+      padding: 43px 0 0 30px;
+
+    }
+  }
   & img{
     position: absolute;
     width: 100%;
@@ -12,14 +31,13 @@
     object-fit: cover ;
     object-position: top;
     top: 0;
-    right: 41px;
+    right: 0;
     z-index: 1;
   }
   & .column{
     position: relative;
     z-index: 3;
     padding: 0;
-    width: 30%;
     &.withoutDisc{
       list-style: none;
     }
@@ -29,7 +47,6 @@
       flex-direction: column;
       gap: 13px;
       width: 31.6%;
-      padding: 5px 35px 0 0
     }
     & li {
       color:white;
@@ -39,8 +56,84 @@
   }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1450px) {
+  .container {
+    & .leftColumn {
+      & ul {
+        padding: 21px 0 0 22px;
+
+      }
+    }
+    & .rightColumn{
+      & ul {
+        padding: 21px 0 0 0;
+      }
+    }
+  }
+}
+@media (max-width: 1400px) {
+  .container {
+    & .leftColumn {
+      & ul {
+        padding: 0 0 0 22px;
+
+      }
+    }
+    & .rightColumn{
+      & ul {
+        padding: 0 0 0 0;
+      }
+    }
+  }
+}
+@media (max-width: 1325px) {
   .container{
-    padding: 30px 16px 0 32px;
+    width: 90%;
+    grid-template-columns: 1fr;
+    height: fit-content !important;
+    margin: 32px auto !important;
+    & .leftColumn{
+      position: relative;
+      min-height: 520px;
+      & ul {
+        width: 95%;
+        padding: 0 20px;
+      }
+    }
+    & .midColumn{
+      min-height:520px;
+    }
+    & .rightColumn{
+      position: relative;
+      & ul {
+        padding: 20px 0 0 0;
+
+      }
+    }
+  }
+}
+@media (max-width: 450px) {
+  .container{
+    & .leftColumn{
+      position: relative;
+      & ul {
+        height: 500px;
+        overflow-y: auto;
+        width: 95%;
+        padding: 0 20px;
+      }
+    }
+    & .midColumn{
+      min-height:520px;
+    }
+    & .rightColumn{
+      position: relative;
+      height: 500px;
+      overflow-y: auto;
+      & ul {
+        padding: 20px  20px 0 30px ;
+
+      }
+    }
   }
 }
