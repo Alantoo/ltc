@@ -13,7 +13,7 @@ import logo from 'assets/logo.png';
 import { formTypes } from 'components/LoginPage';
 import { AuthContext } from 'contexts/AuthContext';
 import { MyTheme } from 'theme';
-
+import myStyles from './Header.module.scss';
 type ClassKey =
   | 'header'
   | 'headerContainer'
@@ -134,14 +134,17 @@ const HeaderView = ({ classes }: HeaderProps) => {
 
   return (
     <div className={classes.header}>
-      <Container className={classes.headerContainer} maxWidth="xl">
+      <Container
+        className={classes.headerContainer + ' ' + myStyles.container}
+        maxWidth="xl"
+      >
         <div className={classes.logo}>
           <Link to={user ? '/profile' : '/'}>
             <img src={logo} alt="logo" />
           </Link>
         </div>
         <Typography className={classes.menu} component="div">
-          <ul>
+          <ul className={myStyles.headerMenu}>
             {loading ? null : user ? (
               <>
                 <li>
