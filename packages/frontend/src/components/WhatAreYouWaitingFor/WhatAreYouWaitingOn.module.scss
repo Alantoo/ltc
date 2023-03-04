@@ -37,3 +37,15 @@
   }
 
 }
+
+@media (max-width: 590px) {
+  .container{
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    & h3{
+      font-size: 40px;
+    }
+  }
+
+}
