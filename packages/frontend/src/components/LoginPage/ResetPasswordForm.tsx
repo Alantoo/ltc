@@ -16,6 +16,7 @@ type ClassKey =
   | 'formTitle'
   | 'field'
   | 'formError'
+  | 'formMessage'
   | 'button'
   | 'links';
 
@@ -39,6 +40,9 @@ const styles = (theme: Theme) => {
     formError: {
       color: myTheme.palette.error.main,
     },
+    formMessage: {
+      color: myTheme.palette.success.main,
+    },
     button: {
       width: '100%',
       marginBottom: 10,
@@ -50,20 +54,25 @@ const styles = (theme: Theme) => {
   });
 };
 
-type LoginFormProps = WithStyles<ClassKey> & {
+type ResetPasswordFormProps = WithStyles<ClassKey> & {
   active: boolean;
   loading: boolean;
   error: string;
-  onFormSubmit: (data: { email: string; password: string }) => void;
-  onRegisterClick: () => void;
-  onForgetPasswordClick: () => void;
+  onFormSubmit: (data: { password: string }) => void;
+  onLoginClick: () => void;
 };
 
-const LoginFormView = (props: LoginFormProps) => {
+const ResetPasswordFormView = (props: ResetPasswordFormProps) => {
   const { classes, error: initError, active, loading } = props;
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [error, setError] = useState(initError);
+  const [passwordProps] = useState<any>({
+    autoComplete: 'new-password',
+    form: {
+      autoComplete: 'off',
+    },
+  });
 
   useEffect(() => {
     setError(initError);
@@ -72,34 +81,25 @@ const LoginFormView = (props: LoginFormProps) => {
   const onFormSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      props.onFormSubmit({ email, password });
+      if (!password) {
+        setError('Password required');
+        return;
+      }
+      if (password !== password2) {
+        setError('Password mismatch');
+        return;
+      }
+      props.onFormSubmit({ password });
     },
-    [email, password, props.onFormSubmit],
+    [password, password2, setError, props.onFormSubmit],
   );
 
-  const onRegisterClick = useCallback(
+  const onLoginClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      props.onRegisterClick();
+      props.onLoginClick();
     },
-    [props.onRegisterClick],
-  );
-
-  const onForgetPasswordClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      props.onForgetPasswordClick();
-    },
-    [props.onForgetPasswordClick],
-  );
-
-  const onEmailChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setEmail(value);
-      setError('');
-    },
-    [setEmail, setError],
+    [props.onLoginClick],
   );
 
   const onPasswordChange = useCallback(
@@ -111,6 +111,15 @@ const LoginFormView = (props: LoginFormProps) => {
     [setPassword, setError],
   );
 
+  const onPassword2Change = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setPassword2(value);
+      setError('');
+    },
+    [setPassword2, setError],
+  );
+
   return (
     <form
       onSubmit={onFormSubmit}
@@ -119,17 +128,19 @@ const LoginFormView = (props: LoginFormProps) => {
       autoComplete="off"
     >
       <Typography className={classes.formTitle} variant="subtitle1">
-        Login
+        Reset Password
       </Typography>
       <div>
         <FormControl className={classes.field}>
           <TextField
-            id="login-email"
-            name="login-email"
-            label="E-mail"
-            value={email}
-            onChange={onEmailChange}
-            InputLabelProps={{ shrink: true }}
+            id="sign-up-password"
+            name="sign-up-password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={onPasswordChange}
+            inputProps={passwordProps}
+            helperText="Use up to 20 characters with a mix of letters, numbers and symbols."
             fullWidth
           />
         </FormControl>
@@ -137,13 +148,13 @@ const LoginFormView = (props: LoginFormProps) => {
       <div>
         <FormControl className={classes.field}>
           <TextField
-            id="login-password"
-            name="login-password"
-            label="Password"
+            id="sign-up-password2"
+            name="sign-up-password2"
+            label="Confirm Password"
             type="password"
-            value={password}
-            onChange={onPasswordChange}
-            InputLabelProps={{ shrink: true }}
+            value={password2}
+            onChange={onPassword2Change}
+            inputProps={passwordProps}
             fullWidth
           />
         </FormControl>
@@ -160,22 +171,18 @@ const LoginFormView = (props: LoginFormProps) => {
           disabled={loading}
           className={classes.button}
         >
-          Sign in
+          Update password
         </Button>
       </div>
       <div className={classes.links}>
-        <a href="#" onClick={onForgetPasswordClick}>
-          Forget password
-        </a>
-        &nbsp;|&nbsp;
-        <a href="#" onClick={onRegisterClick}>
-          Register
+        <a href="#" onClick={onLoginClick}>
+          Go back to login
         </a>
       </div>
     </form>
   );
 };
 
-export const LoginForm = withStyles(styles)(LoginFormView);
+export const ResetPasswordForm = withStyles(styles)(ResetPasswordFormView);
 
-export default LoginForm;
+export default ResetPasswordForm;

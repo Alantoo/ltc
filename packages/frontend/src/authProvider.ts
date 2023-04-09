@@ -142,6 +142,35 @@ export class AuthProvider {
     window.location = `/${username}/profile`;
   }
 
+  async forgetPassword({ email }: { email: string }): Promise<any> {
+    const registerUrl = `${API_URL}/auth/forgetPassword`;
+    await fetchJson(registerUrl, {
+      method: 'POST',
+      data: { email },
+    });
+  }
+
+  async resetPassword({
+    password,
+    userId,
+    token,
+  }: {
+    password: string;
+    userId: string;
+    token: string;
+  }): Promise<any> {
+    const registerUrl = `${API_URL}/auth/resetPassword`;
+    const data = await fetchJson<LoginResult>(registerUrl, {
+      method: 'POST',
+      data: { password, userId, token },
+    });
+    this.setToken(data.loginInfo, data.refreshInfo);
+    const username = this.payload ? this.payload.name : '';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.location = `/${username}/profile`;
+  }
+
   async logout(params: any): Promise<string | false | void> {
     let logoutUrl = `${API_URL}/auth/logout`;
     if (

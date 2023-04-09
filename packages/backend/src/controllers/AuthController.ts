@@ -140,6 +140,39 @@ export class AuthController {
     response.redirect(url);
   }
 
+  @Post('forgetPassword')
+  async forgetPassword(
+    @Body()
+    body: {
+      email: string;
+    },
+    @Req() request: Request,
+    @User() user: UserData,
+  ): Promise<void> {
+    const { email } = body;
+    const host = getHost(request, true);
+    const { token, userId } = await this.authService.generateResetPasswordToken(
+      email,
+    );
+    const url = `${host}/forget-password?userId=${userId}&token=${token}`;
+    await this.emailService.sendResetPassword(url, email);
+  }
+
+  @Post('resetPassword')
+  async resetPassword(
+    @Body()
+    body: {
+      password?: string;
+      userId?: string;
+      token?: string;
+    },
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<LoginResult> {
+    const result = await this.authService.resetPassword(body);
+    this.setRefreshToken(result.refreshInfo, response);
+    return result;
+  }
+
   private getReferName(@Req() request: Request): string {
     return request.cookies['basename'];
   }

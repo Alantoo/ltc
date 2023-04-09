@@ -14,6 +14,11 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as cookieParser from 'cookie-parser';
 import { UserDal, User, UserSchema } from './dals/UserDal';
 import { UserTokenDal, UserToken, UserTokenSchema } from './dals/UserTokenDal';
+import {
+  UserResetPasswordTokenDal,
+  UserResetPasswordToken,
+  UserResetPasswordTokenSchema,
+} from './dals/UserResetPasswordTokenDal';
 import { ListDal, List, ListSchema } from './dals/ListDal';
 import {
   RotatorItemDal,
@@ -105,6 +110,10 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: UserToken.name, schema: UserTokenSchema },
+      {
+        name: UserResetPasswordToken.name,
+        schema: UserResetPasswordTokenSchema,
+      },
       { name: List.name, schema: ListSchema },
       { name: RotatorItem.name, schema: RotatorItemSchema },
       { name: ItemSelect.name, schema: ItemSelectSchema },
@@ -122,6 +131,7 @@ export class CoinbaseWebhookMiddleware implements NestMiddleware {
   providers: [
     UserDal,
     UserTokenDal,
+    UserResetPasswordTokenDal,
     ListDal,
     RotatorItemDal,
     ItemSelectDal,

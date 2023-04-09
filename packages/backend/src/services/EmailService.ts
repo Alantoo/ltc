@@ -35,4 +35,15 @@ export class EmailService {
     const info = await this.transporter.sendMail(options);
     this.logger.log(JSON.stringify(info));
   }
+
+  async sendResetPassword(url: string, email: string) {
+    const options: SendMailOptions = {
+      from: `${this.fromName} <${this.fromEmail}>`,
+      to: email,
+      subject: 'Reset password',
+      html: `<p>Click here to reset your password: <a href="${url}">${url}</a></p>`,
+    };
+    const info = await this.transporter.sendMail(options);
+    this.logger.log(JSON.stringify(info));
+  }
 }

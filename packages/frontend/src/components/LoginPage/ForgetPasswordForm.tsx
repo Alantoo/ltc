@@ -16,6 +16,7 @@ type ClassKey =
   | 'formTitle'
   | 'field'
   | 'formError'
+  | 'formMessage'
   | 'button'
   | 'links';
 
@@ -39,6 +40,9 @@ const styles = (theme: Theme) => {
     formError: {
       color: myTheme.palette.error.main,
     },
+    formMessage: {
+      color: myTheme.palette.success.main,
+    },
     button: {
       width: '100%',
       marginBottom: 10,
@@ -50,20 +54,30 @@ const styles = (theme: Theme) => {
   });
 };
 
-type LoginFormProps = WithStyles<ClassKey> & {
+type ForgetPasswordFormProps = WithStyles<ClassKey> & {
   active: boolean;
   loading: boolean;
   error: string;
-  onFormSubmit: (data: { email: string; password: string }) => void;
-  onRegisterClick: () => void;
-  onForgetPasswordClick: () => void;
+  message: string;
+  onFormSubmit: (data: { email: string }) => void;
+  onLoginClick: () => void;
 };
 
-const LoginFormView = (props: LoginFormProps) => {
-  const { classes, error: initError, active, loading } = props;
+const ForgetPasswordFormView = (props: ForgetPasswordFormProps) => {
+  const {
+    classes,
+    error: initError,
+    message: initMessage,
+    active,
+    loading,
+  } = props;
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(initMessage);
   const [error, setError] = useState(initError);
+
+  useEffect(() => {
+    setMessage(initMessage);
+  }, [initMessage]);
 
   useEffect(() => {
     setError(initError);
@@ -72,43 +86,27 @@ const LoginFormView = (props: LoginFormProps) => {
   const onFormSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      props.onFormSubmit({ email, password });
+      props.onFormSubmit({ email });
     },
-    [email, password, props.onFormSubmit],
+    [email, props.onFormSubmit],
   );
 
-  const onRegisterClick = useCallback(
+  const onLoginClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      props.onRegisterClick();
+      props.onLoginClick();
     },
-    [props.onRegisterClick],
-  );
-
-  const onForgetPasswordClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      props.onForgetPasswordClick();
-    },
-    [props.onForgetPasswordClick],
+    [props.onLoginClick],
   );
 
   const onEmailChange = useCallback(
     (e) => {
       const value = e.target.value;
       setEmail(value);
+      setMessage('');
       setError('');
     },
-    [setEmail, setError],
-  );
-
-  const onPasswordChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setPassword(value);
-      setError('');
-    },
-    [setPassword, setError],
+    [setEmail, setMessage, setError],
   );
 
   return (
@@ -119,30 +117,17 @@ const LoginFormView = (props: LoginFormProps) => {
       autoComplete="off"
     >
       <Typography className={classes.formTitle} variant="subtitle1">
-        Login
+        Forget Password
       </Typography>
       <div>
         <FormControl className={classes.field}>
           <TextField
-            id="login-email"
-            name="login-email"
+            id="email"
+            name="email"
             label="E-mail"
             value={email}
             onChange={onEmailChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
-        </FormControl>
-      </div>
-      <div>
-        <FormControl className={classes.field}>
-          <TextField
-            id="login-password"
-            name="login-password"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={onPasswordChange}
+            autoComplete="on"
             InputLabelProps={{ shrink: true }}
             fullWidth
           />
@@ -153,6 +138,11 @@ const LoginFormView = (props: LoginFormProps) => {
           {error}
         </Typography>
       ) : null}
+      {message ? (
+        <Typography className={classes.formMessage} variant="body2">
+          {message}
+        </Typography>
+      ) : null}
       <div>
         <Button
           variant="contained"
@@ -160,22 +150,18 @@ const LoginFormView = (props: LoginFormProps) => {
           disabled={loading}
           className={classes.button}
         >
-          Sign in
+          Send email
         </Button>
       </div>
       <div className={classes.links}>
-        <a href="#" onClick={onForgetPasswordClick}>
-          Forget password
-        </a>
-        &nbsp;|&nbsp;
-        <a href="#" onClick={onRegisterClick}>
-          Register
+        <a href="#" onClick={onLoginClick}>
+          Go back to login
         </a>
       </div>
     </form>
   );
 };
 
-export const LoginForm = withStyles(styles)(LoginFormView);
+export const ForgetPasswordForm = withStyles(styles)(ForgetPasswordFormView);
 
-export default LoginForm;
+export default ForgetPasswordForm;

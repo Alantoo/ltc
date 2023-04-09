@@ -11,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { hashSync } from 'bcrypt';
 import { UserService, RawUserDocument } from './UserService';
 import { UserTokenDal } from '../dals/UserTokenDal';
+import { UserResetPasswordTokenDal } from '../dals/UserResetPasswordTokenDal';
 
 const getCode = (size = 25): string => {
   const characters =
@@ -103,15 +104,18 @@ export type RefreshInfo = {
 export class AuthService {
   userService: UserService;
   userTokenDal: UserTokenDal;
+  userResetPasswordTokenDal: UserResetPasswordTokenDal;
   jwtService: JwtService;
 
   constructor(
     userService: UserService,
     userTokenDal: UserTokenDal,
+    userResetPasswordTokenDal: UserResetPasswordTokenDal,
     jwtService: JwtService,
   ) {
     this.userService = userService;
     this.userTokenDal = userTokenDal;
+    this.userResetPasswordTokenDal = userResetPasswordTokenDal;
     this.jwtService = jwtService;
   }
 
@@ -267,6 +271,59 @@ export class AuthService {
       });
     }
     return user;
+  }
+
+  async generateResetPasswordToken(email: string) {
+    const existed = await this.userService.findByEmail(email);
+    if (!existed) {
+      throw new BadRequestException('Email is incorrect');
+    }
+    const userId = existed.id.toString();
+    const existedRecord = await this.userResetPasswordTokenDal.getOneByUserId(
+      userId,
+    );
+    if (existedRecord) {
+      await this.userResetPasswordTokenDal.delete(existedRecord.id);
+    }
+    const token = getCode(15);
+    await this.userResetPasswordTokenDal.create({
+      userId: existed.id.toString(),
+      token: this.encodePass(token),
+    });
+    return { token, userId };
+  }
+
+  async resetPassword({
+    userId,
+    token,
+    password,
+  }: {
+    userId?: string;
+    token?: string;
+    password?: string;
+  }): Promise<{
+    loginInfo: LoginInfo;
+    refreshInfo: RefreshInfo;
+  }> {
+    const existedRecord = await this.userResetPasswordTokenDal.getOneByUserId(
+      userId,
+    );
+    if (!existedRecord) {
+      throw new BadRequestException('Reset token is expired');
+    }
+    if (existedRecord.token !== this.encodePass(token)) {
+      throw new BadRequestException('Incorrect token');
+    }
+    await this.userResetPasswordTokenDal.delete(existedRecord.id);
+    const user = await this.userService.updateInternal(userId, {
+      password: this.encodePass(password),
+    });
+
+    const refreshInfo = await this.updateRefreshToken(userId, false);
+
+    const refreshToken = this.createToken(user);
+    const loginInfo = this.createLoginInfo(user, refreshToken);
+    return { loginInfo, refreshInfo };
   }
 
   encodePass(rawPass: string): string {

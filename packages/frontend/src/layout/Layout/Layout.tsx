@@ -21,6 +21,7 @@ import { FAQ } from 'pages/FAQ';
 import { Contact } from 'pages/Contact';
 import { Login } from 'pages/Login';
 import { Register } from 'pages/Register';
+import { ForgetPassword } from 'pages/ForgetPassword';
 import { MyTheme } from 'theme';
 import About from 'pages/About/About';
 import Privacy from 'pages/Privacy/Privacy';
@@ -64,6 +65,7 @@ const LayoutView = ({ classes }: LayoutProps) => {
           <Route path="/profile/settings/" component={Settings} />
           <Route path="/login/" component={Login} />
           <Route path="/register/" component={Register} />
+          <Route path="/forget-password/" component={ForgetPassword} />
           <Route path="/about/" component={About} />
           <Redirect to="/" />
         </Switch>
