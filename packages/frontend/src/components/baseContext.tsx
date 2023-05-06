@@ -10,9 +10,8 @@ const defaultContext = {
   setDataset: () => ({}),
 };
 
-export const BaseContext = createContext<DataProviderContextType>(
-  defaultContext,
-);
+export const BaseContext =
+  createContext<DataProviderContextType>(defaultContext);
 
 type Props = {
   children: React.ReactElement;
