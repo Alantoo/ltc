@@ -1,0 +1,28 @@
+.container {
+  border: 1px solid grey;
+  background: #f5b34f;
+  max-width: 500px;
+  & .textContainer{
+    padding: 0 50px;
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  & .buttonsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    background: white;
+    padding: 15px 0;
+    & button {
+      border-radius: 25px;
+      color: white;
+      font-size: 18px;
+      background: darkblue;
+      border: unset;
+      padding: 10px 25px;
+    }
+  }
+}

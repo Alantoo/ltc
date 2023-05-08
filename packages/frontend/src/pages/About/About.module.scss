@@ -26,21 +26,21 @@
     font-size: 24px;
     line-height: 28px;
   }
-  .cryptoCardsContainer{
-    margin-top: 60px;
-    display: flex;
-    gap: 15px;
-  }
-  .joinText{
-    max-width: 1176px;
-    margin-top: 25px;
-    font-family: 'Halant';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 27px;
-    color: #4E4E4E;
-  }
+}
+.cryptoCardsContainer{
+  margin-top: 60px;
+  display: flex;
+  gap: 15px;
+}
+.joinText{
+  max-width: 1176px;
+  margin-top: 25px;
+  font-family: 'Halant';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 27px;
+  color: #4E4E4E;
 }
 @media (max-width: 1000px) {
   .container{
