@@ -12,3 +12,12 @@
     line-height: 28px;
   }
 }
+@media (max-width: 1230px) {
+  .container{
+    width: 80vw;
+    & img{
+      width: auto;
+      height: auto;
+    }
+  }
+}

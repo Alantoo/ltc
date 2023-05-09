@@ -354,10 +354,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
         subtitleLineHeight="26px"
         containerMargin="10px auto 150px"
       />
-      <PriceBox />
+      <PriceBox text='Some Text '/>
     </div>
   );
-
+//TODO Make another text to Price box
   const { auth, user, loading } = useContext(AuthContext);
   const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
