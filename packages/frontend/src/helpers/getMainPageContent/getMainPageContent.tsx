@@ -7,6 +7,9 @@ import person from 'assets/threeColumnImage/person.png';
 import { DoubleEntryOffer } from '../../components/DoubleEntryOffer';
 import { SingleEntryOffer } from '../../components/SingleEntryOffer';
 import leftColumnImg from 'assets/threeColumnImage/rightSideSnapEdit.png';
+import { useContext, useEffect, useState } from 'react';
+import { List } from '../../dataProvider';
+import DataContext from '../../contexts/DataContext';
 
 const advantages: string[] = [
   'Free to signup',
@@ -24,6 +27,20 @@ export const getMainPageContent = (
   user: JwtPayload | undefined,
 ): JSX.Element => {
   if (user) {
+    const [list, setList] = useState<List[]>([]);
+    const { dataProvider } = useContext(DataContext);
+    useEffect(() => {
+      // refreshUserBalance();
+      dataProvider
+        .getUserStatus()
+        .then((data) => {
+          const { list } = data || {};
+          setList(list);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }, []);
     return (
       <>
         <AboutContent />
@@ -34,13 +51,17 @@ export const getMainPageContent = (
           increase your chances to earn money. Please see prices below.
         </p>
 
-        <DoubleEntryOffer />
+        <DoubleEntryOffer
+          offers={list.filter((offer) => offer.rotateTime.slice(0, 1) === '1')}
+        />
         <p className={styles.notInterestedText}>
           Not Interested in our double entry offer? No problem, simply make a
           selection below for a single entry into one of the money lists of your
           choice.
         </p>
-        <SingleEntryOffer />
+        <SingleEntryOffer
+          offers={list.filter((offer) => offer.rotateTime.slice(0, 1) === '2')}
+        />
       </>
     );
   }

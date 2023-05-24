@@ -1,14 +1,17 @@
-import styles from './OffersContainer.module.scss'
-import {PriceBox} from "../PriceBox";
+import styles from './OffersContainer.module.scss';
+import { PriceBox } from '../PriceBox';
+import { List } from '../../dataProvider';
 
 type PriceBoxContainerProps = {
-    offers: string[]
-}
+  offers: List[];
+};
 
-export const OffersContainer = ({offers}: PriceBoxContainerProps) => {
-    return (
-        <div className={styles.container}>
-            {offers.map(item => <PriceBox text={item}/>)}
-        </div>
-    )
-}
+export const OffersContainer = ({ offers }: PriceBoxContainerProps) => {
+  return (
+    <div className={styles.container}>
+      {offers.map((offer) => (
+        <PriceBox offer={offer} />
+      ))}
+    </div>
+  );
+};

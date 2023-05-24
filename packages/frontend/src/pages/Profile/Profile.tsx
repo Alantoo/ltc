@@ -33,48 +33,8 @@ import bitcoin from '../../assets/bitcoin.png';
 import ethereum from '../../assets/ethereum.png';
 import { HowToBeAdded } from '../About/HowToBeAdded';
 import aboutStyles from 'pages/About/About.module.scss';
-import { PriceBox } from '../../components/PriceBox';
-const rotateTimeToStr = (rotateTime: string): string => {
-  const num = parseInt(rotateTime.slice(0, -1), 10);
-  const mes = rotateTime.slice(-1);
-  const measure = mes === 'd' ? 'day' : 'minute';
-  return `${num}-${measure}`;
-};
-
-const countToStr = (count: number | undefined): string => {
-  switch (count) {
-    case 1: {
-      return 'one';
-    }
-    case 2: {
-      return 'two';
-    }
-    case 3: {
-      return 'three';
-    }
-    case 4: {
-      return 'four';
-    }
-    case 5: {
-      return 'five';
-    }
-    case 6: {
-      return 'six';
-    }
-    case 7: {
-      return 'seven';
-    }
-    case 8: {
-      return 'eight';
-    }
-    case 9: {
-      return 'nine';
-    }
-    default: {
-      return 'unknown';
-    }
-  }
-};
+import { rotateTimeToStr } from '../../helpers/rotateTimeToStr';
+import { countToStr } from '../../helpers/countToStr';
 
 const IS_DEV = window.localStorage['IS_DEV'] === 't';
 
@@ -354,10 +314,10 @@ const ProfileView = ({ classes }: ProfileProps) => {
         subtitleLineHeight="26px"
         containerMargin="10px auto 150px"
       />
-      <PriceBox text='Some Text '/>
+      {/*<PriceBox text="Some Text " />*/}
     </div>
   );
-//TODO Make another text to Price box
+  //TODO Make another text to Price box
   const { auth, user, loading } = useContext(AuthContext);
   const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
