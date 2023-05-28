@@ -1,0 +1,26 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows:
+      - build
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Login to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Restart application
+        run: |
+          docker compose -f /home/ubuntu/app/docker-compose.yml pull && \
+          docker compose -f /home/ubuntu/app/docker-compose.yml down && \
+          docker compose -f /home/ubuntu/app/docker-compose.yml up -d
+      - name: Remove old images
+        run: docker image prune --all --filter "until=$((24 * 30))h" # removing images older than 1 mo
