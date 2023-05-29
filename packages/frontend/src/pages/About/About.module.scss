@@ -4,43 +4,6 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  & .less5MinTitle{
-    margin: 40px 0 0 0;
-    font-family: 'ABeeZee';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 21px;
-    line-height: 25px;
-  }
-  & .threeColumnContainer{
-    margin: 50px 0 56px 0;
-    & .leftColumn{
-      padding-left: 30px;
-    }
-  }
-  & .earningWillBePaid{
-    margin:0;
-    font-family: 'ABeeZee';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 28px;
-  }
-}
-.cryptoCardsContainer{
-  margin-top: 60px;
-  display: flex;
-  gap: 15px;
-}
-.joinText{
-  max-width: 1176px;
-  margin-top: 25px;
-  font-family: 'Halant';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 27px;
-  color: #4E4E4E;
 }
 @media (max-width: 1000px) {
   .container{

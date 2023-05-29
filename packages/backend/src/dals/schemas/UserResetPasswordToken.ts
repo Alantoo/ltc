@@ -5,7 +5,8 @@ import { User } from './User';
 
 export type UserResetPasswordTokenDocument = UserResetPasswordToken & Document;
 
-export type RawUserResetPasswordTokenDocument = LeanDocument<UserResetPasswordTokenDocument>;
+export type RawUserResetPasswordTokenDocument =
+  LeanDocument<UserResetPasswordTokenDocument>;
 
 const options: SchemaOptions = {
   toJSON: {
