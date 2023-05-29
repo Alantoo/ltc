@@ -1,12 +1,13 @@
 import { Price } from './Price';
 import styles from './PriceBox.module.scss';
+import { List } from '../../dataProvider';
 type PriceBoxProps = {
-  text: string;
+  offer: List;
 };
-export const PriceBox = ({ text }: PriceBoxProps) => {
+export const PriceBox = ({ offer }: PriceBoxProps) => {
   return (
     <div className={styles.container}>
-      <Price text={text} />
+      <Price offer={offer} />
     </div>
   );
 };
