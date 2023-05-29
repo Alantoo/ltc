@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  mongo:
+    container_name: mongo-ltc
+    networks:
+      - databases
+    image: mongo:4.0
+    volumes:
+      - ./data/mongodb/db:/data/db/
+      - ./data/mongodb/dumps:/mongodb_dumps
+
+networks:
+  databases:
+    external: true
