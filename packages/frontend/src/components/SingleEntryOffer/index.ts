@@ -1,1 +1,1 @@
-export * from './SingleEntryOffer'
+export * from './SingleEntryOffer';

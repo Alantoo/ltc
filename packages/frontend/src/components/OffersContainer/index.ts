@@ -1,1 +1,1 @@
-export * from './OffersContainer'
+export * from './OffersContainer';

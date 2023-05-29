@@ -1,1 +1,1 @@
-export * from './DoubleEntryOffer'
+export * from './DoubleEntryOffer';

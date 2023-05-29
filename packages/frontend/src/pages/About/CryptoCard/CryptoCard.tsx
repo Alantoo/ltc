@@ -8,8 +8,8 @@ type CryptoCardProps = {
 export const CryptoCard = ({
   cryptoName,
   img,
-  width=595,
-  height=397,
+  width = 595,
+  height = 397,
 }: CryptoCardProps) => {
   return (
     <div className={styles.container}>

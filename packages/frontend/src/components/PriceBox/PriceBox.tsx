@@ -3,10 +3,10 @@ import styles from './PriceBox.module.scss';
 type PriceBoxProps = {
   text: string;
 };
-export const PriceBox = ({text}:PriceBoxProps) => {
+export const PriceBox = ({ text }: PriceBoxProps) => {
   return (
     <div className={styles.container}>
-        <Price text={text} />
+      <Price text={text} />
     </div>
   );
 };
