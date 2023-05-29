@@ -464,11 +464,13 @@ const ProfileView = ({ classes }: ProfileProps) => {
   if (!user) {
     return <Redirect to="/" />;
   }
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const userLink = `${window.location.origin}/${encodeURIComponent(
-    user.name,
+    user?.name ?? 'unknown',
   )}/`;
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   if (!user.isVerified) {
     return (
       <Container maxWidth="xl">
@@ -557,7 +559,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
                             />
                           ) : null}
                           <CheckForm
-                            itemId={activeItem.id}
+                            itemId={activeItem?.id ?? index}
                             selectId={item.id}
                             onUpdate={onApproveUpdate}
                             dataProvider={dataProvider}

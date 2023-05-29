@@ -295,7 +295,7 @@ export class AuthProvider {
     this.onCallbacks.forEach((cb) => {
       try {
         cb(this.payload);
-      } catch (e) {
+      } catch (e: any) {
         console.error(`Event handler error: ${e.message}`);
       }
     });
