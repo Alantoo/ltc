@@ -1,0 +1,32 @@
+node_modules/
+# node modules
+**/node_modules
+**/npm-debug.log
+**/yarn-debug.log
+**/yarn-error.log
+
+# git
+.git
+.gitattributes
+.gitignore
+
+# docker configuration
+.dockerignore
+Dockerfile
+
+# logs and documentations
+*.md
+*.log
+.out
+.pid
+Logs
+
+# compiled files
+tmp
+
+# whitesource
+wss-unified-agent.jar
+
+# IDE files
+.idea
+.vscode

@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  lts-applications:
+    networks:
+      - databases
+      - applications
+    image: ghcr.io/coursewarefactory/ltc/backend:latest
+    ports:
+      - "8282:8282"
+
+networks:
+  applications:
+  databases:
+    external: true
