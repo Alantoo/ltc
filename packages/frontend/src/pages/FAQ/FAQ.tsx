@@ -18,7 +18,7 @@ export const FAQ = () => {
           subtitle="
             Your referral list will only be active for the duration of your
             account meaning you will lose all the participants in your referral
-            list if you close your account or your account is terminated."
+            list if you close your account or your account is terminated.1111"
         />
         <MyFAQ
           title="Where can I find my free Global Money List website link?"
