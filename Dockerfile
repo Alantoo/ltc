@@ -14,7 +14,7 @@ RUN mv .env.production .env
 
 RUN npm run build
 
-FROM node:18.15 as admin-env
+FROM node:12.21 as admin-env
 
 WORKDIR /build
 
@@ -27,18 +27,18 @@ RUN mv .env.production .env
 
 RUN npm run build
 
-#FROM node:18.15 as frontend-env
-#
-#WORKDIR /build
-#
-#COPY ./packages/frontend/package*.json ./
-#
-#RUN npm ci
-#
-#COPY ./packages/frontend ./
-#RUN mv .env.production .env
-#
-#RUN npm run build
+FROM node:18.15 as frontend-env
+
+WORKDIR /build
+
+COPY ./packages/frontend/package*.json ./
+
+RUN npm ci
+
+COPY ./packages/frontend ./
+RUN mv .env.production .env
+
+RUN npm run build
 FROM node:12.21 as backend-node_modules-env
 
 WORKDIR /build
@@ -52,8 +52,8 @@ FROM node:12.21-alpine
 COPY --from=backend-env /build/dist /app
 WORKDIR /app
 COPY --from=backend-node_modules-env /build/node_modules /app/node_modules
-#COPY --from=admin-env /build/dist /app/admin
-#COPY --from=frontend-env /build/dist /app/client
+COPY --from=admin-env /build/build /app/admin
+COPY --from=frontend-env /build/build /app/client
 
 ENV PORT 8282
 
