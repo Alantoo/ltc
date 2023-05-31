@@ -39,11 +39,19 @@ RUN npm run build
 #RUN mv .env.production .env
 #
 #RUN npm run build
+FROM node:12.21 as backend-node_modules-env
+
+WORKDIR /build
+
+COPY ./packages/backend/package*.json ./
+
+RUN npm ci --only=production
 
 FROM node:12.21-alpine
 
+COPY --from=backend-env /build/dist /app
 WORKDIR /app
-COPY --from=backend-env /build/dist/main.js /app/main.js
+COPY --from=backend-node_modules-env /build/node_modules /app/node_modules
 #COPY --from=admin-env /build/dist /app/admin
 #COPY --from=frontend-env /build/dist /app/client
 
