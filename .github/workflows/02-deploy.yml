@@ -17,10 +17,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Restart application
+      - name: Pull new image
         run: |
-          docker compose -f /home/ubuntu/app/docker-compose.yml pull && \
-          docker compose -f /home/ubuntu/app/docker-compose.yml down && \
+          docker compose -f /home/ubuntu/app/docker-compose.yml pull
+      - name: Stop running application
+        run: |
+          docker compose -f /home/ubuntu/app/docker-compose.yml down
+      - name: Start updated application
+        run: |
           docker compose -f /home/ubuntu/app/docker-compose.yml up -d
       - name: Remove old images
         run: docker image prune --all --filter "until=$((24 * 30))h" # removing images older than 1 mo
