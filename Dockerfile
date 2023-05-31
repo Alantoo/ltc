@@ -52,8 +52,8 @@ FROM node:12.21-alpine
 COPY --from=backend-env /build/dist /app
 WORKDIR /app
 COPY --from=backend-node_modules-env /build/node_modules /app/node_modules
-COPY --from=admin-env /build/build /app/admin
-COPY --from=frontend-env /build/build /app/client
+COPY --from=admin-env /build/build /admin
+COPY --from=frontend-env /build/build /client
 
 ENV PORT 8282
 

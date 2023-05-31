@@ -2,6 +2,7 @@ version: "3.7"
 services:
   mongo:
     container_name: mongo-ltc
+    restart: "unless-stopped"
     networks:
       - databases
     image: mongo:4.0

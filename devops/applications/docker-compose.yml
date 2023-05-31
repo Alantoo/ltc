@@ -5,6 +5,7 @@ services:
     networks:
       - databases
     image: ghcr.io/coursewarefactory/ltc/backend:latest
+    restart: "unless-stopped"
     environment:
       PORT: 8282
       PORT_HTTPS: 8443
