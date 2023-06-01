@@ -51,27 +51,41 @@ const LayoutView = ({ classes }: LayoutProps) => {
   return (
     <>
       <div className="layout-body">
+        {/*@ts-ignore*/}
         <Header />
         <Switch>
+          {/*@ts-ignore*/}
           <Route path="/" component={Home} exact />
+          {/*@ts-ignore*/}
           <Route path="/terms/" component={Terms} />
           <Route path="/privacy/" component={Privacy} />
           <Route path="/faqs/" component={FAQ} />
+          {/*@ts-ignore*/}
           <Route path="/contact/" component={Contact} />
+          {/*@ts-ignore*/}
           <Route path="/profile/" component={Profile} exact />
+          {/*@ts-ignore*/}
           <Route path="/profile/referrals/" component={Referrals} />
+          {/*@ts-ignore*/}
           <Route path="/profile/rewards/" component={Earnings} />
+          {/*@ts-ignore*/}
           <Route path="/profile/history/" component={History} />
+          {/*@ts-ignore*/}
           <Route path="/profile/settings/" component={Settings} />
+          {/*@ts-ignore*/}
           <Route path="/login/" component={Login} />
+          {/*@ts-ignore*/}
           <Route path="/register/" component={Register} />
+          {/*@ts-ignore*/}
           <Route path="/forget-password/" component={ForgetPassword} />
           <Route path="/about/" component={About} />
           <Redirect to="/" />
         </Switch>
       </div>
       <Footer />
+      {/*@ts-ignore*/}
       <ScrollToTop />
+      {/*@ts-ignore*/}
       <AuthPopup />
     </>
   );

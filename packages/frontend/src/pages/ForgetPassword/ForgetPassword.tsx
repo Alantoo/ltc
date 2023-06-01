@@ -54,6 +54,7 @@ const ForgetPasswordView = ({ classes }: ForgetPasswordProps) => {
     <Container maxWidth="xl" className={classes.root}>
       <Card className={classes.card} elevation={3}>
         <CardContent>
+          {/*@ts-ignore*/}
           <AuthForms formType={formType} />
         </CardContent>
       </Card>

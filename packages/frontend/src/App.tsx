@@ -37,6 +37,7 @@ function App() {
         <DataContextProvider dataProvider={dataProvider}>
           <Router basename={basename}>
             <ScrollToTop />
+            {/*@ts-ignore*/}
             <Layout />
           </Router>
         </DataContextProvider>

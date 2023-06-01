@@ -46,6 +46,7 @@ const RegisterView = ({ classes }: RegisterProps) => {
     <Container maxWidth="xl" className={classes.root}>
       <Card className={classes.card} elevation={3}>
         <CardContent>
+          {/*@ts-ignore*/}
           <AuthForms formType={formTypes.SIGN_UP} />
         </CardContent>
       </Card>

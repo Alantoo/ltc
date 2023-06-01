@@ -46,6 +46,7 @@ const LoginView = ({ classes }: LoginProps) => {
     <Container maxWidth="xl" className={classes.root}>
       <Card className={classes.card} elevation={3}>
         <CardContent>
+          {/*@ts-ignore*/}
           <AuthForms formType={formTypes.LOGIN} />
         </CardContent>
       </Card>

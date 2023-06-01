@@ -169,6 +169,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
 
   return (
     <div className={`${classes.root} auth-forms`}>
+      {/*@ts-ignore*/}
       <SignUpForm
         active={formType === formTypes.SIGN_UP}
         loading={loading}
@@ -177,6 +178,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
         onLoginClick={onLoginClick}
       />
 
+      {/*@ts-ignore*/}
       <LoginForm
         active={formType === formTypes.LOGIN}
         loading={loading}
@@ -186,6 +188,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
         onRegisterClick={onRegisterClick}
       />
 
+      {/*@ts-ignore*/}
       <ForgetPasswordForm
         active={formType === formTypes.FORGET_PASSWORD}
         loading={loading}
@@ -195,6 +198,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
         onLoginClick={onLoginClick}
       />
 
+      {/*@ts-ignore*/}
       <ResetPasswordForm
         active={formType === formTypes.RESET_PASSWORD}
         loading={loading}

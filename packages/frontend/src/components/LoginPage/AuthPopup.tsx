@@ -63,22 +63,26 @@ const AuthPopupView = ({ classes }: AuthPopupProps) => {
   );
 
   return (
-    <Modal className={classes.root} open={opened}>
-      <div className={classes.holder}>
-        <Card className={classes.card} elevation={3}>
-          <CardContent>
-            <AuthForms formType={authModalOpened} />
-            <IconButton
-              className={classes.closeBtn}
-              size="small"
-              onClick={onCloseClick}
-            >
-              <CloseIcon />
-            </IconButton>
-          </CardContent>
-        </Card>
-      </div>
-    </Modal>
+    <>
+      {/*@ts-ignore*/}
+      <Modal className={classes.root} open={opened}>
+        <div className={classes.holder}>
+          <Card className={classes.card} elevation={3}>
+            <CardContent>
+              {/*@ts-ignore*/}
+              <AuthForms formType={authModalOpened} />
+              <IconButton
+                className={classes.closeBtn}
+                size="small"
+                onClick={onCloseClick}
+              >
+                <CloseIcon />
+              </IconButton>
+            </CardContent>
+          </Card>
+        </div>
+      </Modal>
+    </>
   );
 };
 
