@@ -172,6 +172,7 @@ export class RotatorItemDal extends BaseDal<RotatorItemDocument> {
   async getOneByCode(paymentCode: string): Promise<RawRotatorItemDocument> {
     const query: FilterQuery<Document> = { code: paymentCode };
     await this._beforeFilter(query);
+    //@ts-ignore
     const doc = await this.Model.findOne(query);
     if (doc) {
       return doc.toJSON();

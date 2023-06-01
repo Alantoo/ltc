@@ -26,6 +26,7 @@ export class UserTokenDal {
 
   async getOne(id: string): Promise<RawUserTokenDocument | undefined> {
     const query: FilterQuery<Document> = { _id: id };
+    //@ts-ignore
     const doc = await this.Model.findOne(query);
     if (doc) {
       return doc.toJSON();
@@ -36,6 +37,7 @@ export class UserTokenDal {
     userId: string,
   ): Promise<RawUserTokenDocument | undefined> {
     const query: FilterQuery<Document> = { userId };
+    //@ts-ignore
     const doc = await this.Model.findOne(query);
     if (doc) {
       return doc.toJSON();
@@ -54,6 +56,7 @@ export class UserTokenDal {
 
   async delete(id: string): Promise<RawUserTokenDocument> {
     const query: FilterQuery<Document> = { _id: id };
+    //@ts-ignore
     const doc = await this.Model.findOne(query);
     let obj;
     if (doc) {
