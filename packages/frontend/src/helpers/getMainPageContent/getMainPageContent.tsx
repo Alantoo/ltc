@@ -52,7 +52,7 @@ export const getMainPageContent = (
         </p>
 
         <DoubleEntryOffer
-          offers={list.filter((offer) => offer.rotateTime.slice(0, 1) === '1')}
+          offers={list.filter((offer) => offer.selectCount === 2)}
         />
         <p className={styles.notInterestedText}>
           Not Interested in our double entry offer? No problem, simply make a
@@ -60,7 +60,7 @@ export const getMainPageContent = (
           choice.
         </p>
         <SingleEntryOffer
-          offers={list.filter((offer) => offer.rotateTime.slice(0, 1) === '2')}
+          offers={list.filter((offer) => offer.selectCount === 1)}
         />
       </>
     );

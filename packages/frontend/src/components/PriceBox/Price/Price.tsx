@@ -38,7 +38,7 @@ export const Price = ({ offer }: { offer: List }) => {
     <div className={styles.container}>
       <div className={styles.textContainer}>
         <p>
-          {rotateTimeToStr(rotateTime)} entry into {name} <br />
+          {rotateTimeToStr(rotateTime)} entry into ${name} <br />
           Money List for ${entryPrice.toFixed(2)} plus pay <br />{' '}
           {countToStr(selectCount)} members ${price.toFixed(2)} each in <br />{' '}
           Cryptocurrency
