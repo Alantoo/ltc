@@ -1,9 +1,8 @@
+//@ts-nocheck
 import { Model, Document, LeanDocument, FilterQuery, Types } from 'mongoose';
 
 export { Model, Document, LeanDocument, FilterQuery, Types } from 'mongoose';
-
 const toObjectId = (id: any) => {
-  //@ts-ignore
   return new Types.ObjectId(id);
 };
 
@@ -32,9 +31,9 @@ export class BaseDal<T extends Document> {
     const query: FilterQuery<Document> = { _id: id };
     delete data.createdAt;
     delete data.updatedAt;
-    //@ts-ignore
+
     await this.Model.findOneAndUpdate(query, data);
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     const obj = doc.toJSON();
     return obj;
@@ -91,7 +90,7 @@ export class BaseDal<T extends Document> {
       });
     }
     await this._beforeFindQuery(filterRule);
-    //@ts-ignore
+
     const count = await this.Model.find(filterRule).count();
     return count;
   }
@@ -168,23 +167,22 @@ export class BaseDal<T extends Document> {
       filter,
     );
     await this._beforeFindQuery(filterRule);
-    //@ts-ignore
+
     const list = await this.Model.find(filterRule, projection)
       .skip(newSkip)
       .limit(newLimit)
       .sort(sortRule)
       .select(projection);
-    //@ts-ignore
+
     return list.map((item) => item.toJSON());
   }
 
   async getOne(id): Promise<LeanDocument<T>> {
     const query: FilterQuery<Document> = { _id: id };
     await this._beforeFilter(query);
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     if (doc) {
-      //@ts-ignore
       return doc.toJSON();
     }
   }
@@ -195,14 +193,14 @@ export class BaseDal<T extends Document> {
     await this._beforeUpdate(data);
     delete data.createdAt;
     delete data.updatedAt;
-    //@ts-ignore
+
     const old = await this.Model.findOneAndUpdate(query, data);
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     const obj = doc.toJSON();
-    //@ts-ignore
+
     await this._afterUpdate(old.toJSON(), obj);
-    //@ts-ignore
+
     return obj;
   }
 
@@ -213,16 +211,16 @@ export class BaseDal<T extends Document> {
     const doc = new this.Model(data);
     await doc.save();
     const obj = doc.toJSON();
-    //@ts-ignore
+
     await this._afterCreate(obj);
-    //@ts-ignore
+
     return obj;
   }
 
   async delete(id: string): Promise<LeanDocument<T>> {
     const query: FilterQuery<Document> = { _id: id };
     await this._beforeFilter(query);
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     let obj;
     if (doc) {

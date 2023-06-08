@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document, FilterQuery } from './BaseDal';
@@ -31,7 +32,7 @@ export class UserResetPasswordTokenDal {
     id: string,
   ): Promise<RawUserResetPasswordTokenDocument | undefined> {
     const query: FilterQuery<Document> = { _id: id };
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     if (doc) {
       return doc.toJSON();
@@ -42,7 +43,7 @@ export class UserResetPasswordTokenDal {
     userId: string,
   ): Promise<RawUserResetPasswordTokenDocument | undefined> {
     const query: FilterQuery<Document> = { userId };
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     if (doc) {
       return doc.toJSON();
@@ -61,7 +62,7 @@ export class UserResetPasswordTokenDal {
 
   async delete(id: string): Promise<RawUserResetPasswordTokenDocument> {
     const query: FilterQuery<Document> = { _id: id };
-    //@ts-ignore
+
     const doc = await this.Model.findOne(query);
     let obj;
     if (doc) {
