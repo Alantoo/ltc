@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import profileStyles from './Profile.module.scss';
 import { Redirect } from 'react-router-dom';
 import {
   withStyles,
@@ -25,16 +26,12 @@ import {
   rotateStatus,
 } from 'dataProvider';
 import { MyTheme } from 'theme';
-import { Paragraph } from '../../components/Paragraph';
-import { ThreeColumnsPicture } from '../../components/ThreeColumnsPiture';
-import phone from '../../assets/threeColumnImage/phone.png';
-import { CryptoCard } from '../About/CryptoCard';
-import bitcoin from '../../assets/bitcoin.png';
-import ethereum from '../../assets/ethereum.png';
-import { HowToBeAdded } from '../About/HowToBeAdded';
-import aboutStyles from 'pages/About/About.module.scss';
 import { rotateTimeToStr } from '../../helpers/rotateTimeToStr';
 import { countToStr } from '../../helpers/countToStr';
+import { AboutContent } from '../About/AboutContent';
+import { DoubleEntryOffer } from '../../components/DoubleEntryOffer';
+import { SingleEntryOffer } from '../../components/SingleEntryOffer';
+import { MainImgWithContent } from '../../components/MainImgWithContent';
 
 const IS_DEV = window.localStorage['IS_DEV'] === 't';
 
@@ -255,69 +252,6 @@ const CheckForm = ({
 type ProfileProps = WithStyles<ClassKey>;
 
 const ProfileView = ({ classes }: ProfileProps) => {
-  return (
-    <div className={classes.root}>
-      <Paragraph
-        title="The Money Lists"
-        subtitle="The money lists work by using an algorithm to randomly rotate each member username through the money lists of our Global Money List website. All positions in the money lists randomly rotate every ten seconds. There are six separate Money Lists your username can rotate through. There’s a $1.00 Money List, $5.00 Money List, $10.00 Money List, $20.00 Money List, $50.00 Money List, and a $100.00 Money List you can be added to.
-        Here’s the cost to be added to our various Money Lists. All payments must be made in Bitcoin or Ethereum cryptocurrency!"
-        subtitleTopMargin={5}
-        subtitleLineHeight={'27px'}
-        containerMargin={'30px auto 0 '}
-      />
-      <ThreeColumnsPicture
-        leftColumn={{
-          list: [
-            '$100.00 Money List is $2.95 per 60-day entry. You must also pay two random members $100.00 each in cryptocurrency before you can be added to this Money List.',
-            '$50.00 Money List is $2.95 per 60-day entry. You must also pay two random members $50.00 each in cryptocurrency before you can be added to this Money List.',
-            '$20.00 Money List is $2.95 per 60-day entry. You must also pay two random members $20.00 each in cryptocurrency before you can be added to this Money List.',
-          ],
-          isList: true,
-          lineContent: '',
-          extraClass: aboutStyles.leftColumn,
-        }}
-        rightColumn={{
-          list: [
-            '$10.00 Money List is $2.95 per 60-day entry. You must also pay two random members $10.00 each in cryptocurrency before you can be added to this Money List.',
-            '$5.00 Money List is $2.95 per 60-day entry. You must also pay two random members $5.00 each in cryptocurrency before you can be added to this Money List.',
-            '$1.00 Money List is $2.95 per 60-day entry. You must also pay two random members $1.00 each in cryptocurrency before you can be added to this Money List.',
-          ],
-          isList: true,
-          lineContent: '',
-        }}
-        img={phone}
-        imgAlt={'phone with money'}
-        imgWidth={360}
-        imgHeight={520}
-        extraClass={aboutStyles.threeColumnContainer}
-      />
-      <p className={aboutStyles.earningWillBePaid}>
-        All earnings will be paid to you with one of the cryptocurrencies listed
-        below.
-      </p>
-      <div className={aboutStyles.cryptoCardsContainer}>
-        <CryptoCard cryptoName="Bitcoin" img={bitcoin} />
-        <CryptoCard cryptoName="Ethereum" img={ethereum} />
-      </div>
-      <p className={aboutStyles.joinText}>
-        You can join any of the money lists after you have signed up. You can
-        pay to be added to the money lists as many times as you like! Global
-        Money List currently signup hundreds of new members daily increasing
-        your chance to win! Make sure to add yourself to the Money Lists as soon
-        as possible!
-      </p>
-      <HowToBeAdded />
-      <Paragraph
-        title="Referral List"
-        subtitle="Building your referral list is the most important way to create residual income using this system. Here’s how it works! When someone click on your affiliate link and sign up, they’re automatically added to your referral list. When any member listed in your referral list pay to be added to any of our money lists, your username will be locked in the #1 position of their money list. Once clicked on You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00, or $100.00 in cryptocurrency depending on which money list your referral decides to be added to. Your referral will now click on the required number of members usernames randomly rotating through the money list to have themselves added to that money list. There is no limit to how large your referral list can grow to be, so the larger the list the more income for you. Go to your homepage and copy your affiliate link to share with all of your family, friends, and network associates. This will rapidly grow your referral list causing you to earn unlimited amounts of income even long after you stopped promoting this system."
-        subtitleTopMargin={5}
-        subtitleLineHeight="26px"
-        containerMargin="10px auto 150px"
-      />
-      {/*<PriceBox text="Some Text " />*/}
-    </div>
-  );
-  //TODO Make another text to Price box
   const { auth, user, loading } = useContext(AuthContext);
   const { dataProvider } = useContext(DataContext);
   const [isSent, setIsSent] = useState(false);
@@ -625,166 +559,32 @@ const ProfileView = ({ classes }: ProfileProps) => {
   }
 
   return (
-    <Container maxWidth="xl">
-      <Typography className={classes.text}>
-        Share your affiliate link below to build your referral list
-        <br />
-        <a href={userLink} target="_blank">
-          {userLink}
-        </a>
-      </Typography>
-      {/*<div className={classes.balanceRow}>*/}
-      {/*  <Typography variant="h6">Balance: ${userBalance || 0}</Typography>*/}
-      {/*  <PayOutButton />*/}
-      {/*</div>*/}
-
-      {activeItemEl}
-      {activeItemSuccessEl}
-
-      <Typography component="div" className={classes.text}>
-        <h3 className="h3">The Money Lists</h3>
-        <p>
-          The money lists work by using an algorithm to randomly rotate each
-          member username through the money lists of other members free Global
-          Money List websites. All positions in the money lists randomly rotate
-          every ten seconds. There are six separate Money Lists your username
-          can rotate through. There’s a $1.00 Money List, $5.00 Money List,
-          $10.00 Money List, $20.00 Money List, $50.00 Money List, and a $100.00
-          Money List you can be added to.
-        </p>
-        <p>
-          Here’s the cost to be added to our various Money Lists. All payments
-          must be made in one of the many cryptocurrencies we accept!
-        </p>
-        <p>
-          <b>$100.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
-          also pay two random members <b>$100.00</b> each in cryptocurrency
-          before you can be added to this Money List.
-          <br />
-          <b>$50.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
-          also pay three random members <b>$50.00</b> each in cryptocurrency
-          before you can be added to this Money List.
-          <br />
-          <b>$20.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
-          also pay four random members <b>$20.00</b> each in cryptocurrency
-          before you can be added to this Money List.
-          <br />
-          <b>$10.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
-          also pay five random members <b>$10.00</b> each in cryptocurrency
-          before you can be added to this Money List.
-          <br />
-          <b>$5.00</b> Money List is <b>$2.95</b> per 60-day entry. You must
-          also pay six random members <b>$5.00</b> each in cryptocurrency before
-          you can be added to this Money List.
-          <br />
-          $1.00 Money List is <b>$2.95</b> per 60-day entry. You must also pay
-          seven random members <b>$1.00</b> each in cryptocurrency before you
-          can be added to this Money List.
-        </p>
-        <p>
-          All earnings will be paid to you with one of the cryptocurrencies
-          listed below.
-          <br />
-          Ethereum
-          <br />
-          Polygon
-          <br />
-          Bitcoin
-          <br />
-          Dogecoin
-          <br />
-          Litecoin
-          <br />
-          Stellar Lumens
-          <br />
-          Ripple network
-          <br />
-          all ERC-20 tokens
-        </p>
-        <p>
-          You can join any of the money lists after you have signed up. You can
-          pay to be added to the money lists as many times as you like! Global
-          Money List currently signup hundreds of new members daily increasing
-          your chance to win! Make sure to add yourself to the Money Lists as
-          soon as possible!
-        </p>
-        <h3 className="h3">How to be added to the money lists</h3>
-        <ul>
-          <li>
-            You must download Coinbase free cryptocurrency wallet to
-            automatically collect your earnings.
-          </li>
-          <a
-            href="https://wallet.coinbase.com/?utm_source=google_search_b&utm_medium=cpc&utm_campaign=15497172649&utm_content=133267465160&utm_term=coinbase&utm_creative=567664243589&cb_device=c&cb_placement=&cb_country=us&cb_city=open&cb_language=en_us&gclid=CjwKCAiA-9uNBhBTEiwAN3IlNFxO-wyKywn67Y8mqMhJof9hg1rN5bH5jaMaEr3-4i_NFZDQTuk_UhoCcocQAvD_BwE"
-            target="_blank"
-            className="link"
-          >
-            Click here to download.
-          </a>
-          <li>
-            To purchase cryptocurrency from Coinbase you must first create an
-            account.
-          </li>
-          <li>Select one of our six Global Money Lists to enter.</li>
-          <li>
-            You must use your Coinbase cryptocurrency wallet to Make the $2.95
-            process fee to Global Money List.
-          </li>
-
-          <li>
-            When your payment is accepted, you’re taken to a page where the
-            money list you paid to be added to is now present.
-          </li>
-          <li>
-            You must now click on the required number of members randomly
-            rotating through the money list revolver starting at #1.
-          </li>
-          <li>
-            Each of the members who username you’ve clicked on in the money list
-            will be paid directly by you from your Coinbase wallet into their
-            Coinbase wallet.
-          </li>
-          <li>
-            Once payment is made to selected member, you must copy and paste the
-            correct transaction i.d. from payment receipt into required slot and
-            then click on verify button. You must verify each payment made to
-            the selected members to be added to the money list.
-          </li>
-          <li>
-            If you signed up on one of our members affiliate links that member
-            will automatically be locked in the #1 position of the money list
-            and receive the first payment.
-          </li>
-        </ul>
-        <h3 className="h3">Referral List</h3>
-        <p>
-          Building your referral list is the most important way to create
-          residual income using this online lottery system. Here’s how it works!
-          When someone click on your affiliate link and sign up, they’re
-          automatically added to your referral list. When any member listed in
-          your referral list pay to be added to any of our money lists, your
-          username will be locked in the #1 position of their money list. Once
-          clicked on You’ll be paid either $1.00, $5.00, $10.00, $20.00, $50.00,
-          or $100.00 in cryptocurrency depending on which money list your
-          referral decides to be added to. Your referral will now click on the
-          required number of members usernames randomly rotating through the
-          money list to have themselves added to that money list. There is no
-          limit to how large your referral list can grow to be, so the larger
-          the list the more income for you. There’s a one-time process fee of{' '}
-          <b>$1.95</b> that will allow you to be paid by members in your
-          referral list, but this fee will be waived if you pay to be added to
-          one of our six money lists first. Go to your homepage and copy your
-          affiliate link to share with all of your family, friends, and network
-          associates. This will rapidly grow your referral list causing you to
-          earn unlimited amounts of income even long after you stopped promoting
-          this system.
-        </p>
-      </Typography>
-
-      {listsListEl}
-
-      {/*<PayOutHistory />*/}
-    </Container>
+    <div className={classes.root}>
+      <MainImgWithContent
+        title="global money list"
+        subtitle="The greatest Residual Income System Ever! Earn hundreds of dollars in bitcoin daily"
+        align="center"
+      />
+      <AboutContent />
+      <p className={profileStyles.secondEntryTitle}>
+        Add a second entry of yourself into the money list you choose for less
+        than 25% more of the total cost. Instead of one entry You’ll have two
+        separate entries in the money list you choose which will greatly
+        increase your chances to earn money. Please see prices below.
+      </p>
+      <DoubleEntryOffer
+        offers={list.filter((offer) => offer.selectCount === 2)}
+      />
+      <p className={profileStyles.notInterestedText}>
+        Not Interested in our double entry offer? No problem, simply make a
+        selection below for a single entry into one of the money lists of your
+        choice.
+      </p>
+      <SingleEntryOffer
+        offers={list.filter((offer) => offer.selectCount === 1)}
+      />
+      );
+    </div>
   );
 };
 
