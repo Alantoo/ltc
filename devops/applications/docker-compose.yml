@@ -7,6 +7,7 @@ services:
     image: ghcr.io/coursewarefactory/ltc/backend:latest
     restart: "unless-stopped"
     environment:
+      NODE_ENV: production
       PORT: 8282
       PORT_HTTPS: 8443
       HOST: "https://ltc.evg-soft.com"
