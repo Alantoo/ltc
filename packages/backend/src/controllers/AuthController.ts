@@ -23,10 +23,10 @@ import {
 import { EmailService } from '../services/EmailService';
 
 function getHost(req: Request, forUI = false) {
-  if (process.env.NODE_ENV === 'production') {
-    return req.headers.origin || process.env.HOST;
+  if (process.env.NODE_ENV === 'development') {
+    return forUI ? 'http://localhost:3002' : 'http://localhost:8282';
   }
-  return forUI ? 'http://localhost:3002' : 'http://localhost:8282';
+  return req.headers.origin || process.env.HOST;
 }
 
 type LoginResult = {
