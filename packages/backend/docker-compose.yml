@@ -2,20 +2,6 @@ version: "3.7"
 services:
   mongo:
     container_name: mongo-ltc
-    networks:
-      - app-network
     image: mongo:4.0
     ports:
       - "27017:27017"
-  server:
-    container_name: server-ltc
-    networks:
-      - app-network
-    image: failwin/ltc
-    ports:
-      - "8282:8282"
-    depends_on:
-      - mongo
-networks:
-  app-network:
-    driver: bridge

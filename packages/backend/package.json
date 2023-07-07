@@ -8,6 +8,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build && gulp postbuild",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "dev:setup": "docker-compose up -d && npm run migrate:up",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug",
