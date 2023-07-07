@@ -140,8 +140,8 @@ export class AuthController {
     response.redirect(url);
   }
 
-  @Post('forgetPassword')
-  async forgetPassword(
+  @Post('forgotPassword')
+  async forgotPassword(
     @Body()
     body: {
       email: string;
@@ -154,7 +154,7 @@ export class AuthController {
     const { token, userId } = await this.authService.generateResetPasswordToken(
       email,
     );
-    const url = `${host}/forget-password?userId=${userId}&token=${token}`;
+    const url = `${host}/forgot-password?userId=${userId}&token=${token}`;
     await this.emailService.sendResetPassword(url, email);
   }
 
