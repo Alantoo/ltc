@@ -40,15 +40,15 @@ const styles = (theme: Theme) => {
   });
 };
 
-type ForgetPasswordProps = WithStyles<ClassKey>;
+type ForgotPasswordProps = WithStyles<ClassKey>;
 
-const ForgetPasswordView = ({ classes }: ForgetPasswordProps) => {
+const ForgotPasswordView = ({ classes }: ForgotPasswordProps) => {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const userId = searchParams.get('userId');
   const token = searchParams.get('token');
   const formType =
-    userId && token ? formTypes.RESET_PASSWORD : formTypes.FORGET_PASSWORD;
+    userId && token ? formTypes.RESET_PASSWORD : formTypes.FORGOT_PASSWORD;
 
   return (
     <Container maxWidth="xl" className={classes.root}>
@@ -62,6 +62,6 @@ const ForgetPasswordView = ({ classes }: ForgetPasswordProps) => {
   );
 };
 
-export const ForgetPassword = withStyles(styles)(ForgetPasswordView);
+export const ForgotPassword = withStyles(styles)(ForgotPasswordView);
 
-export default ForgetPassword;
+export default ForgotPassword;

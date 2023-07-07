@@ -142,8 +142,8 @@ export class AuthProvider {
     window.location = `/${username}/profile`;
   }
 
-  async forgetPassword({ email }: { email: string }): Promise<any> {
-    const registerUrl = `${API_URL}/auth/forgetPassword`;
+  async forgotPassword({ email }: { email: string }): Promise<any> {
+    const registerUrl = `${API_URL}/auth/forgotPassword`;
     await fetchJson(registerUrl, {
       method: 'POST',
       data: { email },

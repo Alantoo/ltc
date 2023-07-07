@@ -56,7 +56,7 @@ type LoginFormProps = WithStyles<ClassKey> & {
   error: string;
   onFormSubmit: (data: { email: string; password: string }) => void;
   onRegisterClick: () => void;
-  onForgetPasswordClick: () => void;
+  onForgotPasswordClick: () => void;
 };
 
 const LoginFormView = (props: LoginFormProps) => {
@@ -85,12 +85,12 @@ const LoginFormView = (props: LoginFormProps) => {
     [props.onRegisterClick],
   );
 
-  const onForgetPasswordClick = useCallback(
+  const onForgotPasswordClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      props.onForgetPasswordClick();
+      props.onForgotPasswordClick();
     },
-    [props.onForgetPasswordClick],
+    [props.onForgotPasswordClick],
   );
 
   const onEmailChange = useCallback(
@@ -164,8 +164,8 @@ const LoginFormView = (props: LoginFormProps) => {
         </Button>
       </div>
       <div className={classes.links}>
-        <a href="#" onClick={onForgetPasswordClick}>
-          Forget password
+        <a href="#" onClick={onForgotPasswordClick}>
+          Forgot password
         </a>
         &nbsp;|&nbsp;
         <a href="#" onClick={onRegisterClick}>

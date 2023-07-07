@@ -54,7 +54,7 @@ const styles = (theme: Theme) => {
   });
 };
 
-type ForgetPasswordFormProps = WithStyles<ClassKey> & {
+type ForgotPasswordFormProps = WithStyles<ClassKey> & {
   active: boolean;
   loading: boolean;
   error: string;
@@ -63,7 +63,7 @@ type ForgetPasswordFormProps = WithStyles<ClassKey> & {
   onLoginClick: () => void;
 };
 
-const ForgetPasswordFormView = (props: ForgetPasswordFormProps) => {
+const ForgotPasswordFormView = (props: ForgotPasswordFormProps) => {
   const {
     classes,
     error: initError,
@@ -117,7 +117,7 @@ const ForgetPasswordFormView = (props: ForgetPasswordFormProps) => {
       autoComplete="off"
     >
       <Typography className={classes.formTitle} variant="subtitle1">
-        Forget Password
+        Forgot Password
       </Typography>
       <div>
         <FormControl className={classes.field}>
@@ -162,6 +162,6 @@ const ForgetPasswordFormView = (props: ForgetPasswordFormProps) => {
   );
 };
 
-export const ForgetPasswordForm = withStyles(styles)(ForgetPasswordFormView);
+export const ForgotPasswordForm = withStyles(styles)(ForgotPasswordFormView);
 
-export default ForgetPasswordForm;
+export default ForgotPasswordForm;

@@ -10,14 +10,14 @@ import {
 import { MyTheme } from 'theme';
 import { SignUpForm } from './SignUpForm';
 import { LoginForm } from './LoginForm';
-import { ForgetPasswordForm } from './ForgetPasswordForm';
+import { ForgotPasswordForm } from './ForgotPasswordForm';
 import { ResetPasswordForm } from './ResetPasswordForm';
 import { AuthContext } from 'contexts/AuthContext';
 
 export const formTypes = {
   SIGN_UP: 'signUp',
   LOGIN: 'login',
-  FORGET_PASSWORD: 'forgetPassword',
+  FORGOT_PASSWORD: 'forgotPassword',
   RESET_PASSWORD: 'resetPassword',
 };
 
@@ -50,8 +50,8 @@ const AuthFormsView = (props: AuthFormsProps) => {
   const [signUpFormError, setSignUpFormError] = useState('');
   const [loginFormError, setLoginFormError] = useState('');
   const [resetPasswordError, setResetPasswordError] = useState('');
-  const [forgetPasswordError, setForgetPasswordError] = useState('');
-  const [forgetPasswordMessage, setForgetPasswordMessage] = useState('');
+  const [forgotPasswordError, setForgotPasswordError] = useState('');
+  const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
 
   useEffect(() => {
     setFormType(props.formType || formTypes.LOGIN);
@@ -67,8 +67,8 @@ const AuthFormsView = (props: AuthFormsProps) => {
     // setFormType(formTypes.LOGIN);
   }, [setFormType]);
 
-  const onForgetPasswordClick = useCallback(() => {
-    history.push('/forget-password');
+  const onForgotPasswordClick = useCallback(() => {
+    history.push('/forgot-password');
     // setFormType(formTypes.LOGIN);
   }, [setFormType]);
 
@@ -122,25 +122,25 @@ const AuthFormsView = (props: AuthFormsProps) => {
     [history, setSignUpFormError, setLoading],
   );
 
-  const onForgetPasswordFormSubmit = useCallback(
+  const onForgotPasswordFormSubmit = useCallback(
     ({ email }) => {
       setLoading(true);
-      setForgetPasswordMessage('');
-      setForgetPasswordError('');
+      setForgotPasswordMessage('');
+      setForgotPasswordError('');
 
       auth
-        .forgetPassword({ email })
+        .forgotPassword({ email })
         .then(() => {
-          setForgetPasswordMessage('Password reset request sent to your email');
+          setForgotPasswordMessage('Password reset request sent to your email');
         })
         .catch((err) => {
-          setForgetPasswordError(err.message);
+          setForgotPasswordError(err.message);
         })
         .finally(() => {
           setLoading(false);
         });
     },
-    [setForgetPasswordMessage, setForgetPasswordError, setLoading],
+    [setForgotPasswordMessage, setForgotPasswordError, setLoading],
   );
 
   const onResetPasswordFormSubmit = useCallback(
@@ -164,7 +164,7 @@ const AuthFormsView = (props: AuthFormsProps) => {
           setLoading(false);
         });
     },
-    [setForgetPasswordMessage, setForgetPasswordError, setLoading],
+    [setForgotPasswordMessage, setForgotPasswordError, setLoading],
   );
 
   return (
@@ -184,17 +184,17 @@ const AuthFormsView = (props: AuthFormsProps) => {
         loading={loading}
         error={loginFormError}
         onFormSubmit={onLoginFormSubmit}
-        onForgetPasswordClick={onForgetPasswordClick}
+        onForgotPasswordClick={onForgotPasswordClick}
         onRegisterClick={onRegisterClick}
       />
 
       {/*@ts-ignore*/}
-      <ForgetPasswordForm
-        active={formType === formTypes.FORGET_PASSWORD}
+      <ForgotPasswordForm
+        active={formType === formTypes.FORGOT_PASSWORD}
         loading={loading}
-        error={forgetPasswordError}
-        message={forgetPasswordMessage}
-        onFormSubmit={onForgetPasswordFormSubmit}
+        error={forgotPasswordError}
+        message={forgotPasswordMessage}
+        onFormSubmit={onForgotPasswordFormSubmit}
         onLoginClick={onLoginClick}
       />
 
