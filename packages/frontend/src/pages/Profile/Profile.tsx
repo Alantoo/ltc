@@ -324,7 +324,7 @@ const ProfileView = ({ classes }: ProfileProps) => {
       .catch((err) => {
         console.error(err);
       });
-  }, [!!activeItem, itemsListCache]);
+  }, [activeItem, itemsListCache]);
 
   const onSendClick = useCallback(
     (e: React.MouseEvent) => {
@@ -565,6 +565,8 @@ const ProfileView = ({ classes }: ProfileProps) => {
         subtitle="The greatest Residual Income System Ever! Earn hundreds of dollars in bitcoin daily"
         align="center"
       />
+      {activeItemEl}
+      {activeItemSuccessEl}
       <AboutContent />
       <p className={profileStyles.secondEntryTitle}>
         Add a second entry of yourself into the money list you choose for less
