@@ -33,7 +33,7 @@ export const Price = ({ offer }: { offer: List }) => {
   const onPayDirectClick = (e: React.MouseEvent) => {
     e.preventDefault();
     location.replace(src);
-    onPaySubmit(id, true);
+    // onPaySubmit(id, true);
   };
   return (
     <div className={styles.container}>
