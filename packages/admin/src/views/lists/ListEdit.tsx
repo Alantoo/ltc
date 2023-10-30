@@ -20,6 +20,7 @@ export const ListEdit = (props: EditProps) => {
         <NumberInput source="price" />
         <NumberInput source="selectCount" />
         <TextInput source="rotateTime" />
+        <TextInput source="src" />
       </SimpleForm>
     </Edit>
   );

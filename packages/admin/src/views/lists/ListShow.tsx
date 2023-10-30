@@ -10,6 +10,7 @@ export const ListShow = (props: ShowProps) => {
         <TextField source="price" />
         <TextField source="selectCount" />
         <TextField source="rotateTime" />
+        <TextField source="src" />
       </SimpleShowLayout>
     </Show>
   );
