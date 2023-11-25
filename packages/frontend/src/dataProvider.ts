@@ -66,6 +66,7 @@ export type List = MyRecord & {
   entryPrice: number;
   rotateTime: string;
   selectCount: number;
+  src: string;
 };
 
 export type User = MyRecord & {

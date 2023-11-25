@@ -10,6 +10,7 @@ export const ListList = (props: ListProps) => {
         <TextField source="price" />
         <TextField source="selectCount" />
         <TextField source="rotateTime" />
+        <TextField source="src" />
       </Datagrid>
     </List>
   );

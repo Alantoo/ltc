@@ -34,6 +34,10 @@ export class List extends Document {
   price: number;
 
   @ApiProperty()
+  @Prop({ type: String, required: true })
+  src: string;
+
+  @ApiProperty()
   @Prop({ type: Number, default: 6 })
   selectCount: number;
 

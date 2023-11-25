@@ -16,6 +16,7 @@ export const ListCreate = (props: CreateProps) => {
         <NumberInput source="price" />
         <NumberInput source="selectCount" defaultValue={6} />
         <TextInput source="rotateTime" defaultValue="60d" />
+        <TextInput source="src" />
       </SimpleForm>
     </Create>
   );

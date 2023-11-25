@@ -1,13 +1,13 @@
 import styles from './Price.module.scss';
-import { List } from '../../../dataProvider';
+import { List } from 'dataProvider';
 import React, { useCallback, useContext } from 'react';
-import { rotateTimeToStr } from '../../../helpers/rotateTimeToStr';
-import { countToStr } from '../../../helpers/countToStr';
+import { rotateTimeToStr } from 'helpers/rotateTimeToStr';
+import { countToStr } from 'helpers/countToStr';
 import DataContext from '../../../contexts/DataContext';
 
 const IS_DEV = window.localStorage['IS_DEV'] === 't';
 export const Price = ({ offer }: { offer: List }) => {
-  const { price, entryPrice, selectCount, rotateTime, id, name } = offer;
+  const { price, entryPrice, selectCount, rotateTime, id, name, src } = offer;
   const { dataProvider } = useContext(DataContext);
   const onPaySubmit = useCallback(
     (listId: string | number, direct?: boolean) => {
@@ -32,7 +32,8 @@ export const Price = ({ offer }: { offer: List }) => {
   };
   const onPayDirectClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    onPaySubmit(id, true);
+    location.replace(src);
+    // onPaySubmit(id, true);
   };
   return (
     <div className={styles.container}>
