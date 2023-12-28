@@ -16,7 +16,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/${{ github.repository }}
+            ghcr.io/${{ github.repository }}/backend
           tags: |
             type=sha
             type=raw,enable=${{ github.ref == format('refs/heads/{0}', 'master') }},value=latest
